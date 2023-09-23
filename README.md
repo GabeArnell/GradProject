@@ -1,4 +1,4 @@
-# amazon_clone_tutorial
+# amazon_clone_tutorial framework
 
 A new Flutter project.
 
