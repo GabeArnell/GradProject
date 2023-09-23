@@ -7,6 +7,7 @@ const authRouter = express.Router();
 
 
 authRouter.post('/api/signup', async (req,res)=>{
+    console.log(req.body)
     const {name, email, password} = req.body
 
     const existingUser = await User.findOne({email: email});
