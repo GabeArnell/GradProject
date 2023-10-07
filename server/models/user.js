@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 const { use } = require("../routes/auth")
-
+// TODO HASH THE PASSWORD!!
 const userSchema = mongoose.Schema({
     name: {
         required: true,
