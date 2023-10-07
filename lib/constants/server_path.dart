@@ -1,0 +1,1 @@
+const String SERVER_URI = 'http://thriftexchange.net';
