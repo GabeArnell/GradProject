@@ -14,6 +14,7 @@ Body Contents must be provided in a JSON format. Example:
 ### Sign Up - Account Creation
 HTTP Method: POST
 > /api/signup
+
 Required Body Values
  - "email" String - The new user's email. Email must be new to the database.
  - "name" String - The new user's name. 
@@ -27,6 +28,7 @@ Responses
 ### Sign In - Login
 HTTP Method: POST
 > /api/signin
+
 Required Body Values
  - "email" String - The email of the user.
  - "password" String - The password of the user.
@@ -38,6 +40,7 @@ Responses
 ### Validate Token 
 HTTP Method: POST
 > /api/validateToken
+
 Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
 Responses
  - Status 200. The token was evaluated. If the response JSON in the response body is **true** the token is valid. If it is **false** it is invalid.
@@ -46,6 +49,7 @@ Responses
 ### Get User Data
 HTTP Method: GET
 > /api/getuserdata
+
 Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
 Responses
  - Status 200: Successfull request. Response body is JSON data of the user and their token.
@@ -57,6 +61,7 @@ Responses
 ### Get Listings
 HTTP Method: GET
 > /api/listings
+
 Requirements: None
 Responses
  - Status 200. Returns JSON data of **count** and **listings**
