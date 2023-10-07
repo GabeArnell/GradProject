@@ -1,12 +1,24 @@
 const mongoose = require("mongoose")
 const { use } = require("../routes/auth")
 
-const userSchema = mongoose.Schema({
+const listingSchema = mongoose.Schema({
     name: {
         required: true,
         type: String,
         trim: true,
     },
+
+    price: {
+        required: true,
+        type: Number,
+        trim: true,
+    },
+
+    image: {
+        type: String,
+        default: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png'
+    },
+
 
     email: {
         required: true,
@@ -22,29 +34,17 @@ const userSchema = mongoose.Schema({
             message: 'Invalid Email'
         }
     },
-    password: {
-        required: true,
-        type: String,
-        validate: {
-            validator: (value) =>{
-                return value.length >= 1
-            },
-            message: 'Please enter a password longer than 6 characters'
-        }
 
+    category: {
+        type: String,
+        default: 'Furniture'
     },
 
-    address: {
+    description: {
         type: String,
-        default: ''
-    },
-
-    type: {
-        type: String,
-        default: 'user'
+        default: 'Used wooden chair, some dents on side but structurally sound.'
     }
-
 });
 
-const User = mongoose.model('User', userSchema);
-module.exports = User;
+const Listing = mongoose.model('Listing', listingSchema);
+module.exports = Listing;

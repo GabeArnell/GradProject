@@ -41,6 +41,7 @@ class AuthService {
 
     }
     catch (error) {
+      // TODO ADD ERROR HERE
     }
   }
 
@@ -98,7 +99,7 @@ class AuthService {
 
       // User user = User(id: '', name: '', password: password, email: email, address: '', type: '', token: '');
       http.Response rawResponse = await http.post(
-      Uri.parse('$SERVER_URI/validateToken'), 
+      Uri.parse('$SERVER_URI/api/validateToken'), 
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'x-auth-token': token!,
@@ -108,7 +109,7 @@ class AuthService {
       var tokenIsValid = jsonDecode(rawResponse.body);
 
       if (tokenIsValid == true){
-        http.Response userResponse = await http.get(Uri.parse('$SERVER_URI/'),
+        http.Response userResponse = await http.get(Uri.parse('$SERVER_URI/api/getuserdata'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': token,

@@ -15,7 +15,8 @@ const auth = async (req, res, callback) => {
 
         // TODO
         // THIS IS NOT SAFE BECAUSE IT ASSUMES THAT IF TOKEN IS SAFE THEN ID IS MATCHING. ATTACKER CAN PUT RIGHT TOKEN AND WRONG ID
-        req.user = verified.id;
+        // EDIT ACTUALLY THIS MAY BE FINE, REVIEW LATER
+        req.user = valid.id;
         req.token = token;
         
         callback();

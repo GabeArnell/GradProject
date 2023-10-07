@@ -9,6 +9,8 @@ const {TOKEN_PRIVATE_KEY} = require("../config.json")
 
 const authModule = require("../middleware/auth")
 
+// TODO: FORCE ALL EMAIL INPUTS TO LOWERCASE
+
 authRouter.post('/api/signup', async (req,res)=>{
     console.log(req.body)
     const {name, email, password} = req.body
@@ -39,6 +41,7 @@ authRouter.post('/api/signup', async (req,res)=>{
         res.status(500).json ({error: error.message});
     }
 });
+
 authRouter.post('/api/signin', async (req,res)=>{
     console.log("Sign in", req.body)
     const {email, password} = req.body
@@ -47,11 +50,11 @@ authRouter.post('/api/signin', async (req,res)=>{
     {
         const existingUser = await User.findOne({email: email});
         if (!existingUser){
-            return res.status(200).json({error: "Invalid Credentials"})
+            return res.status(400).json({error: "Invalid Credentials"})
         }
         const matchedPassword = await bcryptjs.compare(password, existingUser.password);
         if (!matchedPassword){
-            return res.status(200).json({error: "Invalid Credentials"})
+            return res.status(400).json({error: "Invalid Credentials"})
         }
 
         // User is Authenticated at this point
@@ -65,7 +68,7 @@ authRouter.post('/api/signin', async (req,res)=>{
 });
 
 
-authRouter.post('/validateToken', async (req,res)=>{
+authRouter.post('/api/validateToken', async (req,res)=>{
     try
     {
         const token = req.header('x-auth-token');
@@ -91,9 +94,9 @@ authRouter.post('/validateToken', async (req,res)=>{
 })
 
 
-authRouter.get("/", authModule, async (req,res) => {
+authRouter.get("/api/getuserdata", authModule, async (req,res) => {
     const user = await User.findById(req.user);
-    res.json({...user._doc, token: req.token});
+    res.status(200).json({...user._doc, token: req.token});
 });
 
 
