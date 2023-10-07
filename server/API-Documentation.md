@@ -19,6 +19,7 @@ Required Body Values
  - "email" String - The new user's email. Email must be new to the database.
  - "name" String - The new user's name. 
  - "password" String - The new user's password.
+
 Responses
  - Status 200. The account creation was successful. The response body contains a JSON data of the new user including their email, name, password, type (customer, seller, admin), and address (empty for now).
  - Status 400: "Email already being used." means that an account already has that email in the databasse.
@@ -32,6 +33,7 @@ HTTP Method: POST
 Required Body Values
  - "email" String - The email of the user.
  - "password" String - The password of the user.
+
 Responses
  - Status 200. A successful login. Response body contains JSON data of the user as well as a **token** value which is used to authenticate the user. The token should be held by the client as other APIs may require it.
  - Status 400: "Invalid Credentials". This means that the email does not exist as an account or that the password is wrong.
@@ -42,6 +44,7 @@ HTTP Method: POST
 > /api/validateToken
 
 Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
+
 Responses
  - Status 200. The token was evaluated. If the response JSON in the response body is **true** the token is valid. If it is **false** it is invalid.
  - Status 500. There is an internal server error. Contact the backend developer and give them this message.
@@ -51,6 +54,7 @@ HTTP Method: GET
 > /api/getuserdata
 
 Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
+
 Responses
  - Status 200: Successfull request. Response body is JSON data of the user and their token.
  - Status 401: "Invalid authentication token". The given token is invalid. It is not linked to a current user.
@@ -63,6 +67,7 @@ HTTP Method: GET
 > /api/listings
 
 Requirements: None
+
 Responses
  - Status 200. Returns JSON data of **count** and **listings**
  count is how many total listings the server wants to send. 
