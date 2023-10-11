@@ -60,7 +60,7 @@ class _OrdersState extends State<Orders> {
               scrollDirection: Axis.horizontal,
               itemCount: list.length,
               itemBuilder: (context, index) {
-                return Product(image: list[index]);
+                return ProductW(image: list[index]);
               }),
         ),
       ],

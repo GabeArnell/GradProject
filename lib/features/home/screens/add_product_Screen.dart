@@ -1,8 +1,14 @@
+import 'dart:io';
+
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thrift_exchange/common/widgets/custom_button.dart';
 import 'package:thrift_exchange/common/widgets/custom_textfield.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
+import 'package:thrift_exchange/constants/utils.dart';
+import 'package:thrift_exchange/features/home/screens/home_screens.dart';
+import 'package:thrift_exchange/features/home/services/home_services.dart';
 
 class AddProductScreen extends StatefulWidget {
   static const String routeName = '/add-product';
@@ -18,8 +24,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final TextEditingController priceController = TextEditingController();
   final TextEditingController quantityController = TextEditingController();
   final TextEditingController zipcodeController = TextEditingController();
+  final HomeServices homeServices = HomeServices();
 
   String category = 'Apparel';
+  List<File> images = [];
+  final _addProductFormKey = GlobalKey<FormState>();
   @override
   void dispose() {
     super.dispose();
@@ -37,6 +46,28 @@ class _AddProductScreenState extends State<AddProductScreen> {
     'Furniture',
     'Other'
   ];
+
+  void submitProduct() {
+    if (_addProductFormKey.currentState!.validate() || images.isNotEmpty) {
+      homeServices.submitProduct(
+        context: context,
+        name: productNameController.text,
+        description: descriptionController.text,
+        price: double.parse(priceController.text),
+        quantity: double.parse(quantityController.text),
+        zipcode: double.parse(zipcodeController.text),
+        category: category,
+        images: images,
+      );
+    }
+  }
+
+  void selectImages() async {
+    var res = await pickImages();
+    setState(() {
+      images = res;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +94,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       ),
       body: SingleChildScrollView(
           child: Form(
+        key: _addProductFormKey,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 13),
           child: Column(
@@ -70,31 +102,52 @@ class _AddProductScreenState extends State<AddProductScreen> {
               const SizedBox(
                 height: 21,
               ),
-              Container(
-                //margin: EdgeInsets.only(top:21,left: 15, right: 15),
-                width: double.infinity,
-                height: 150,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.black, width: 1),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.folder_open,
-                      size: 39,
-                    ),
-                    Text(
-                      'Select Product Images to Upload',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.grey.shade400,
+              images.isNotEmpty
+                  ? CarouselSlider(
+                      items: images.map(
+                        (i) {
+                          return Builder(
+                            builder: (BuildContext context) => Image.file(
+                              i,
+                              fit: BoxFit.cover,
+                              height: 200,
+                            ),
+                          );
+                        },
+                      ).toList(),
+                      options: CarouselOptions(
+                        viewportFraction: 1,
+                        height: 200,
+                      ),
+                    )
+                  : GestureDetector(
+                      onTap: selectImages,
+                      child: Container(
+                        //margin: EdgeInsets.only(top:21,left: 15, right: 15),
+                        width: double.infinity,
+                        height: 150,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.black, width: 1),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.folder_open,
+                              size: 39,
+                            ),
+                            Text(
+                              'Select Product Images to Upload',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.grey.shade400,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ],
-                ),
-              ),
               const SizedBox(
                 height: 33,
               ),
@@ -157,7 +210,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               ),
               CustomButton(
                 text: 'Submit',
-                onTap: () {},
+                onTap: submitProduct,
               ),
               const SizedBox(
                 height: 15,

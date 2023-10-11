@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class Product extends StatelessWidget {
+class ProductW extends StatelessWidget {
   final String image;
-  const Product({super.key, required this.image});
+  const ProductW({super.key, required this.image});
 
   @override
   Widget build(BuildContext context) {
