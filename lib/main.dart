@@ -1,18 +1,22 @@
-import 'package:amazon_clone_tutorial/constants/global_variables.dart';
-import 'package:amazon_clone_tutorial/features/auth/screens/auth_screen.dart';
-import 'package:amazon_clone_tutorial/features/auth/services/auth_service.dart';
-import 'package:amazon_clone_tutorial/features/home/screens/home_screens.dart';
-import 'package:amazon_clone_tutorial/providers/user_provider.dart';
-import 'package:amazon_clone_tutorial/router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:thrift_exchange/common/widgets/bottom_bar.dart';
+import 'package:thrift_exchange/constants/global_variables.dart';
+import 'package:thrift_exchange/features/auth/screens/auth_screen.dart';
+import 'package:thrift_exchange/features/auth/services/auth_service.dart';
+import 'package:thrift_exchange/providers/user_provider.dart';
+import 'package:thrift_exchange/router.dart';
 
 void main() {
-  runApp(MultiProvider(
-  providers: [
-    ChangeNotifierProvider(create: (context)=>UserProvider(),),
-  ],  
-  child: const MyApp()));
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.amber,
+  ));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(
+      create: (context) => UserProvider(),
+    ),
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -26,7 +30,7 @@ class _MyAppState extends State<MyApp> {
   final AuthService authService = AuthService();
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     authService.getUserData(context: context);
   }
@@ -34,25 +38,23 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Thrift Exchange',
       theme: ThemeData(
-        scaffoldBackgroundColor: GlobalVariables.backgroundColor,
-        colorScheme: const ColorScheme.light(
-          primary: GlobalVariables.secondaryColor,
-
-        ),
-
-        appBarTheme: const AppBarTheme(
-          elevation: 5,
-          iconTheme: IconThemeData(color: Colors.black),
-
-        )
-      ),
+          scaffoldBackgroundColor: GlobalVariables.backgroundColor,
+          colorScheme: const ColorScheme.light(
+            primary: Color.fromARGB(255, 255, 226, 7),
+          ),
+          appBarTheme: const AppBarTheme(
+            elevation: 5,
+            iconTheme: IconThemeData(color: Colors.black),
+          )),
       onGenerateRoute: (settings) => generateRoute(settings),
-      
+
       // Below checks if we have a user token saved in which case, we skip auth screen
-      home: Provider.of<UserProvider>(context).user.token.isNotEmpty ? const HomeScreen() : const AuthScreen(),
+      home: Provider.of<UserProvider>(context).user.token.isNotEmpty
+          ? const BottomBar()
+          : const AuthScreen(),
     );
   }
 }
-

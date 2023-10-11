@@ -1,14 +1,13 @@
 import 'dart:convert';
 
-import 'package:amazon_clone_tutorial/constants/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:thrift_exchange/constants/utils.dart';
 
-void httpErrorHandle({
-  required http.Response response,
-  required BuildContext context,
-  required VoidCallback onSuccess
-}) {
+void httpErrorHandle(
+    {required http.Response response,
+    required BuildContext context,
+    required VoidCallback onSuccess}) {
   switch (response.statusCode) {
     case 200:
       onSuccess();
