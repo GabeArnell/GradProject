@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 // Imports from other files
 const authRouter = require('./routes/auth')
 const listingRouter = require('./routes/listing')
-
+const cors = require("cors")
 
 // Initializations
 const {PORT, DATABASE_URI} = require('./config.json')
