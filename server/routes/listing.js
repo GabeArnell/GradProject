@@ -25,6 +25,10 @@ listingRouter.get("/api/listings",  (req,res) => {
     });
 });
 
+listingRouter.post('/api/admin/add-product', authModule, async (req, res)=>{
+    console.log(res.body)
+})
+
 
 
 module.exports = listingRouter;

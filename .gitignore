@@ -10,6 +10,8 @@
 .svn/
 migrate_working_dir/
 
+/android/local.properties
+
 # IntelliJ related
 *.iml
 *.ipr
@@ -48,3 +50,4 @@ app.*.map.json
 
 # Server Config
 /server/config.json
+android/local.properties
