@@ -51,3 +51,5 @@ app.*.map.json
 # Server Config
 /server/config.json
 android/local.properties
+
+/build/*

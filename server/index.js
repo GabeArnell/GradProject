@@ -7,7 +7,6 @@ const mongoose = require("mongoose");
 // Imports from other files
 const authRouter = require('./routes/auth')
 const listingRouter = require('./routes/listing')
-const listingRouter = require('./routes/listing')
 
 
 // Initializations
@@ -21,7 +20,6 @@ app.use(cors())
 app.use(express.json())
 app.use(express.static(path.join(__dirname,'../build/web')));
 app.use(authRouter);
-app.use(listingRouter);
 app.use(listingRouter);
 
 // Database connections
