@@ -69,26 +69,30 @@ authRouter.post('/api/signin', async (req,res)=>{
 
 
 authRouter.post('/api/validateToken', async (req,res)=>{
+    console.log("validate tokening");
     try
     {
         const token = req.header('x-auth-token');
         if (!token){
-            return req.json(false);
+            return res.json(false);
         }
-
+        console.log("attempting to verify");
         const valid = jwt.verify(token, TOKEN_PRIVATE_KEY);
         if (!valid){
-            return req.json(false);
+            return res.json(false);
         }
-
+        console.log("Searching for the user")
         const existingUser = await User.findById(valid.id);
         if (!existingUser){
-            return req.json(false);
+            return res.json(false);
         }
+        console.log("Found the user")
 
-        return req.json(true);
+        return res.json(true);
+        
     }
     catch (error) {
+        console.log('validation errored out', error.message);
         return res.status(500).json ({error: error.message});
     }
 })

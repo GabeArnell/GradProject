@@ -14,9 +14,9 @@ const listingSchema = mongoose.Schema({
         trim: true,
     },
 
-    image: {
-        type: String,
-        default: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png'
+    images: {
+        type: Array,
+        default: ['https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png']
     },
 
 
@@ -43,7 +43,15 @@ const listingSchema = mongoose.Schema({
     description: {
         type: String,
         default: 'Used wooden chair, some dents on side but structurally sound.'
-    }
+    },
+    zipcode: {
+        type: Number,
+        default: 12601,
+    },
+    quantity: {
+        type: Number,
+        default: 99,
+    },
 });
 
 const Listing = mongoose.model('Listing', listingSchema);
