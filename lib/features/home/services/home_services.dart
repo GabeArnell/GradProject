@@ -3,15 +3,18 @@ import 'dart:io';
 
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:thrift_exchange/constants/error_handling.dart';
 import 'package:thrift_exchange/constants/server_path.dart';
 import 'package:thrift_exchange/constants/utils.dart';
+import 'package:thrift_exchange/features/account/screens/profile_screen.dart';
 import 'package:thrift_exchange/models/product.dart';
 import 'package:http/http.dart' as http;
 import 'package:thrift_exchange/providers/user_provider.dart';
 
 class HomeServices {
+  var logger = Logger();
   void submitProduct({
     required BuildContext context,
     required String name,
@@ -32,6 +35,9 @@ class HomeServices {
           CloudinaryFile.fromFile(images[i].path, folder: name),
         );
         imageUrls.add(res.secureUrl);
+      }
+      if (imageUrls.length != 0) {
+        ProfilePage();
       }
       Product product = Product(
         name: name,
@@ -96,5 +102,36 @@ class HomeServices {
       showSnackBar(context, e.toString());
     }
     return productList;
+  }
+
+  void deleteProduct({
+    required BuildContext context,
+    required Product product,
+    required VoidCallback onSuccess,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    try {
+      http.Response res = await http.post(
+        Uri.parse('$SERVER_URI/delete-product'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+        body: jsonEncode({
+          'id': product.id,
+        }),
+      );
+
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          onSuccess();
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
   }
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:thrift_exchange/common/widgets/custom_button.dart';
 import 'package:thrift_exchange/common/widgets/custom_textfield.dart';
@@ -60,6 +61,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
         images: images,
       );
     }
+    Navigator.pop(context);
   }
 
   void selectImages() async {
@@ -175,7 +177,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               ),
               CustomTextField(
                 controller: quantityController,
-                hintText: 'quantity',
+                hintText: 'Quantity',
               ),
               const SizedBox(
                 height: 13,

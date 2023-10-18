@@ -30,6 +30,17 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {});
   }
 
+  void deleteProduct(Product product, int index) {
+    homeServices.deleteProduct(
+      context: context,
+      product: product,
+      onSuccess: () {
+        products!.removeAt(index);
+        setState(() {});
+      },
+    );
+  }
+
   void navigateToAddProduct() {
     Navigator.pushNamed(context, AddProductScreen.routeName);
   }
@@ -138,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () => deleteProduct(productData, index),
                           icon: const Icon(Icons.delete_outline),
                         ),
                       ],
