@@ -8,6 +8,7 @@ class Product {
   final String category;
   final double price;
   final double zipcode;
+  final String seller;
   final String? id;
 
   Product({
@@ -18,6 +19,7 @@ class Product {
     required this.category,
     required this.price,
     required this.zipcode,
+    required this.seller,
     this.id,
   });
 
@@ -29,7 +31,8 @@ class Product {
       'images': images,
       'category': category,
       'price': price,
-      'zipcode': price,
+      'zipcode': zipcode,
+      'seller': seller,
       'id': id,
     };
   }
@@ -43,6 +46,7 @@ class Product {
       category: map['category'] ?? '',
       price: map['price']?.toDouble() ?? 0.0,
       zipcode: map['zipcode']?.toDouble() ?? 0.0,
+      seller: map['seller']?.toString() ?? '',
       id: map['_id'],
     );
   }

@@ -18,8 +18,12 @@ const {PORT, DATABASE_URI} = require('./config.json')
 const app = express();
 
 // Allowing cross origin requests
-app.use(cors())
-
+const corsOptions ={
+    origin:'http://localhost:52418', 
+    credentials:true,            //access-control-allow-credentials:true
+    optionSuccessStatus:200
+}
+app.use(cors(corsOptions));
 // Middleware Routes
 app.use(express.json())
 app.use(express.static(path.join(__dirname,'../build/web')));

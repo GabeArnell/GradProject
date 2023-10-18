@@ -43,9 +43,9 @@ productsRouter.post('/admin/add-product', authModule, async (req, res)=>{
         let listing = new Listing({
             name: item.name,
             description: item.description,
-            email: existingUser.email,
+            seller: existingUser.email,
             quantity: item.quantity,
-            image: item.images,
+            images: item.images,
             category: item.category,
             price: item.price,
             zipcode: item.zipcode
@@ -77,7 +77,7 @@ productsRouter.post('/delete-product', authModule, async (req, res)=>{
         if (!existingListing){
             return res.status(400).json ({error: "Could not find product to delete."});
         }       
-        if (existingListing.email != existingUser.email && existingUser.type != 'admin'){
+        if (existingListing.seller != existingUser.email && existingUser.type != 'admin'){
             return res.status(401).json ({error: "User is not authorized to delete the product."});
         } 
 

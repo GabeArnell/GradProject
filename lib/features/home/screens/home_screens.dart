@@ -53,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
+    print(user.email);
     return products == null
         ? const Loader()
         : Scaffold(
@@ -139,6 +140,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisCount: 2),
               itemBuilder: (context, index) {
                 final productData = products![index];
+                print(productData.name);
+                print(productData.seller);
                 return Column(
                   children: [
                     SizedBox(
@@ -161,10 +164,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                        IconButton(
+                      if (user.email == productData.seller || user.type == 'admin')
+                       IconButton(
+                          
                           onPressed: () => deleteProduct(productData, index),
                           icon: const Icon(Icons.delete_sharp),
-                        ),
+                        )
+                        else
+                          SizedBox()
+                        
+                        
+                        
                       ],
                     ),
                   ],

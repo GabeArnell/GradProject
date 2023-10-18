@@ -9,7 +9,7 @@ module.exports.getDemoListings = ()=>{
             price: 5.50,
             category: "Furniture",
             description: "Has a few scratches on the legs.",
-            email: "gabe@gmail.com",
+            seller: "gabe@gmail.com",
             zipcode: 12601,
         },
         {
@@ -18,7 +18,7 @@ module.exports.getDemoListings = ()=>{
             price: 7.00,
             category: "Sports",
             description: "In good condition, used a couple times.",
-            email: "gabe@gmail.com",
+            seller: "gabe@gmail.com",
             zipcode: 12601,
         },
         {
@@ -27,7 +27,7 @@ module.exports.getDemoListings = ()=>{
             price: 30.00,
             category: "Technology",
             description: "Need to get rid of my second monitor when I leave the dormatory. Open to haggle.",
-            email: "gabe@gmail.com",
+            seller: "gabe@gmail.com",
             zipcode: 12601,
         }
 
@@ -40,12 +40,10 @@ module.exports.get = async() =>{
     return results;
 }
 module.exports.searchByField = async(field,input) =>{
-    let results = await Listing.find({ field: 
-        {$regex: input, $options: 'i'}
-    }, 
-    function(err,docs) { 
-        console.log("search by field error", err, docs)
-    })
     
+    let results = await Listing.find({ 'name': 
+        {$regex: input, $options: 'i'}
+    });
+    console.log(results)
     return results;
 }

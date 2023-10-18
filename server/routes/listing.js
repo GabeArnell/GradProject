@@ -26,7 +26,7 @@ listingRouter.get("/api/products/search/:input", async(req,res)=>{
     }
     catch (e)
     {
-        return res.status(500).json ({error: error.message});
+        return res.status(500).json ({error: e.message});
     }
 });
 

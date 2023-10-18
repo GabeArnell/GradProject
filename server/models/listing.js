@@ -20,7 +20,7 @@ const listingSchema = mongoose.Schema({
     },
 
 
-    email: {
+    seller: {
         required: true,
         type: String,
         trim: true,
