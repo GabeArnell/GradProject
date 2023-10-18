@@ -4,6 +4,7 @@ import 'package:thrift_exchange/common/widgets/loader.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
 import 'package:thrift_exchange/features/account/widgets/product.dart';
 import 'package:thrift_exchange/features/home/screens/add_product_Screen.dart';
+import 'package:thrift_exchange/features/home/screens/products_screens.dart';
 import 'package:thrift_exchange/features/home/search/screens/search_screen.dart';
 import 'package:thrift_exchange/features/home/services/home_services.dart';
 import 'package:thrift_exchange/models/product.dart';
@@ -53,7 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
-    print(user.email);
     return products == null
         ? const Loader()
         : Scaffold(
@@ -140,44 +140,44 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisCount: 2),
               itemBuilder: (context, index) {
                 final productData = products![index];
-                print(productData.name);
-                print(productData.seller);
-                return Column(
-                  children: [
-                    SizedBox(
-                      height: 140,
-                      child: ProductW(image: productData.images[0]),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 13.0),
-                            child: Text(
-                              productData.name,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              style: TextStyle(
-                                fontSize: 17,
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      ProductsScreen.routeName,
+                      arguments: productData,
+                    );
+                  },
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 140,
+                        child: ProductW(image: productData.images[0]),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 13.0),
+                              child: Text(
+                                productData.name,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                                style: TextStyle(
+                                  fontSize: 17,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      if (user.email == productData.seller || user.type == 'admin')
-                       IconButton(
-                          
-                          onPressed: () => deleteProduct(productData, index),
-                          icon: const Icon(Icons.delete_sharp),
-                        )
-                        else
-                          SizedBox()
-                        
-                        
-                        
-                      ],
-                    ),
-                  ],
+                          IconButton(
+                            onPressed: () => deleteProduct(productData, index),
+                            icon: const Icon(Icons.delete_sharp),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 );
               },
             ),

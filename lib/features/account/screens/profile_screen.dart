@@ -14,7 +14,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(67),
@@ -26,9 +26,11 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           elevation: 0,
           title: Padding(
-            padding: const EdgeInsets.only(top: 6),
+            padding: const EdgeInsets.only(
+              top: 6,
+            ),
             child: const Text(
-              'Add Product',
+              'Profile Details',
               style: TextStyle(
                 color: Colors.black,
               ),
@@ -40,25 +42,46 @@ class _ProfilePageState extends State<ProfilePage> {
         padding: const EdgeInsets.all(0),
         children: <Widget>[
           UserAccountsDrawerHeader(
-              accountName: Text("Pawan Kumar"),
-              accountEmail: Text("mtechviral@gmail.com"),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "https://images.unsplash.com/photo-1497551060073-4c5ab6435f12?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"),
-              )),
+            accountName: Text(
+              '${user.name}',
+              style: TextStyle(color: Colors.black),
+            ),
+            accountEmail: Text(
+              '${user.email}',
+              style: TextStyle(color: Colors.black),
+            ),
+            currentAccountPicture: CircleAvatar(
+              backgroundImage: NetworkImage(
+                  "https://images.unsplash.com/photo-1497551060073-4c5ab6435f12?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"),
+            ),
+          ),
           ListTile(
             leading: Icon(Icons.person),
-            title: Text("Pawan Kumar"),
-            subtitle: Text("Developer"),
+            title: Text("Username"),
+            subtitle: Text('${user.name}'),
             trailing: Icon(Icons.edit),
             onTap: () {},
           ),
           ListTile(
             leading: Icon(Icons.email),
             title: Text("Email"),
-            subtitle: Text("mtechviral@gmail.com"),
+            subtitle: Text('${user.email}'),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: Icon(Icons.password),
+            title: Text("Password"),
+            subtitle: Text('**********'),
             trailing: Icon(Icons.edit),
-          )
+            onTap: () {},
+          ),
+          ListTile(
+            leading: Icon(Icons.location_city),
+            title: Text("Address"),
+            subtitle: Text('${user.address}'),
+            trailing: Icon(Icons.edit),
+            onTap: () {},
+          ),
         ],
       ),
     );
