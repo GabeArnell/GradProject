@@ -23,7 +23,7 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         settings: routeSettings,
         builder: (_) => const AddProductScreen(),
       );
-    case BottomBar.routeName:
+    case SearchScreen.routeName:
       var searchQuery = routeSettings.arguments as String;
       return MaterialPageRoute(
         settings: routeSettings,
@@ -31,7 +31,7 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
           searchQuery: searchQuery,
         ),
       );
-    case SearchScreen.routeName:
+    case BottomBar.routeName:
       return MaterialPageRoute(
         settings: routeSettings,
         builder: (_) => const BottomBar(),
