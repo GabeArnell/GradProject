@@ -19,7 +19,7 @@ const app = express();
 
 // Allowing cross origin requests
 const corsOptions ={
-    origin:'http://localhost:52418', 
+    origin:'*', 
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200
 }
