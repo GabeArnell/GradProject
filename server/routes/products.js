@@ -55,13 +55,9 @@ productsRouter.post('/admin/add-product', authModule, async (req, res)=>{
         listing = await listing.save()
         res.json(listing);
 
-
-        
-        
-
     }
     catch (e){
-        return res.status(500).json ({error: error.message});
+        return res.status(500).json ({error: e.message});
     }
 })
 productsRouter.post('/delete-product', authModule, async (req, res)=>{
