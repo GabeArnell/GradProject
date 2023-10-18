@@ -57,6 +57,7 @@ productsRouter.post('/admin/add-product', authModule, async (req, res)=>{
 
     }
     catch (e){
+        console.log('prod error', e.message);
         return res.status(500).json ({error: e.message});
     }
 })
