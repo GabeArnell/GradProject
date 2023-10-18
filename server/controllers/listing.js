@@ -39,3 +39,13 @@ module.exports.get = async() =>{
 
     return results;
 }
+module.exports.searchByField = async(field,input) =>{
+    let results = await Listing.find({ field: 
+        {$regex: input, $options: 'i'}
+    }, 
+    function(err,docs) { 
+        console.log("search by field error", err, docs)
+    })
+    
+    return results;
+}
