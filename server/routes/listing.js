@@ -8,16 +8,6 @@ const Listing = require("../models/listing");
 const User = require("../models/user");
 
 
-// TODO, ADD TOKENIZATION TO IT
-// listingRouter.get("/api/listings", authModule, async (req,res) => {
-//     let array = listingController.getDemoListings();
-
-//     res.json({
-//         count: array.length,
-//         listings: array
-//     });
-// });
-// PLACEHOLDER
 listingRouter.get("/api/listings",  async (req,res) => {
     try {
         let array = await listingController.get();
@@ -86,7 +76,33 @@ listingRouter.post('/admin/add-product', authModule, async (req, res)=>{
         return res.status(500).json ({error: error.message});
     }
 })
+listingRouter.post('/delete-product', authModule, async (req, res)=>{
+    console.log(req.user);
+    let item = req.body;
+    try {
+        const existingUser = await User.findById(req.user);
+        if (!existingUser){
+            return res.status(500).json ({error: "Could not find user"});
+        }
 
+        const existingListing = await Listing.findById(item.id);
+        if (!existingListing){
+            return res.status(400).json ({error: "Could not find product to delete."});
+        }       
+        if (existingListing.email != existingUser.email && existingUser.type != 'admin'){
+            return res.status(401).json ({error: "User is not authorized to delete the product."});
+        } 
+
+        await Listing.deleteOne({ _id: existingListing._id });
+
+        res.status(200).json(true);
+        
+
+    }
+    catch (e){
+        return res.status(500).json ({error: error.message});
+    }
+})
 
 
 module.exports = listingRouter;
