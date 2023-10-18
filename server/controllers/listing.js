@@ -9,7 +9,7 @@ module.exports.getDemoListings = ()=>{
             price: 5.50,
             category: "Furniture",
             description: "Has a few scratches on the legs.",
-            seller: "gabe@gmail.com",
+            email: "gabe@gmail.com",
             zipcode: 12601,
         },
         {
@@ -18,7 +18,7 @@ module.exports.getDemoListings = ()=>{
             price: 7.00,
             category: "Sports",
             description: "In good condition, used a couple times.",
-            seller: "gabe@gmail.com",
+            email: "gabe@gmail.com",
             zipcode: 12601,
         },
         {
@@ -27,7 +27,7 @@ module.exports.getDemoListings = ()=>{
             price: 30.00,
             category: "Technology",
             description: "Need to get rid of my second monitor when I leave the dormatory. Open to haggle.",
-            seller: "gabe@gmail.com",
+            email: "gabe@gmail.com",
             zipcode: 12601,
         }
 

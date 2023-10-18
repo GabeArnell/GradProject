@@ -43,9 +43,9 @@ productsRouter.post('/admin/add-product', authModule, async (req, res)=>{
         let listing = new Listing({
             name: item.name,
             description: item.description,
-            seller: existingUser.email,
+            email: existingUser.email,
             quantity: item.quantity,
-            images: item.images,
+            images: item.images.length > 0 ? item.images : ['https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png'],
             category: item.category,
             price: item.price,
             zipcode: item.zipcode
@@ -77,7 +77,7 @@ productsRouter.post('/delete-product', authModule, async (req, res)=>{
         if (!existingListing){
             return res.status(400).json ({error: "Could not find product to delete."});
         }       
-        if (existingListing.seller != existingUser.email && existingUser.type != 'admin'){
+        if (existingListing.email != existingUser.email && existingUser.type != 'admin'){
             return res.status(401).json ({error: "User is not authorized to delete the product."});
         } 
 
