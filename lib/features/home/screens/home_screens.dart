@@ -4,6 +4,7 @@ import 'package:thrift_exchange/common/widgets/loader.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
 import 'package:thrift_exchange/features/account/widgets/product.dart';
 import 'package:thrift_exchange/features/home/screens/add_product_Screen.dart';
+import 'package:thrift_exchange/features/home/search/screens/search_screen.dart';
 import 'package:thrift_exchange/features/home/services/home_services.dart';
 import 'package:thrift_exchange/models/product.dart';
 import 'package:thrift_exchange/providers/user_provider.dart';
@@ -17,6 +18,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  void navigateToSearchScreen(String query) {
+    Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
+  }
+
   List<Product>? products = [];
   final HomeServices homeServices = HomeServices();
   @override
@@ -72,47 +77,49 @@ class _HomeScreenState extends State<HomeScreen> {
                           right: 15,
                         ),
                         child: Material(
-                          borderRadius: BorderRadius.circular(7),
+                          borderRadius: BorderRadius.circular(3),
                           elevation: 1,
                           child: TextFormField(
+                            onFieldSubmitted: navigateToSearchScreen,
                             decoration: InputDecoration(
-                                suffixIcon: InkWell(
-                                  onTap: () {},
-                                  child: const Padding(
-                                    padding: EdgeInsets.only(
-                                      left: 6,
-                                    ),
-                                    child: Icon(
-                                      Icons.search,
-                                      color: Colors.black,
-                                      size: 23,
-                                    ),
+                              suffixIcon: InkWell(
+                                onTap: () {},
+                                child: const Padding(
+                                  padding: EdgeInsets.only(
+                                    left: 6,
+                                  ),
+                                  child: Icon(
+                                    Icons.search,
+                                    color: Colors.black,
+                                    size: 23,
                                   ),
                                 ),
-                                filled: true,
-                                fillColor: Colors.white,
-                                contentPadding:
-                                    const EdgeInsets.only(left: 13, top: 10),
-                                border: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(7),
-                                  ),
-                                  borderSide: BorderSide.none,
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                              contentPadding:
+                                  const EdgeInsets.only(left: 13, top: 10),
+                              border: const OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(7),
                                 ),
-                                enabledBorder: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(7),
-                                  ),
-                                  borderSide: BorderSide(
-                                    color: Colors.black38,
-                                    width: 1,
-                                  ),
+                                borderSide: BorderSide.none,
+                              ),
+                              enabledBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(3),
                                 ),
-                                hintText: 'Search Thrift-Exchange',
-                                hintStyle: const TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 17,
-                                )),
+                                borderSide: BorderSide(
+                                  color: Colors.black38,
+                                  width: 1,
+                                ),
+                              ),
+                              hintText: 'Search Thrift-Exchange',
+                              hintStyle: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 17,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -142,15 +149,21 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Expanded(
-                          child: Text(
-                            productData.name,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 13.0),
+                            child: Text(
+                              productData.name,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              style: TextStyle(
+                                fontSize: 17,
+                              ),
+                            ),
                           ),
                         ),
                         IconButton(
                           onPressed: () => deleteProduct(productData, index),
-                          icon: const Icon(Icons.delete_outline),
+                          icon: const Icon(Icons.delete_sharp),
                         ),
                       ],
                     ),

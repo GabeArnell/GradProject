@@ -41,7 +41,10 @@ dependencies:
   badges: ^2.0.2
   file_picker: ^5.5.0
   carousel_slider: ^4.2.1
+  carousel_images: ^1.1.2
   cloudinary_public: ^0.21.0
+  logger: ^2.0.2+1
+  flutter_rating_bar: ^4.0.0
 
 dev_dependencies:
   flutter_test:

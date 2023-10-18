@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:thrift_exchange/common/widgets/loader.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
 import 'package:thrift_exchange/features/account/widgets/address_box.dart';
+import 'package:thrift_exchange/features/home/search/services/search_services.dart';
+import 'package:thrift_exchange/features/home/search/widgets/searched_product.dart';
 import 'package:thrift_exchange/models/product.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -20,6 +22,10 @@ class _SearchScreenState extends State<SearchScreen> {
   List<Product>? products;
   final SearchServices searchServices = SearchServices();
 
+  void navigateToSearchScreen(String query) {
+    Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -30,10 +36,6 @@ class _SearchScreenState extends State<SearchScreen> {
     products = await searchServices.fetchSearchedProduct(
         context: context, searchQuery: widget.searchQuery);
     setState(() {});
-  }
-
-  void navigateToSearchScreen(String query) {
-    Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
   }
 
   @override
@@ -53,14 +55,14 @@ class _SearchScreenState extends State<SearchScreen> {
               Expanded(
                 child: Container(
                   height: 42,
-                  margin: const EdgeInsets.only(left: 15),
+                  margin: const EdgeInsets.only(left: 0),
                   child: Material(
-                    borderRadius: BorderRadius.circular(7),
+                    borderRadius: BorderRadius.circular(3),
                     elevation: 1,
                     child: TextFormField(
                       onFieldSubmitted: navigateToSearchScreen,
                       decoration: InputDecoration(
-                        prefixIcon: InkWell(
+                        suffixIcon: InkWell(
                           onTap: () {},
                           child: const Padding(
                             padding: EdgeInsets.only(
@@ -75,23 +77,23 @@ class _SearchScreenState extends State<SearchScreen> {
                         ),
                         filled: true,
                         fillColor: Colors.white,
-                        contentPadding: const EdgeInsets.only(top: 10),
+                        contentPadding: const EdgeInsets.only(left: 13),
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(
-                            Radius.circular(7),
+                            Radius.circular(3),
                           ),
                           borderSide: BorderSide.none,
                         ),
                         enabledBorder: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(
-                            Radius.circular(7),
+                            Radius.circular(3),
                           ),
                           borderSide: BorderSide(
                             color: Colors.black38,
                             width: 1,
                           ),
                         ),
-                        hintText: 'Search Amazon.in',
+                        hintText: 'Search Thrift-Exchange',
                         hintStyle: const TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 17,
@@ -105,7 +107,6 @@ class _SearchScreenState extends State<SearchScreen> {
                 color: Colors.transparent,
                 height: 42,
                 margin: const EdgeInsets.symmetric(horizontal: 10),
-                child: const Icon(Icons.mic, color: Colors.black, size: 25),
               ),
             ],
           ),
@@ -115,7 +116,6 @@ class _SearchScreenState extends State<SearchScreen> {
           ? const Loader()
           : Column(
               children: [
-                const AddressBox(),
                 const SizedBox(height: 10),
                 Expanded(
                   child: ListView.builder(
@@ -123,11 +123,11 @@ class _SearchScreenState extends State<SearchScreen> {
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            ProductDetailScreen.routeName,
-                            arguments: products![index],
-                          );
+                          // Navigator.pushNamed(
+                          //   context,
+                          //   ProductDetailScreen.routeName,
+                          //   arguments: products![index],
+                          // );
                         },
                         child: SearchedProduct(
                           product: products![index],
