@@ -104,3 +104,42 @@ Responses
  }`
  - Status 500. There is an internal server error. Contact the backend developer and give them this message.
 
+
+
+## User API
+
+### Change Name 
+HTTP Method: POST
+> /api/save-user-name
+
+Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
+
+Request Body should be the new name in a JSON format.
+
+Responses
+ - Status 200: Successfull request. Response body is JSON data of the updated user.
+ - Status 500. There is an internal server error. Contact the backend developer and give them this message.
+
+### Change Address 
+HTTP Method: POST
+> /api/save-user-address
+
+Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
+
+Request Body should be the new address in a JSON format.
+
+Responses
+ - Status 200: Successfull request. Response body is JSON data of the updated user.
+ - Status 500. There is an internal server error. Contact the backend developer and give them this message.
+
+### Change Password 
+HTTP Method: POST
+> /api/save-user-password
+
+Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
+
+Request Body should be the new password in a JSON format.
+
+Responses
+ - Status 200: Successfull request. Response body is JSON data of the updated user.
+ - Status 500. There is an internal server error. Contact the backend developer and give them this message.
