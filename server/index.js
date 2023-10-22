@@ -11,6 +11,10 @@ const authRouter = require('./routes/auth')
 const listingRouter = require('./routes/listing')
 // API for individual products
 const productsRouter = require("./routes/products")
+// API for user settings changes
+const userRouter = require("./routes/user")
+
+
 const cors = require("cors")
 
 // Initializations
@@ -30,6 +34,7 @@ app.use(express.static(path.join(__dirname,'../build/web')));
 app.use(authRouter);
 app.use(listingRouter);
 app.use(productsRouter);
+app.use(userRouter);
 
 // Database connections
 mongoose.connect(DATABASE_URI).then(()=>{
