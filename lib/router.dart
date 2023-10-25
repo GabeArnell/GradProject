@@ -26,12 +26,22 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         settings: routeSettings,
         builder: (_) => const AddProductScreen(),
       );
+    // case SearchScreen.routeName:
+    //   var searchQuery = routeSettings.arguments as String;
+    //   return MaterialPageRoute(
+    //     settings: routeSettings,
+    //     builder: (_) => SearchScreen(
+    //       searchQuery: searchQuery,
+    //     ),
+    //   );
     case SearchScreen.routeName:
-      var searchQuery = routeSettings.arguments as String;
+      var arguments = routeSettings.arguments as Map<String, String>;
       return MaterialPageRoute(
         settings: routeSettings,
         builder: (_) => SearchScreen(
-          searchQuery: searchQuery,
+          searchQuery: arguments['query']!,
+          category: arguments['category']!,
+          zipcode: arguments['zipcode']!,
         ),
       );
     case ProductsScreen.routeName:

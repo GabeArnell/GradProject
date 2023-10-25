@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:thrift_exchange/common/widgets/loader.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
 import 'package:thrift_exchange/features/account/widgets/address_box.dart';
 import 'package:thrift_exchange/features/home/screens/products_screens.dart';
 import 'package:thrift_exchange/features/home/search/services/search_services.dart';
 import 'package:thrift_exchange/features/home/search/widgets/searched_product.dart';
+import 'package:thrift_exchange/features/home/widgets/search_filter.dart';
 import 'package:thrift_exchange/models/product.dart';
+import 'package:thrift_exchange/providers/user_provider.dart';
 
 class SearchScreen extends StatefulWidget {
   static const String routeName = '/search-screen';
   final String searchQuery;
+  final String category;
+  final String zipcode;
   const SearchScreen({
     Key? key,
     required this.searchQuery,
+    required this.category,
+    required this.zipcode,
   }) : super(key: key);
 
   @override
@@ -21,21 +28,34 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   List<Product>? products;
+  String _selectedCategory = 'All';
+  String _selectedZipcode = '0';
+
   final SearchServices searchServices = SearchServices();
 
   void navigateToSearchScreen(String query) {
-    Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
+    Navigator.pushNamed(context, SearchScreen.routeName, arguments: {
+      'query': query,
+      'category': _selectedCategory,
+      'zipcode': _selectedZipcode,
+    });
   }
 
   @override
   void initState() {
     super.initState();
+    _selectedCategory = widget.category;
+    _selectedZipcode = widget.zipcode;
     fetchSearchedProduct();
   }
 
   fetchSearchedProduct() async {
     products = await searchServices.fetchSearchedProduct(
-        context: context, searchQuery: widget.searchQuery);
+      context: context,
+      searchQuery: widget.searchQuery,
+      category: widget.category,
+      zipcode: widget.zipcode,
+    );
     setState(() {});
   }
 
@@ -117,6 +137,18 @@ class _SearchScreenState extends State<SearchScreen> {
           ? const Loader()
           : Column(
               children: [
+                SearchFilter(
+                  onCategorySelected: (category) {
+                    setState(() {
+                      _selectedCategory = category;
+                    });
+                  },
+                  onZipcodeUpdated: (zipcode) {
+                    setState(() {
+                      _selectedZipcode = zipcode;
+                    });
+                  },
+                ),
                 const SizedBox(height: 10),
                 Expanded(
                   child: ListView.builder(
