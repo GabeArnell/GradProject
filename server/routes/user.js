@@ -14,9 +14,14 @@ userRouter.post('/api/profile/update-details', authModule, async (req, res)=>{
 
    switch(req.type){
     case('username'):
+    changeName(req,res,req.body.detail.trim())
+        break;
     case('address'):
+    changeAddress(req,res,req.body.detail.trim());
+    break;
     case('password'):
-        changeName(req,res,req.body.detail.trim())
+    changePassword(req,res,req.body.detail.trim())
+
         break;
    }
 });
