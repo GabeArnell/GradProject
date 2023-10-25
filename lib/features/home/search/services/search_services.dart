@@ -13,12 +13,19 @@ class SearchServices {
   Future<List<Product>> fetchSearchedProduct({
     required BuildContext context,
     required String searchQuery,
+    required String category,
+    required String zipcode,
   }) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     List<Product> productList = [];
     try {
       http.Response res = await http.get(
-        Uri.parse('$SERVER_URI/api/products/search/$searchQuery'),
+        Uri.parse('$SERVER_URI/api/products/search/$searchQuery').replace(
+          queryParameters: {
+            'category': category,
+            'zipcode': zipcode,
+          },
+        ),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': userProvider.user.token,
