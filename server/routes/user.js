@@ -12,7 +12,7 @@ userRouter.post('/api/profile/update-details', authModule, async (req, res)=>{
     console.log(req.user);
     console.log(req.body);
 
-   switch(req.type){
+   switch(req.body.type){
     case('username'):
     changeName(req,res,req.body.detail.trim())
         break;
