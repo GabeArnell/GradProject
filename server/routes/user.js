@@ -7,13 +7,28 @@ const User = require("../models/user");
 const bcryptjs = require("bcryptjs");
 
 
+// Change Details
+userRouter.post('/api/profile/update-details', authModule, async (req, res)=>{
+    console.log(req.user);
+    console.log(req.body);
+
+   switch(req.type){
+    case('username'):
+    case('address'):
+    case('password'):
+        changeName(req,res,req.body.detail.trim())
+        break;
+   }
+});
+
+
 // Change Name
-userRouter.post('/api/save-user-name', authModule, async (req, res)=>{
+async function changeName(req,res,value){
     console.log(req.user);
     console.log(req.body);
 
     try {
-        const {newName} = req.body;
+        const newName = value;
         let existingUser = await User.findById(req.user);
         if (!existingUser){
             return res.status(500).json ({error: "Could not find user"});
@@ -33,15 +48,15 @@ userRouter.post('/api/save-user-name', authModule, async (req, res)=>{
         console.log('error with username saving error', e.message);
         return res.status(500).json ({error: e.message});
     }
-});
+};
 
-// Change Name
-userRouter.post('/api/save-user-address', authModule, async (req, res)=>{
+// Change Address
+async function changeAddress(req,res,value){
     console.log(req.user);
     console.log(req.body);
 
     try {
-        const {newAddress} = req.body;
+        const newAddress = value;
         let existingUser = await User.findById(req.user);
         if (!existingUser){
             return res.status(500).json ({error: "Could not find user"});
@@ -57,18 +72,18 @@ userRouter.post('/api/save-user-address', authModule, async (req, res)=>{
 
     }
     catch (e){
-        console.log('error with name saving', e.message);
+        console.log('error with address saving', e.message);
         return res.status(500).json ({error: e.message});
     }
-})
+}
 
 // Change Password
-userRouter.post('/api/save-user-password', authModule, async (req, res)=>{
+async function changePassword(req,res,value){
     console.log(req.user);
     console.log(req.body);
 
     try {
-        const { newPassword } = req.body;
+        const newPassword = value;
         let existingUser = await User.findById(req.user);
         if (!existingUser){
             return res.status(500).json ({error: "Could not find user"});
@@ -89,6 +104,6 @@ userRouter.post('/api/save-user-password', authModule, async (req, res)=>{
         console.log('error with password saving', e.message);
         return res.status(500).json ({error: e.message});
     }
-})
+}
 
 module.exports = userRouter;
