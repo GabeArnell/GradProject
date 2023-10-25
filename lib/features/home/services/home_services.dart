@@ -47,7 +47,6 @@ class HomeServices {
         category: category,
         price: price,
         zipcode: zipcode,
-        email: userProvider.user.email
       );
       http.Response res = await http.post(
         Uri.parse('$SERVER_URI/admin/add-product'),

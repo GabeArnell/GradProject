@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
+import 'package:thrift_exchange/features/account/widgets/update_details.dart';
 import 'package:thrift_exchange/providers/user_provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -12,6 +13,13 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  String activeField = '';
+  void _setActiveField(String field) {
+    setState(() {
+      activeField = field;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
@@ -60,8 +68,18 @@ class _ProfilePageState extends State<ProfilePage> {
             title: Text("Username"),
             subtitle: Text('${user.name}'),
             trailing: Icon(Icons.edit),
-            onTap: () {},
+            onTap: () {
+              setState(() {
+                activeField = 'username';
+              });
+            },
           ),
+          if (activeField == 'username')
+            UpdateDetails(
+                type: 'username',
+                onSubmitted: () {
+                  _setActiveField('');
+                }),
           ListTile(
             leading: Icon(Icons.email),
             title: Text("Email"),
@@ -73,15 +91,35 @@ class _ProfilePageState extends State<ProfilePage> {
             title: Text("Password"),
             subtitle: Text('**********'),
             trailing: Icon(Icons.edit),
-            onTap: () {},
+            onTap: () {
+              setState(() {
+                activeField = 'password';
+              });
+            },
           ),
+          if (activeField == 'password')
+            UpdateDetails(
+                type: 'password',
+                onSubmitted: () {
+                  _setActiveField('');
+                }),
           ListTile(
             leading: Icon(Icons.location_city),
             title: Text("Address"),
             subtitle: Text('${user.address}'),
             trailing: Icon(Icons.edit),
-            onTap: () {},
+            onTap: () {
+              setState(() {
+                activeField = 'address';
+              });
+            },
           ),
+          if (activeField == 'address')
+            UpdateDetails(
+                type: 'address',
+                onSubmitted: () {
+                  _setActiveField('');
+                }),
         ],
       ),
     );

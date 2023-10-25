@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:thrift_exchange/common/widgets/loader.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
 import 'package:thrift_exchange/features/account/widgets/address_box.dart';
+import 'package:thrift_exchange/features/home/screens/products_screens.dart';
 import 'package:thrift_exchange/features/home/search/services/search_services.dart';
 import 'package:thrift_exchange/features/home/search/widgets/searched_product.dart';
 import 'package:thrift_exchange/models/product.dart';
@@ -123,11 +124,11 @@ class _SearchScreenState extends State<SearchScreen> {
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
-                          // Navigator.pushNamed(
-                          //   context,
-                          //   ProductDetailScreen.routeName,
-                          //   arguments: products![index],
-                          // );
+                          Navigator.pushNamed(
+                            context,
+                            ProductsScreen.routeName,
+                            arguments: products![index],
+                          );
                         },
                         child: SearchedProduct(
                           product: products![index],
