@@ -194,11 +194,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                 ),
-                                IconButton(
-                                  onPressed: () =>
-                                      deleteProduct(productData, index),
-                                  icon: const Icon(Icons.delete_sharp),
-                                ),
+                                if (productData.email == user.email)
+                                  IconButton(
+                                    onPressed: () =>
+                                        deleteProduct(productData, index),
+                                    icon: const Icon(Icons.delete_sharp),
+                                  ),
                               ],
                             ),
                           ],

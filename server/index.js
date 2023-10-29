@@ -13,6 +13,8 @@ const listingRouter = require('./routes/listing')
 const productsRouter = require("./routes/products")
 // API for user settings changes
 const userRouter = require("./routes/user")
+// API for sending and receiving messages
+const messageRouter = require("./routes/message")
 
 
 const cors = require("cors")
@@ -35,6 +37,7 @@ app.use(authRouter);
 app.use(listingRouter);
 app.use(productsRouter);
 app.use(userRouter);
+app.use(messageRouter);
 
 // Database connections
 mongoose.connect(DATABASE_URI).then(()=>{
