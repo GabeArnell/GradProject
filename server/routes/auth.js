@@ -61,6 +61,7 @@ authRouter.post('/api/signin', async (req,res)=>{
         return res.json({token, ...existingUser._doc});
     }
     catch (error) {
+        console.log("Auth error", error.message)
         return res.status(500).json ({error: error.message});
     }
 });
