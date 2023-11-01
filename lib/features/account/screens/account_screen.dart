@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
 import 'package:thrift_exchange/features/account/widgets/below_app_bar.dart';
 import 'package:thrift_exchange/features/account/widgets/top_buttons.dart';
+import 'package:thrift_exchange/features/chat/screens/chat_home_page.dart';
+import 'package:thrift_exchange/features/home/screens/add_product_Screen.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,10 +42,18 @@ class AccountScreen extends StatelessWidget {
                   right: 15,
                 ),
                 child: Row(
-                  children: const [
+                  children: [
                     Padding(
                       padding: EdgeInsets.only(right: 15),
-                      child: Icon(Icons.notifications_outlined),
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, ChatHomePage.routeName);
+                          //ChatHomePage();
+                        },
+                        icon: Icon(
+                          Icons.message_outlined,
+                        ),
+                      ),
                     ),
                     Icon(Icons.search),
                   ],
