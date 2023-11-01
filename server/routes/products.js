@@ -5,6 +5,7 @@ const productsRouter = express.Router();
 const authModule = require("../middleware/auth");
 const Listing = require("../models/listing");
 const User = require("../models/user");
+const Rating = require("../models/rating");
 
 
 productsRouter.post('/admin/add-product', authModule, async (req, res)=>{

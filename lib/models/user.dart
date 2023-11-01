@@ -7,6 +7,7 @@ class User {
   final String email;
   final String address;
   final String type;
+  final String image;
   final String token;
 
   User({
@@ -16,6 +17,7 @@ class User {
     required this.email,
     required this.address,
     required this.type,
+    required this.image,
     required this.token,
   });
 
@@ -27,6 +29,7 @@ class User {
       'email': email,
       'address': address,
       'type': type,
+      'image': image,
       'token': token,
     };
   }
@@ -39,6 +42,7 @@ class User {
       email: map['email'] ?? '',
       address: map['address'] ?? '',
       type: map['type'] ?? '',
+      image: map['image'] ?? 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png',
       token: map['token'] ?? '',
     );
   }

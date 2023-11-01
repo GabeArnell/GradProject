@@ -6,9 +6,11 @@ class ConversationList extends StatefulWidget {
   String messageText;
   String imageUrl;
   String time;
+  String email;
   bool isMessageRead;
   ConversationList(
       {required this.name,
+      required this.email,
       required this.messageText,
       required this.imageUrl,
       required this.time,
@@ -23,7 +25,7 @@ class _ConversationListState extends State<ConversationList> {
     return GestureDetector(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return ChatDetailPage();
+          return ChatDetailPage( email: widget.email,name: widget.name);
         }));
       },
       child: Container(

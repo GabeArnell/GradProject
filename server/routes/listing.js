@@ -20,6 +20,7 @@ listingRouter.get("/api/listings",  async (req,res) => {
 });
 
 listingRouter.get("/api/products/search/:input", async(req,res)=>{
+    console.log(req.params)
     try {
         let array = await listingController.searchByField('name',req.params.input);
         res.status(200).json(array);

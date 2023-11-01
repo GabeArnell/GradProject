@@ -57,8 +57,6 @@ authRouter.post('/api/signin', async (req,res)=>{
             return res.status(400).json({error: "Invalid Credentials"})
         }
 
-        // User is Authenticated at this point
-        // TODO- THE TOKEN SHOULD ONLY BE USED FOR ABOUT 1 DAYS LENGTH
         const token = jwt.sign({id: existingUser._id}, TOKEN_PRIVATE_KEY);
         return res.json({token, ...existingUser._doc});
     }

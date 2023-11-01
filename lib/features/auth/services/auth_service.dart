@@ -29,6 +29,7 @@ class AuthService {
           email: email,
           address: '',
           type: '',
+          image: '',
           token: '');
       http.Response res = await http.post(
         Uri.parse('$SERVER_URI/api/signup'),
@@ -65,6 +66,7 @@ class AuthService {
           email: email,
           address: '',
           type: '',
+          image: '',
           token: '');
       http.Response res = await http.post(
         Uri.parse('$SERVER_URI/api/signin'),

@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
+
 import 'package:thrift_exchange/features/chat/models/chat_message_model.dart';
 
+import '../services/chat_services.dart';
+
 class ChatDetailPage extends StatefulWidget {
+  String email;
+  String name;
+  ChatDetailPage(
+      {
+      required this.email,
+      required this.name,
+      });
   @override
   _ChatDetailPageState createState() => _ChatDetailPageState();
 }
@@ -9,16 +19,32 @@ class ChatDetailPage extends StatefulWidget {
 class _ChatDetailPageState extends State<ChatDetailPage> {
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
-  List<ChatMessage> messages = [
-    ChatMessage(messageContent: "Hello, Will", messageType: "receiver"),
-    ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
-    ChatMessage(
-        messageContent: "Hey Kriss, I am doing fine dude. wbu?",
-        messageType: "sender"),
-    ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-    ChatMessage(
-        messageContent: "Is there any thing wrong?", messageType: "sender"),
-  ];
+  // List<ChatMessage> messages = [
+  //   ChatMessage(messageContent: "Hello, Will", messageType: "receiver"),
+  //   ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
+  //   ChatMessage(
+  //       messageContent: "Hey Kriss, I am doing fine dude. wbu?",
+  //       messageType: "sender"),
+  //   ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
+  //   ChatMessage(
+  //       messageContent: "Is there any thing wrong?", messageType: "sender"),
+  // ];
+
+  ChatServices chatservice = ChatServices();
+  List<ChatMessage> messages = [];
+
+
+  @override
+  void initState() {
+    super.initState();
+    fetchAllConversations();
+  }
+
+  void fetchAllConversations() async {
+    messages =  (await chatservice.getConversation(context,widget.email)).cast<ChatMessage>(); 
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +71,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                 ),
                 CircleAvatar(
                   backgroundImage: NetworkImage(
-                      "<https://randomuser.me/api/portraits/men/5.jpg>"),
+                      "https://randomuser.me/api/portraits/men/5.jpg"),
                   maxRadius: 20,
                 ),
                 SizedBox(
@@ -57,7 +83,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        "Kriss Benwat",
+                        widget.name,
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w600),
                       ),
@@ -158,18 +184,19 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     onPressed: () {
                       if (messageController.text.isNotEmpty) {
                         //Send the message as JSON data to send_message event
-                        socketIO.sendMessage('send_message',
-                            json.encode({'message': messageController.text}));
+                        print("Sending message"+ messageController.text );
                         //Add the message to the list
-                        this.setState(
-                            () => messages.add(messageController.text));
-                        messageController.text = '';
+                        setState(
+                            () => messages.add(new ChatMessage(messageContent: messageController.text, messageType: 'sender')));
                         //Scrolldown the list to show the latest message
                         scrollController.animateTo(
                           scrollController.position.maxScrollExtent,
                           duration: Duration(milliseconds: 600),
                           curve: Curves.ease,
                         );
+                        chatservice.sendMessage(context: context, recipient: widget.email, content: messageController.text);
+                        messageController.text = '';
+
                       }
                     },
                     child: Icon(

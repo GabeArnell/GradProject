@@ -11,6 +11,8 @@ import 'package:thrift_exchange/features/home/search/screens/search_screen.dart'
 import 'package:thrift_exchange/features/home/services/home_services.dart';
 import 'package:thrift_exchange/models/product.dart';
 
+import '../../chat/services/chat_services.dart';
+
 //Not needed for thhis week
 class ProductsScreen extends StatefulWidget {
   static const String routeName = '/product-details';
@@ -25,6 +27,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
   void navigateToSearchScreen(String query) {
     Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
   }
+
+  final ChatServices chatService = ChatServices();
 
   @override
   Widget build(BuildContext context) {
@@ -230,6 +234,11 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     return 'Enter your Message';
                   }
                   return null;
+                },
+                onFieldSubmitted: (value) {
+                  if (value.isNotEmpty) {
+                    chatService.sendMessage(context: context, recipient: widget.product.email, content: value);
+                  }
                 },
               ),
             ),

@@ -3,65 +3,31 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:thrift_exchange/features/chat/models/chat_user_models.dart';
 import 'package:thrift_exchange/features/chat/widgets/conversation_list.dart';
-
+import "../services/chat_services.dart";
 class ChatPage extends StatefulWidget {
   @override
   _ChatPageState createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
-  List<ChatUsers> chatUsers = [
-    ChatUsers(
-        name: "Jane Russel",
-        messageText: "Awesome Setup",
-        imageURL:
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png",
-        time: "Now"),
-    ChatUsers(
-        name: "Glady's Murphy",
-        messageText: "That's Great",
-        imageURL:
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png",
-        time: "Yesterday"),
-    ChatUsers(
-        name: "Jorge Henry",
-        messageText: "Hey where are you?",
-        imageURL:
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png",
-        time: "31 Mar"),
-    ChatUsers(
-        name: "Philip Fox",
-        messageText: "Busy! Call me in 20 mins",
-        imageURL:
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png",
-        time: "28 Mar"),
-    ChatUsers(
-        name: "Debra Hawkins",
-        messageText: "Thankyou, It's awesome",
-        imageURL:
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png",
-        time: "23 Mar"),
-    ChatUsers(
-        name: "Jacob Pena",
-        messageText: "will update you in evening",
-        imageURL:
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png",
-        time: "17 Mar"),
-    ChatUsers(
-        name: "Andrey Jones",
-        messageText: "Can you please share the file?",
-        imageURL:
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png",
-        time: "24 Feb"),
-    ChatUsers(
-        name: "John Wick",
-        messageText: "How are you?",
-        imageURL:
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png",
-        time: "18 Feb"),
-  ];
+
+  ChatServices chatservice = ChatServices();
+  List<ChatUsers> chatUsers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchAllConversations();
+  }
+
+  void fetchAllConversations() async {
+    chatUsers =  (await chatservice.fetchConversations(context)).cast<ChatUsers>(); 
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
@@ -146,6 +112,7 @@ class _ChatPageState extends State<ChatPage> {
               itemBuilder: (context, index) {
                 return ConversationList(
                   name: chatUsers[index].name,
+                  email: chatUsers[index].email,
                   messageText: chatUsers[index].messageText,
                   imageUrl: chatUsers[index].imageURL,
                   time: chatUsers[index].time,
