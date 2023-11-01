@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:thrift_exchange/features/chat/models/chat_message_model.dart';
@@ -39,12 +41,21 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   @override
   void initState() {
     super.initState();
-    fetchAllConversations();
+    fetchCurrentConversation();
+    startUpdateLoop();
   }
 
-  void fetchAllConversations() async {
+  void fetchCurrentConversation() async {
     messages =  (await chatservice.getConversation(context,widget.email)).cast<ChatMessage>(); 
     setState(() {});
+  }
+  
+  startUpdateLoop() {
+    Timer.periodic(Duration(milliseconds: 5000), (timer) {
+      setState(() {
+        fetchCurrentConversation();
+      });
+    });
   }
 
   @override

@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:thrift_exchange/features/chat/models/chat_user_models.dart';
 import 'package:thrift_exchange/features/chat/widgets/conversation_list.dart';
@@ -17,11 +19,20 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
     fetchAllConversations();
+    startUpdateLoop();
   }
 
   void fetchAllConversations() async {
     chatUsers =  (await chatservice.fetchConversations(context)).cast<ChatUsers>(); 
     setState(() {});
+  }
+
+  startUpdateLoop() {
+    Timer.periodic(Duration(milliseconds: 10000), (timer) {
+      setState(() {
+        fetchAllConversations();
+      });
+    });
   }
 
   @override
