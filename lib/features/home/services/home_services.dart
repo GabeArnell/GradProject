@@ -135,4 +135,50 @@ class HomeServices {
       showSnackBar(context, e.toString());
     }
   }
+
+  Future<String> descriptionHelp({
+    required BuildContext context,
+    required String name,
+    required String description,
+    required String price,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    try {
+      showSnackBar(context, 'Generating description.');
+
+      http.Response res = await http.post(
+        Uri.parse('$SERVER_URI/api/chatbot/description-gen'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+        body: jsonEncode({
+          'name': name,
+          'description': description,
+          'price': price,
+        })
+      );
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          showSnackBar(context, 'Description generated.');
+
+        },
+      );
+      print(jsonDecode(res.body));
+      return jsonDecode(res.body);
+
+    } catch (e) {
+      showSnackBar(
+        context,
+        e.toString(),
+      );
+      return "Could not connect to Service";
+
+    }
+  }
+
+
 }

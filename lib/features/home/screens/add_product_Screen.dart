@@ -64,6 +64,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
     Navigator.pop(context);
   }
 
+  void generateDescription() async{
+    if (productNameController.text.isNotEmpty){
+      String response = await homeServices.descriptionHelp(
+        context: context, 
+      name: productNameController.text, 
+      description: descriptionController.text, 
+      price: priceController.text);
+      if (response != 'Could not connect to Service'){
+        descriptionController.text = response;
+      }
+    }
+  }
+
   void selectImages() async {
     var res = await pickImages();
     setState(() {
@@ -168,6 +181,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
               const SizedBox(
                 height: 13,
               ),
+              CustomButton(
+                text: 'Generate Description',
+                onTap: generateDescription,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+
               CustomTextField(
                 controller: priceController,
                 hintText: 'Price',

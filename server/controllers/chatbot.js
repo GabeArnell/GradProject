@@ -12,9 +12,17 @@ async function communicate(message){
         model: "gpt-4",
         messages: [{role: "user", content: message}],
     });
-    return (completion.choices[0].message)
+    console.log("ChatGPT:", completion.choices[0].message)
+    return (completion.choices[0].message.content)
 }
-communicate("Write a description for my used Saber tennis racket that will make people want to buy it. Also suggest a price for it. Keep it under 200 words.")
-.then(msg =>{
-    console.log("ChatGPT:",msg.content)
-})
+
+
+module.exports.descriptionGen = async (name,info,price)=>{
+    let prompt = `Write an amazon description for a product given the name, info, and price. Make people want to buy it. Answer in less than 70 words.\n`
+    prompt+=`name: ${name.trim()}\n`
+    prompt+=`info: ${info.trim()}\n`
+    prompt+=`price: ${price.trim()}\n`
+    let answer = await communicate(prompt);
+    return answer;
+
+}
