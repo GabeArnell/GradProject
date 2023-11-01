@@ -45,6 +45,8 @@ messageRouter.get("/api/get-conversation-headers", authModule, async (req,res) =
             }
             msg.convoemail = sender[0].email
             msg.convoname = sender[0].name
+            msg.convoimage = sender[0].image || null;
+
             if (!convoMap[sender[0].email]){
 
                 convoMap[sender[0].email] = msg;
@@ -62,6 +64,7 @@ messageRouter.get("/api/get-conversation-headers", authModule, async (req,res) =
             }
             msg.convoemail = recipient[0].email
             msg.convoname = recipient[0].name
+            msg.convoimage = recipient[0].image || null;
 
             if (!convoMap[recipient[0].email]){
                 convoMap[recipient[0].email] = msg;
@@ -84,7 +87,7 @@ messageRouter.get("/api/get-conversation-headers", authModule, async (req,res) =
                 name: msg.convoname,
                 email: msg.convoemail,
                 messageText: msg.content,
-                imageURL: user.image || "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png",
+                imageURL: msg.convoimage || "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png",
                 time: stringDate
             })
         }

@@ -7,10 +7,12 @@ import '../services/chat_services.dart';
 class ChatDetailPage extends StatefulWidget {
   String email;
   String name;
+  String imageURL;
   ChatDetailPage(
       {
       required this.email,
       required this.name,
+      required this.imageURL,
       });
   @override
   _ChatDetailPageState createState() => _ChatDetailPageState();
@@ -71,7 +73,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                 ),
                 CircleAvatar(
                   backgroundImage: NetworkImage(
-                      "https://randomuser.me/api/portraits/men/5.jpg"),
+                      widget.imageURL),
                   maxRadius: 20,
                 ),
                 SizedBox(

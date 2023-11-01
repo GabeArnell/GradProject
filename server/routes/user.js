@@ -21,7 +21,6 @@ userRouter.post('/api/profile/update-details', authModule, async (req, res)=>{
         break;
     case('password'):
         changePassword(req,res,req.body.detail.trim())
-
         break;
    }
 });
