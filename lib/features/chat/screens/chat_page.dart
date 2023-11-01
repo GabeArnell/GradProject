@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:thrift_exchange/features/chat/models/chat_user_models.dart';
