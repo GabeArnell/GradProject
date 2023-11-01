@@ -59,6 +59,8 @@ class AuthService {
     required String password,
   }) async {
     try {
+
+  
       User user = User(
           id: '',
           name: '',
@@ -68,12 +70,13 @@ class AuthService {
           type: '',
           image: '',
           token: '');
+
       http.Response res = await http.post(
-        Uri.parse('$SERVER_URI/api/signin'),
-        body: user.toJson(),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8'
-        },
+      Uri.parse('$SERVER_URI/api/signin'), 
+      body: user.toJson(),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
       );
 
       // ignore: use_build_context_synchronously
@@ -93,7 +96,10 @@ class AuthService {
                       });
             });
           });
-    } catch (error) {}
+    } catch (error) {
+      print("Auth Error");
+      print(error);
+    }
   }
 
   // Get User data
