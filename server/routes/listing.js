@@ -19,6 +19,24 @@ listingRouter.get("/api/listings",  async (req,res) => {
     }
 });
 
+
+listingRouter.get("/api/my-listings",  authModule, async (req,res) => {
+    try {
+        const existingUser = await User.findById(req.user);
+
+        let results = await Listing.find({ 'seller': existingUser.email});
+    
+        console.log(results)
+
+        res.status(200).json(results);    
+    }
+    catch (e)
+    {
+        return res.status(500).json ({error: error.message});
+    }
+});
+
+
 listingRouter.get("/api/products/search/:input", async(req,res)=>{
     console.log(req.params)
     try {
