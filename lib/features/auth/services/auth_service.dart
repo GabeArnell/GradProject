@@ -23,14 +23,16 @@ class AuthService {
   }) async {
     try {
       User user = User(
-          id: '',
-          name: name,
-          password: password,
-          email: email,
-          address: '',
-          type: '',
-          image: '',
-          token: '');
+        id: '',
+        name: name,
+        password: password,
+        email: email,
+        address: '',
+        type: '',
+        image: '',
+        token: '',
+        cart: [],
+      );
       http.Response res = await http.post(
         Uri.parse('$SERVER_URI/api/signup'),
         body: user.toJson(),
@@ -59,24 +61,24 @@ class AuthService {
     required String password,
   }) async {
     try {
-
-  
       User user = User(
-          id: '',
-          name: '',
-          password: password,
-          email: email,
-          address: '',
-          type: '',
-          image: '',
-          token: '');
+        id: '',
+        name: '',
+        password: password,
+        email: email,
+        address: '',
+        type: '',
+        image: '',
+        token: '',
+        cart: [],
+      );
 
       http.Response res = await http.post(
-      Uri.parse('$SERVER_URI/api/signin'), 
-      body: user.toJson(),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8'
-      },
+        Uri.parse('$SERVER_URI/api/signin'),
+        body: user.toJson(),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
       );
 
       // ignore: use_build_context_synchronously

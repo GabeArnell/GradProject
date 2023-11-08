@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:thrift_exchange/common/widgets/bottom_bar.dart';
+import 'package:thrift_exchange/features/account/screens/postings.dart';
 import 'package:thrift_exchange/features/account/screens/profile_screen.dart';
 import 'package:thrift_exchange/features/chat/screens/chat_home_page.dart';
 import 'package:thrift_exchange/features/home/screens/add_product_Screen.dart';
@@ -62,6 +63,11 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
       return MaterialPageRoute(
         settings: routeSettings,
         builder: (_) => ChatHomePage(),
+      );
+    case PostingsPage.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => PostingsPage(),
       );
     case BottomBar.routeName:
       return MaterialPageRoute(

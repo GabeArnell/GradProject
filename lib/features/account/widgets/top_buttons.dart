@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thrift_exchange/constants/utils.dart';
+import 'package:thrift_exchange/features/account/screens/postings.dart';
 import 'package:thrift_exchange/features/account/screens/profile_screen.dart';
 import 'package:thrift_exchange/features/account/widgets/account_button.dart';
 import 'package:thrift_exchange/features/account/widgets/orders.dart';
@@ -16,6 +17,10 @@ class TopBottons extends StatefulWidget {
 class _TopBottonsState extends State<TopBottons> {
   void navigateToProfileScreen() {
     Navigator.pushNamed(context, ProfilePage.routeName);
+  }
+
+  void navigateToPostingsScreen() {
+    Navigator.pushNamed(context, PostingsPage.routeName);
   }
 
   @override
@@ -52,7 +57,8 @@ class _TopBottonsState extends State<TopBottons> {
         ),
         Row(
           children: [
-            AccountButton(text: 'Your Postings', onPressed: () {}),
+            AccountButton(
+                text: 'Your Postings', onPressed: navigateToPostingsScreen),
           ],
         ),
         SizedBox(
