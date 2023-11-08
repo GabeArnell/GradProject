@@ -10,12 +10,11 @@ class ChatDetailPage extends StatefulWidget {
   String email;
   String name;
   String imageURL;
-  ChatDetailPage(
-      {
-      required this.email,
-      required this.name,
-      required this.imageURL,
-      });
+  ChatDetailPage({
+    required this.email,
+    required this.name,
+    required this.imageURL,
+  });
   @override
   _ChatDetailPageState createState() => _ChatDetailPageState();
 }
@@ -37,7 +36,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   ChatServices chatservice = ChatServices();
   List<ChatMessage> messages = [];
 
-
   @override
   void initState() {
     super.initState();
@@ -46,10 +44,11 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   }
 
   void fetchCurrentConversation() async {
-    messages =  (await chatservice.getConversation(context,widget.email)).cast<ChatMessage>(); 
+    messages = (await chatservice.getConversation(context, widget.email))
+        .cast<ChatMessage>();
     setState(() {});
   }
-  
+
   startUpdateLoop() {
     Timer.periodic(Duration(milliseconds: 5000), (timer) {
       setState(() {
@@ -83,8 +82,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   width: 2,
                 ),
                 CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      widget.imageURL),
+                  backgroundImage: NetworkImage(widget.imageURL),
                   maxRadius: 20,
                 ),
                 SizedBox(
@@ -155,7 +153,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
               },
             ),
           ),
-          
           Align(
             alignment: Alignment.bottomLeft,
             child: Container(
@@ -200,19 +197,22 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     onPressed: () {
                       if (messageController.text.isNotEmpty) {
                         //Send the message as JSON data to send_message event
-                        print("Sending message"+ messageController.text );
+                        print("Sending message" + messageController.text);
                         //Add the message to the list
-                        setState(
-                            () => messages.add(new ChatMessage(messageContent: messageController.text, messageType: 'sender')));
+                        setState(() => messages.add(new ChatMessage(
+                            messageContent: messageController.text,
+                            messageType: 'sender')));
                         //Scrolldown the list to show the latest message
                         scrollController.animateTo(
                           scrollController.position.maxScrollExtent,
                           duration: Duration(milliseconds: 600),
                           curve: Curves.ease,
                         );
-                        chatservice.sendMessage(context: context, recipient: widget.email, content: messageController.text);
+                        chatservice.sendMessage(
+                            context: context,
+                            recipient: widget.email,
+                            content: messageController.text);
                         messageController.text = '';
-
                       }
                     },
                     child: Icon(

@@ -1,8 +1,11 @@
 import 'package:badges/badges.dart' as bd;
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
 import 'package:thrift_exchange/features/account/screens/account_screen.dart';
+import 'package:thrift_exchange/features/cart/screens/cart_screen.dart';
 import 'package:thrift_exchange/features/home/screens/home_screens.dart';
+import 'package:thrift_exchange/providers/user_provider.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({super.key});
@@ -19,9 +22,7 @@ class _BottomBarState extends State<BottomBar> {
   List<Widget> pages = [
     const HomeScreen(),
     const AccountScreen(),
-    const Center(
-      child: Text('Cart Page'),
-    ),
+    const CartScreen(),
   ];
 
   void updatePage(int page) {
@@ -32,6 +33,7 @@ class _BottomBarState extends State<BottomBar> {
 
   @override
   Widget build(BuildContext context) {
+    final userCartLength = context.watch<UserProvider>().user.cart.length;
     return Scaffold(
       body: pages[_page],
       bottomNavigationBar: BottomNavigationBar(
@@ -92,7 +94,7 @@ class _BottomBarState extends State<BottomBar> {
               ),
               child: bd.Badge(
                 elevation: 0,
-                badgeContent: const Text('0'),
+                badgeContent: Text(userCartLength.toString()),
                 badgeColor: Colors.white,
                 child: const Icon(
                   Icons.shopping_cart_outlined,

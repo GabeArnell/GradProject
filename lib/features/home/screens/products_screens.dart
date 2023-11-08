@@ -9,6 +9,7 @@ import 'package:thrift_exchange/features/home/screens/add_product_Screen.dart';
 import 'package:thrift_exchange/features/home/screens/home_screens.dart';
 import 'package:thrift_exchange/features/home/search/screens/search_screen.dart';
 import 'package:thrift_exchange/features/home/services/home_services.dart';
+import 'package:thrift_exchange/features/home/services/product_services.dart';
 import 'package:thrift_exchange/models/product.dart';
 
 import '../../chat/services/chat_services.dart';
@@ -24,8 +25,16 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
+  ProductServices prodServices = ProductServices();
   void navigateToSearchScreen(String query) {
     Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
+  }
+
+  void addToCart() {
+    prodServices.addToCart(
+      context: context,
+      product: widget.product,
+    );
   }
 
   final ChatServices chatService = ChatServices();
@@ -237,7 +246,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 },
                 onFieldSubmitted: (value) {
                   if (value.isNotEmpty) {
-                    chatService.sendMessage(context: context, recipient: widget.product.email, content: value);
+                    chatService.sendMessage(
+                        context: context,
+                        recipient: widget.product.email,
+                        content: value);
                   }
                 },
               ),
@@ -254,7 +266,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
             Padding(
               padding: const EdgeInsets.only(
                   left: 10.0, right: 10, bottom: 5, top: 5),
-              child: CustomButton(text: 'Add to Cart', onTap: () {}),
+              child: CustomButton(text: 'Add to Cart', onTap: addToCart),
             ),
             Container(
               color: Colors.black12,

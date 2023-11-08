@@ -9,6 +9,7 @@ class User {
   final String type;
   final String image;
   final String token;
+  final List<dynamic> cart;
 
   User({
     required this.id,
@@ -19,6 +20,7 @@ class User {
     required this.type,
     required this.image,
     required this.token,
+    required this.cart,
   });
 
   Map<String, dynamic> toMap() {
@@ -31,6 +33,7 @@ class User {
       'type': type,
       'image': image,
       'token': token,
+      'cart': cart,
     };
   }
 
@@ -42,12 +45,41 @@ class User {
       email: map['email'] ?? '',
       address: map['address'] ?? '',
       type: map['type'] ?? '',
-      image: map['image'] ?? 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png',
+      image: map['image'] ??
+          'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png',
       token: map['token'] ?? '',
+      cart: List<Map<String, dynamic>>.from(
+        map['cart']?.map(
+          (x) => Map<String, dynamic>.from(x),
+        ),
+      ),
     );
   }
 
   String toJson() => json.encode(toMap());
 
   factory User.fromJson(String source) => User.fromMap(json.decode(source));
+  User copyWith({
+    String? id,
+    String? name,
+    String? email,
+    String? password,
+    String? address,
+    String? type,
+    String? image,
+    String? token,
+    List<dynamic>? cart,
+  }) {
+    return User(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      password: password ?? this.password,
+      address: address ?? this.address,
+      type: type ?? this.type,
+      token: token ?? this.token,
+      cart: cart ?? this.cart,
+      image: image ?? this.image,
+    );
+  }
 }
