@@ -58,6 +58,7 @@ authRouter.post('/api/signin', async (req,res)=>{
         }
 
         const token = jwt.sign({id: existingUser._id}, TOKEN_PRIVATE_KEY);
+        console.log("returning",existingUser._doc);
         return res.json({token, ...existingUser._doc});
     }
     catch (error) {

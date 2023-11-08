@@ -1,9 +1,6 @@
 const nodemailer = require('nodemailer');
 const {EMAIL_USERNAME,EMAIL_PASSWORD}  = require("../config.json")
-const html = `
-<h1>Hello World</h1>
-<p>This is our first *successful* email</p>
-`
+
 
 module.exports.sendEmail = async (address,subject, htmlContent)=>{
     const transporter = nodemailer.createTransport({
