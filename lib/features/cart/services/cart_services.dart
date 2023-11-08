@@ -9,6 +9,7 @@ import 'package:thrift_exchange/constants/server_path.dart';
 import 'package:thrift_exchange/constants/utils.dart';
 import 'package:thrift_exchange/models/user.dart';
 import 'package:thrift_exchange/providers/user_provider.dart';
+import 'dart:convert';
 
 class CartServices {
   void removeFromCart({
@@ -33,6 +34,8 @@ class CartServices {
           User user =
               userProvider.user.copyWith(cart: jsonDecode(res.body)['cart']);
           userProvider.setUserFromModel(user);
+          showSnackBar(context, 'Added product to cart!');
+
         },
       );
     } catch (e) {

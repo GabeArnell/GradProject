@@ -12,7 +12,6 @@ class PostingItem extends StatefulWidget {
 class _PostingItemState extends State<PostingItem> {
   @override
   Widget build(BuildContext context) {
-    var product;
     return Column(
       children: [
         Container(
@@ -22,7 +21,7 @@ class _PostingItemState extends State<PostingItem> {
           child: Row(
             children: [
               Image.network(
-                product.images[0],
+                widget.product.images[0],
                 fit: BoxFit.contain,
                 height: 135,
                 width: 135,
@@ -33,7 +32,7 @@ class _PostingItemState extends State<PostingItem> {
                     width: 235,
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
-                      product.name,
+                      widget.product.name,
                       style: const TextStyle(
                         fontSize: 16,
                       ),
@@ -44,7 +43,7 @@ class _PostingItemState extends State<PostingItem> {
                     width: 235,
                     padding: const EdgeInsets.only(left: 10, top: 5),
                     child: Text(
-                      '\$${product.price}',
+                      '\$${widget.product.price}',
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,

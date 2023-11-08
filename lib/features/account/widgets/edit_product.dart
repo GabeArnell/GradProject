@@ -59,9 +59,18 @@ class _EditProductPageState extends State<EditProductPage> {
     'Other'
   ];
 
-  void submitProduct() {
-    if (_addProductFormKey.currentState!.validate() || images.isNotEmpty) {
-      homeServices.submitProduct(
+  void submitProduct(String id) {
+      if (priceController.text.isEmpty){
+        priceController.text = "-1";
+      }
+      if (quantityController.text.isEmpty){
+        quantityController.text = "-1";
+      }
+      if (zipcodeController.text.isEmpty){
+        zipcodeController.text = "0";
+      }
+      homeServices.editProduct(
+        id: id,
         context: context,
         name: productNameController.text,
         description: descriptionController.text,
@@ -71,7 +80,10 @@ class _EditProductPageState extends State<EditProductPage> {
         category: category,
         images: images,
       );
-    }
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Editted product")));
+
+    Navigator.pop(context);
     Navigator.pop(context);
   }
 
@@ -179,14 +191,14 @@ class _EditProductPageState extends State<EditProductPage> {
               ),
               CustomTextField(
                 controller: productNameController,
-                hintText: widget.product.name,
+                hintText: "Name: ${widget.product.name}",
               ),
               const SizedBox(
                 height: 13,
               ),
               CustomTextField(
                 controller: descriptionController,
-                hintText: widget.product.description,
+                hintText: "Description: ${widget.product.description}",
                 maxLines: 8,
               ),
               const SizedBox(
@@ -197,21 +209,21 @@ class _EditProductPageState extends State<EditProductPage> {
               ),
               CustomTextField(
                 controller: priceController,
-                hintText: widget.product.price.toString(),
+                hintText: "Price: ${widget.product.price}",
               ),
               const SizedBox(
                 height: 13,
               ),
               CustomTextField(
                 controller: quantityController,
-                hintText: widget.product.quantity.toString(),
+                hintText: "Quantity: ${widget.product.quantity}",
               ),
               const SizedBox(
                 height: 13,
               ),
               CustomTextField(
                 controller: zipcodeController,
-                hintText: widget.product.zipcode.toString(),
+                hintText: "Zip Code: ${widget.product.zipcode}",
               ),
               const SizedBox(
                 height: 13,
@@ -239,7 +251,9 @@ class _EditProductPageState extends State<EditProductPage> {
               ),
               CustomButton(
                 text: 'Submit',
-                onTap: submitProduct,
+                onTap: (){
+                  submitProduct(widget.product.id!);
+                },
               ),
               const SizedBox(
                 height: 15,

@@ -62,6 +62,55 @@ productsRouter.post('/admin/add-product', authModule, async (req, res)=>{
         return res.status(500).json ({error: e.message});
     }
 })
+productsRouter.post('/admin/edit-product', authModule, async (req, res)=>{
+    console.log("EDITING PRODUCT")
+    console.log(req.user);
+    console.log(req.body);
+    let item = req.body;
+    try {
+        const existingUser = await User.findById(req.user);
+        if (!existingUser){
+            return res.status(500).json ({error: "Could not find user"});
+        }
+        let existingListing = await Listing.findById(item.id);
+        if (!existingListing){
+            return res.status(500).json ({error: "Could not find product"});
+        }
+        if (item.name != null && item.name.length > 0){
+            existingListing.name = item.name;
+        }
+        if (item.description != null && item.description.length > 0){
+            existingListing.description = item.description;
+        }
+        if (item.category != null && item.category.length > 0){
+            existingListing.category = item.category;
+        }
+        if (parseInt(item.quantity) != null && item.quantity >= 1){
+            existingListing.quantity = parseInt(item.quantity);
+        }
+
+        if (parseFloat(item.price) != null && parseFloat(item.price) >= 0){
+            existingListing.price = parseFloat(item.price);
+        }
+        
+        if (parseInt(item.zipcode) != null && item.zipcode >1 ){
+            existingListing.zipcode = item.zipcode;
+        }
+
+        if (item.images.length > 0){
+            existingListing.images.push(...item.images)
+        }
+        
+
+        existingListing = await existingListing.save()
+        res.json(existingListing);
+
+    }
+    catch (e){
+        console.log('prod error', e.message);
+        return res.status(500).json ({error: e.message});
+    }
+})
 productsRouter.post('/delete-product', authModule, async (req, res)=>{
     console.log(req.user);
     let item = req.body;

@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thrift_exchange/common/widgets/custom_button.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
+import 'package:thrift_exchange/features/cart/screens/checkout_screen.dart';
 import 'package:thrift_exchange/features/cart/widgets/cart_product.dart';
 import 'package:thrift_exchange/features/cart/widgets/cart_subtotal.dart';
 import 'package:thrift_exchange/features/home/search/screens/search_screen.dart';
 import 'package:thrift_exchange/providers/user_provider.dart';
+
+import '../../../models/product.dart';
+import '../services/cart_services.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -20,10 +24,26 @@ class _CartScreenState extends State<CartScreen> {
       'query': query,
     });
   }
+  final CartServices cartServices = CartServices();
+
+  List<Product> products = [];
+  void initState() {
+    super.initState();
+    loadCart();
+  }
+
+  void loadCart() async {
+    products = (await cartServices.fetchCartProducts(context)).cast<Product>();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     final user = context.watch<UserProvider>().user;
+    num userCartLength = 0;
+    for (int i = 0; i < context.watch<UserProvider>().user.cart.length; i++){
+      userCartLength += context.watch<UserProvider>().user.cart[i]['quantity'];
+    }
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(67),
@@ -104,12 +124,19 @@ class _CartScreenState extends State<CartScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const CartSubtotal(),
+            CartSubtotal(products: products),
             Padding(
               padding: const EdgeInsets.all(17),
               child: CustomButton(
-                text: 'Proceed to Buy (${user.cart.length} items)',
-                onTap: () {},
+                text: 'Proceed to Buy (${userCartLength} items)',
+                onTap: () {
+                  if (userCartLength > 0){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return CheckoutScreen(
+                          products: products);
+                    }));
+                  }
+                },
                 color: Colors.yellow[600],
               ),
             ),
@@ -124,11 +151,12 @@ class _CartScreenState extends State<CartScreen> {
               height: 10,
             ),
             ListView.builder(
-              itemCount: user.cart.length,
+              itemCount: products.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 return CartProduct(
                   index: index,
+                  product: products[index]
                 );
               },
             ),

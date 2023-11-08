@@ -74,6 +74,64 @@ class HomeServices {
     }
   }
 
+  void editProduct({
+    required BuildContext context,
+    required String id,
+    required String name,
+    required String description,
+    required double price,
+    required double quantity,
+    required double zipcode,
+    required String category,
+    required List<File> images,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    try {
+      final cloudinary = CloudinaryPublic('dyczsvdgt', 'irpg0kb6');
+      List<String> imageUrls = [];
+      for (int i = 0; i < images.length; i++) {
+        CloudinaryResponse res = await cloudinary.uploadFile(
+          CloudinaryFile.fromFile(images[i].path, folder: name),
+        );
+        imageUrls.add(res.secureUrl);
+      }
+      Product product = Product(
+        id: id,
+        name: name,
+        description: description,
+        quantity: quantity,
+        images: imageUrls,
+        category: category,
+        price: price,
+        zipcode: zipcode,
+        email: ''
+      );
+      http.Response res = await http.post(
+        Uri.parse('$SERVER_URI/admin/edit-product'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+        body: product.toJson(),
+      );
+
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          showSnackBar(context, 'Product Edited Successfully!');
+          Navigator.pop(context);
+        },
+      );
+    } catch (e) {
+      showSnackBar(
+        context,
+        e.toString(),
+      );
+    }
+  }
+
   Future<List<Product>> fetchAllProducts(BuildContext context) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     List<Product> productList = [];

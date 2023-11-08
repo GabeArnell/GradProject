@@ -6,6 +6,8 @@ import 'package:thrift_exchange/features/account/widgets/posting_item.dart';
 import 'package:thrift_exchange/features/home/screens/products_screens.dart';
 import 'package:thrift_exchange/models/product.dart';
 
+import '../widgets/edit_product.dart';
+
 class PostingsPage extends StatefulWidget {
   static const String routeName = '/show-postings';
   const PostingsPage({super.key});
@@ -69,7 +71,7 @@ class _PostingsPageState extends State<PostingsPage> {
                         onTap: () {
                           Navigator.pushNamed(
                             context,
-                            ProductsScreen.routeName,
+                            EditProductPage.routeName,
                             arguments: postings![index],
                           );
                         },

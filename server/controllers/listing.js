@@ -25,7 +25,7 @@ module.exports.getDemoListings = ()=>{
             name: "Computer Monitor",
             images: ["https://i.pcmag.com/imagery/roundups/05ersXu1oMXozYJa66i9GEo-40..v1657319390.jpg"],
             price: 30.00,
-            category: "Technology",
+            category: "Electronics",
             description: "Need to get rid of my second monitor when I leave the dormatory. Open to haggle.",
             email: "gabe@gmail.com",
             zipcode: 12601,
@@ -44,6 +44,6 @@ module.exports.searchByField = async(field,input) =>{
     let results = await Listing.find({ 'name': 
         {$regex: input, $options: 'i'}
     });
-    console.log(results)
+    //console.log(results)
     return results;
 }
