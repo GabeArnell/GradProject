@@ -43,33 +43,6 @@ class CartServices {
     }
   }
 
-  void removeFromCart({    required BuildContext context,
-    required Product product,
-})async{
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-
-    try {
-      http.Response res = await http.delete(
-        Uri.parse('$SERVER_URI/api/remove-from-cart/'+product.id.toString()),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': userProvider.user.token,
-        },
-      );
-
-      httpErrorHandle(
-        response: res,
-        context: context,
-        onSuccess: () {
-          User user =
-              userProvider.user.copyWith(cart: jsonDecode(res.body)['cart']);
-          userProvider.setUserFromModel(user);
-        },
-      );
-    } catch (e) {
-      showSnackBar(context, e.toString());
-    }
-  }
 
  Future<List<Product>> fetchCartProducts(BuildContext context) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
