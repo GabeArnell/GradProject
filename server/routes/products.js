@@ -6,7 +6,7 @@ const authModule = require("../middleware/auth");
 const {Listing} = require("../models/listing");
 const User = require("../models/user");
 const Rating = require("../models/rating");
-
+const mailer = require("../controllers/mailer")
 
 productsRouter.post('/admin/add-product', authModule, async (req, res)=>{
     console.log(req.user);
@@ -185,28 +185,43 @@ productsRouter.delete('/api/remove-from-cart/:id', authModule, async(req,res)=>{
 
 
 
-// productsRouter.post('/checkout', authModule, async (req, res)=>{
-//     console.log(req.user);
-//     try {
-//         const existingUser = await User.findById(req.user);
-//         if (!existingUser){
-//             return res.status(500).json ({error: "Could not find user"});
-//         }
+productsRouter.post('/checkout', authModule, async (req, res)=>{
+    console.log(req.user);
+    try {
+        let existingUser = await User.findById(req.user);
+        if (!existingUser){
+            return res.status(500).json ({error: "Could not find user"});
+        }
+        if (existingUser.cart.length < 1){
+            return res.status(500).json({error: "No items in cart"});
+        }
 
-//         let existingListing = await Listing.findById(item.id);
-//         if (!existingListing){
-//             return res.status(400).json ({error: "Could not find product to delete."});
-//         }       
-
-//         let existingCart = await Cart.find({email: existingUser.email});
-//         if (!existingListing || existingCart.items.length < 1){
-//             return res.status(400).json ({error: "Empty Carts can not checkout"});
-//         }
+       let totalPrice = 0;
+       let totalItems = 0;
+       let html =''
         
-//         res.status(200).json(existingCart);
-//     }
-//     catch (e){
-//         return res.status(500).json ({error: error.message});
-//     }
-// })
+        res.status(200).json(existingUser.cart);
+
+        while(existingUser.cart.length > 0){
+            let dupple = existingUser.cart.shift();
+            totalItems += dupple.quantity;
+            let basePrice = dupple.product.price;
+            totalPrice += dupple.quantity * basePrice;
+            html+=`<li>x${dupple.quantity} ${dupple.product.name} | ${basePrice * dupple.quantity}</li>`;
+        }
+        let tax = 0.08;
+        let salesTax = totalItems * tax;
+
+        html = `<ul>${html}</ul>`
+        html+=`<br><hr>Price: $${totalPrice}<br>Sales Tax: $${salesTax}<br>Total Price: $${totalPrice + salesTax}`;
+
+        existingUser = existingUser.save();
+        mailer.sendEmail(existingUser.email,"ThriftExchange Receipt", html);
+
+        res.status(200).json(existingUser);
+    }
+    catch (e){
+        return res.status(500).json ({error: error.message});
+    }
+})
 module.exports = productsRouter;

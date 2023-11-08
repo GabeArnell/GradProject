@@ -5,7 +5,7 @@ const html = `
 <p>This is our first *successful* email</p>
 `
 
-async function sendEmail(){
+module.exports.sendEmail = async (address,subject, htmlContent)=>{
     const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
@@ -15,17 +15,11 @@ async function sendEmail(){
     })
     const info = await transporter.sendMail({
         from: EMAIL_USERNAME,
-        to: "gabearnell@gmail.com",
-        subject: "Test Email",
-        html: html
+        to: address,
+        subject: subject,
+        html: htmlContent
     })
 }
-
-sendEmail()
-.catch(error=>{
-    console.log(error)
-})
-
 
 // let mailTransporter = nodemailer.createTransport({
 //     service: "gmail",
