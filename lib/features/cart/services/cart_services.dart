@@ -9,7 +9,6 @@ import 'package:thrift_exchange/constants/server_path.dart';
 import 'package:thrift_exchange/constants/utils.dart';
 import 'package:thrift_exchange/models/user.dart';
 import 'package:thrift_exchange/providers/user_provider.dart';
-import 'dart:convert';
 
 class CartServices {
   void removeFromCart({
@@ -34,76 +33,10 @@ class CartServices {
           User user =
               userProvider.user.copyWith(cart: jsonDecode(res.body)['cart']);
           userProvider.setUserFromModel(user);
-          showSnackBar(context, 'Added product to cart!');
-
         },
       );
     } catch (e) {
       showSnackBar(context, e.toString());
     }
   }
-
-
- Future<List<Product>> fetchCartProducts(BuildContext context) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    List<Product> productList = [];
-    try {
-      http.Response res =
-          await http.get(Uri.parse('$SERVER_URI/api/get-cart-products'), headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': userProvider.user.token,
-      });
-
-      httpErrorHandle(
-        response: res,
-        context: context,
-        onSuccess: () {
-          for (int i = 0; i < jsonDecode(res.body).length; i++) {
-            productList.add(
-              Product.fromJson(
-                jsonEncode(
-                  jsonDecode(res.body)[i],
-                ),
-              ),
-            );
-          }
-        },
-      );
-    } catch (e) {
-      showSnackBar(context, e.toString());
-    }
-    return productList;
-  }
-
-  void checkoutCart({
-    required BuildContext context
-  }) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-
-    try {
-      http.Response res = await http.post(
-        Uri.parse('$SERVER_URI/api/checkout'),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': userProvider.user.token,
-        }
-      );
-
-      httpErrorHandle(
-        response: res,
-        context: context,
-        onSuccess: () {
-          User user =
-              userProvider.user.copyWith(cart: jsonDecode(res.body)['cart']);
-          userProvider.setUserFromModel(user);
-          showSnackBar(context, 'Order processed!');
-          Navigator.pop(context);
-
-        },
-      );
-    } catch (e) {
-      showSnackBar(context, e.toString());
-    }
-  }
-
 }

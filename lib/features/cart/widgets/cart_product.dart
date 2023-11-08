@@ -7,8 +7,7 @@ import 'package:thrift_exchange/providers/user_provider.dart';
 
 class CartProduct extends StatefulWidget {
   final int index;
-  Product product;
-  CartProduct({super.key, required this.index, required this.product});
+  const CartProduct({super.key, required this.index});
 
   @override
   State<CartProduct> createState() => _CartProductState();
@@ -18,24 +17,19 @@ class _CartProductState extends State<CartProduct> {
   final ProductServices productServices = ProductServices();
   final CartServices cartServices = CartServices();
 
-  void increaseQuantity() {
-    widget.product.quantity = widget.product.quantity + 1;
-    productServices.addToCart(context: context, product: widget.product);
+  void increaseQuantity(Product product) {
+    productServices.addToCart(context: context, product: product);
   }
 
-  void decreaseQuantity() {
-    if (widget.product.quantity > 0){
-      widget.product.quantity = widget.product.quantity - 1;
-      cartServices.removeFromCart(context: context, product: widget.product);
-    }
+  void decreaseQuantity(Product product) {
+    cartServices.removeFromCart(context: context, product: product);
   }
 
   @override
-  Widget build(BuildContext context)  {
-
-    final quantity = widget.product.quantity;
-    print("Cart Product");
-    print(widget.product.quantity);
+  Widget build(BuildContext context) {
+    final cartProduct = context.watch<UserProvider>().user.cart[widget.index];
+    final product = Product.fromMap(cartProduct['product']);
+    final quantity = cartProduct['quantity'];
     return Column(
       children: [
         Container(
@@ -45,7 +39,7 @@ class _CartProductState extends State<CartProduct> {
           child: Row(
             children: [
               Image.network(
-                widget.product.images[0],
+                product.images[0],
                 fit: BoxFit.contain,
                 height: 135,
                 width: 135,
@@ -56,7 +50,7 @@ class _CartProductState extends State<CartProduct> {
                     width: 235,
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
-                      widget.product.name,
+                      product.name,
                       style: const TextStyle(
                         fontSize: 16,
                       ),
@@ -67,7 +61,7 @@ class _CartProductState extends State<CartProduct> {
                     width: 235,
                     padding: const EdgeInsets.only(left: 10, top: 5),
                     child: Text(
-                      '\$${widget.product.price}',
+                      '\$${product.price}',
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -97,7 +91,7 @@ class _CartProductState extends State<CartProduct> {
                 child: Row(
                   children: [
                     InkWell(
-                      onTap: () => decreaseQuantity(),
+                      onTap: () => decreaseQuantity(product),
                       child: Container(
                         width: 35,
                         height: 33,
@@ -121,12 +115,12 @@ class _CartProductState extends State<CartProduct> {
                         height: 33,
                         alignment: Alignment.center,
                         child: Text(
-                          quantity.toString().split(".")[0],
+                          quantity.toString(),
                         ),
                       ),
                     ),
                     InkWell(
-                      onTap: () => increaseQuantity(),
+                      onTap: () => increaseQuantity(product),
                       child: Container(
                         width: 35,
                         height: 33,

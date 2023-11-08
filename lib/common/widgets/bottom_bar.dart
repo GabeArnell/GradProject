@@ -33,10 +33,7 @@ class _BottomBarState extends State<BottomBar> {
 
   @override
   Widget build(BuildContext context) {
-    num userCartLength = 0;
-    for (int i = 0; i < context.watch<UserProvider>().user.cart.length; i++){
-      userCartLength += context.watch<UserProvider>().user.cart[i]['quantity'];
-    }
+    final userCartLength = context.watch<UserProvider>().user.cart.length;
     return Scaffold(
       body: pages[_page],
       bottomNavigationBar: BottomNavigationBar(
