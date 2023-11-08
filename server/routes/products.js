@@ -3,10 +3,9 @@ const express = require("express");
 const productsRouter = express.Router();
 
 const authModule = require("../middleware/auth");
-const Listing = require("../models/listing");
+const {Listing} = require("../models/listing");
 const User = require("../models/user");
 const Rating = require("../models/rating");
-const Cart = require("../models/cart");
 
 
 productsRouter.post('/admin/add-product', authModule, async (req, res)=>{
@@ -186,28 +185,28 @@ productsRouter.delete('/api/remove-from-cart/:id', authModule, async(req,res)=>{
 
 
 
-productsRouter.post('/checkout', authModule, async (req, res)=>{
-    console.log(req.user);
-    try {
-        const existingUser = await User.findById(req.user);
-        if (!existingUser){
-            return res.status(500).json ({error: "Could not find user"});
-        }
+// productsRouter.post('/checkout', authModule, async (req, res)=>{
+//     console.log(req.user);
+//     try {
+//         const existingUser = await User.findById(req.user);
+//         if (!existingUser){
+//             return res.status(500).json ({error: "Could not find user"});
+//         }
 
-        let existingListing = await Listing.findById(item.id);
-        if (!existingListing){
-            return res.status(400).json ({error: "Could not find product to delete."});
-        }       
+//         let existingListing = await Listing.findById(item.id);
+//         if (!existingListing){
+//             return res.status(400).json ({error: "Could not find product to delete."});
+//         }       
 
-        let existingCart = await Cart.find({email: existingUser.email});
-        if (!existingListing || existingCart.items.length < 1){
-            return res.status(400).json ({error: "Empty Carts can not checkout"});
-        }
+//         let existingCart = await Cart.find({email: existingUser.email});
+//         if (!existingListing || existingCart.items.length < 1){
+//             return res.status(400).json ({error: "Empty Carts can not checkout"});
+//         }
         
-        res.status(200).json(existingCart);
-    }
-    catch (e){
-        return res.status(500).json ({error: error.message});
-    }
-})
+//         res.status(200).json(existingCart);
+//     }
+//     catch (e){
+//         return res.status(500).json ({error: error.message});
+//     }
+// })
 module.exports = productsRouter;

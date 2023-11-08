@@ -1,4 +1,4 @@
-const Listing = require("../models/listing");
+const {Listing} = require("../models/listing");
 const User = require("../models/user");
 
 module.exports.getDemoListings = ()=>{

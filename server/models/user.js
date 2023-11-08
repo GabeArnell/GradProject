@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 const { use } = require("../routes/auth")
-const Listing = require("./listing")
+const {Listing, listingSchema} = require("./listing")
 const userSchema = mongoose.Schema({
     name: {
         required: true,
@@ -51,7 +51,7 @@ const userSchema = mongoose.Schema({
 
     cart: [
         {
-            product: Listing,
+            product: listingSchema,
             quantity: {
                 type: Number,
                 required: true

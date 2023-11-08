@@ -4,7 +4,7 @@ const listingController = require("../controllers/listing")
 const listingRouter = express.Router();
 
 const authModule = require("../middleware/auth");
-const Listing = require("../models/listing");
+const {Listing} = require("../models/listing");
 const User = require("../models/user");
 
 
