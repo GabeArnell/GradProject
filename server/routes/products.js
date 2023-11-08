@@ -294,7 +294,7 @@ productsRouter.post('/api/checkout', authModule, async (req, res)=>{
             html+=`<li>x${dupple.quantity} ${existingListing.name} | $${basePrice * dupple.quantity}</li>`;
         }
         let tax = 0.08;
-        let salesTax = totalItems * tax;
+        let salesTax = totalPrice * tax;
 
         html += `</ul>`
         html+=`<br><hr>Price: $${totalPrice}<br>Sales Tax: $${salesTax}<br>Total Price: $${totalPrice + salesTax}`;
