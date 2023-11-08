@@ -117,7 +117,7 @@ productsRouter.post('/edit-product-price/:newprice', authModule, async (req, res
     }
 })
 
-productsRouter.post('/add-to-cart', authModule, async (req, res)=>{
+productsRouter.post('/api/add-to-cart', authModule, async (req, res)=>{
     console.log(req.user);
     let {id} = req.body;
     try {
