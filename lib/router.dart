@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:thrift_exchange/common/widgets/bottom_bar.dart';
 import 'package:thrift_exchange/features/account/screens/postings.dart';
 import 'package:thrift_exchange/features/account/screens/profile_screen.dart';
+import 'package:thrift_exchange/features/account/widgets/edit_product.dart';
 import 'package:thrift_exchange/features/chat/screens/chat_home_page.dart';
 import 'package:thrift_exchange/features/home/screens/add_product_Screen.dart';
 import 'package:thrift_exchange/features/home/screens/home_screens.dart';
@@ -51,6 +52,14 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
       return MaterialPageRoute(
         settings: routeSettings,
         builder: (_) => ProductsScreen(
+          product: product,
+        ),
+      );
+    case EditProductPage.routeName:
+      var product = routeSettings.arguments as Product;
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => EditProductPage(
           product: product,
         ),
       );

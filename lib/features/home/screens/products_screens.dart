@@ -258,11 +258,11 @@ class _ProductsScreenState extends State<ProductsScreen> {
             //   color: Colors.black12,
             //   height: 3,
             // ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 10.0, right: 10, bottom: 10, top: 15),
-              child: CustomButton(text: 'Buy Now', onTap: () {}),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(
+            //       left: 10.0, right: 10, bottom: 10, top: 15),
+            //   child: CustomButton(text: 'Buy Now', onTap: () {}),
+            // ),
             Padding(
               padding: const EdgeInsets.only(
                   left: 10.0, right: 10, bottom: 5, top: 5),
