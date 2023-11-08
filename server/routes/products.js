@@ -120,59 +120,70 @@ productsRouter.post('/edit-product-price/:newprice', authModule, async (req, res
 
 productsRouter.post('/add-to-cart', authModule, async (req, res)=>{
     console.log(req.user);
-    let {itemID} = req.body;
+    let {id} = req.body;
     try {
-        const existingUser = await User.findById(req.user);
+        let existingUser = await User.findById(req.user);
         if (!existingUser){
             return res.status(500).json ({error: "Could not find user"});
         }
 
-        let existingListing = await Listing.findById(item.id);
+        let existingListing = await Listing.findById(id);
         if (!existingListing){
             return res.status(400).json ({error: "Could not find product to delete."});
-        }       
-
-        let existingCart = await Cart.find({email: existingUser.email});
-        if (!existingListing){
-            existingCart = new Cart({
-                email: existingUser.email,
-                items: []
-            })
-            existingCart = await existingCart.save();
+        }   
+        
+        if (existingUser.cart.length == 0){
+            existingUser.cart.push({existingListing, quantity: 1});
+        }
+        else {
+            let foundProduct = false;
+            for (let duple of existingUser.cart){
+                if (duple.product_.id.equals(existingListing._id)){
+                    foundProduct = true;
+                    duple.quantity +=1
+                }
+            }
+            if (!foundProduct){
+                existingUser.cart.push({existingListing, quantity: 1});
+            }     
         }
 
-        existingCart.items.push(itemID);
-        existingCart = await existingCart.save();
+        existingUser = await existingUser.save();
+        res.status(200).json(existingUser);
+
         
-        res.status(200).json(existingCart);
     }
     catch (e){
         return res.status(500).json ({error: error.message});
     }
 })
-productsRouter.get("/get-cart", authModule, async(req,res)=>{
-    console.log(req.user);
-    try {
-        const existingUser = await User.findById(req.user);
-        if (!existingUser){
-            return res.status(500).json ({error: "Could not find user"});
-        }
 
-        let existingCart = await Cart.find({email: existingUser.email});
-        if (!existingListing){
-            existingCart = new Cart({
-                email: existingUser.email,
-                items: []
-            })
-            existingCart = await existingCart.save();
-        }
-        
-        res.status(200).json(existingCart);
+productsRouter.delete('/api/remove-from-cart/:id', authModule, async(req,res)=>{
+    try{
+        const id = req.params.id;
+        const existingListing = await productsRouter.findById(id);
+        let existingUser = await User.findById(req.user);
+
+        function filterOut(dupple){
+            if (dupple.product._id.equals(existingListing.id)){
+                dupple.quantity-=1;
+                if (dupple.quantity <= 0){
+                    return false;
+                }
+            }
+            return true;
+        }   
+        existingUser.cart = existingUser.cart.filter(filterOut);     
+        existingUser = await existingUser.save();
+
+        res.status(200).json(existingUser)
     }
     catch (e){
-        return res.status(500).json ({error: error.message});
+        console.log('prod cart error', e.message);
+        return res.status(500).json ({error: e.message});
     }
 })
+
 
 
 productsRouter.post('/checkout', authModule, async (req, res)=>{
