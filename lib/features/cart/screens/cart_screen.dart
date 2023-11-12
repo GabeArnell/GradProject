@@ -24,6 +24,7 @@ class _CartScreenState extends State<CartScreen> {
       'query': query,
     });
   }
+
   final CartServices cartServices = CartServices();
 
   List<Product> products = [];
@@ -41,7 +42,7 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     final user = context.watch<UserProvider>().user;
     num userCartLength = 0;
-    for (int i = 0; i < context.watch<UserProvider>().user.cart.length; i++){
+    for (int i = 0; i < context.watch<UserProvider>().user.cart.length; i++) {
       userCartLength += context.watch<UserProvider>().user.cart[i]['quantity'];
     }
     return Scaffold(
@@ -130,10 +131,10 @@ class _CartScreenState extends State<CartScreen> {
               child: CustomButton(
                 text: 'Proceed to Buy (${userCartLength} items)',
                 onTap: () {
-                  if (userCartLength > 0){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      return CheckoutScreen(
-                          products: products);
+                  if (userCartLength > 0) {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return CheckoutScreen(products: products);
                     }));
                   }
                 },
@@ -154,10 +155,7 @@ class _CartScreenState extends State<CartScreen> {
               itemCount: products.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                return CartProduct(
-                  index: index,
-                  product: products[index]
-                );
+                return CartProduct(index: index, product: products[index]);
               },
             ),
           ],

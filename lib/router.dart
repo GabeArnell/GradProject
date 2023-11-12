@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:thrift_exchange/common/widgets/bottom_bar.dart';
+import 'package:thrift_exchange/features/account/screens/order_details.dart';
 import 'package:thrift_exchange/features/account/screens/postings.dart';
 import 'package:thrift_exchange/features/account/screens/profile_screen.dart';
 import 'package:thrift_exchange/features/account/widgets/edit_product.dart';
@@ -8,6 +9,7 @@ import 'package:thrift_exchange/features/home/screens/add_product_Screen.dart';
 import 'package:thrift_exchange/features/home/screens/home_screens.dart';
 import 'package:thrift_exchange/features/home/screens/products_screens.dart';
 import 'package:thrift_exchange/features/home/search/screens/search_screen.dart';
+import 'package:thrift_exchange/models/order.dart';
 import 'package:thrift_exchange/models/product.dart';
 
 import 'features/auth/screens/auth_screen.dart';
@@ -61,6 +63,14 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         settings: routeSettings,
         builder: (_) => EditProductPage(
           product: product,
+        ),
+      );
+    case OrderDetailScreen.routeName:
+      var order = routeSettings.arguments as Order;
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => OrderDetailScreen(
+          order: order,
         ),
       );
     case ProfilePage.routeName:

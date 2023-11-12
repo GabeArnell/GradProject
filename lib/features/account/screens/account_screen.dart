@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
 import 'package:thrift_exchange/features/account/widgets/below_app_bar.dart';
+import 'package:thrift_exchange/features/account/widgets/orders.dart';
 import 'package:thrift_exchange/features/account/widgets/top_buttons.dart';
 import 'package:thrift_exchange/features/chat/screens/chat_home_page.dart';
 import 'package:thrift_exchange/features/home/screens/add_product_Screen.dart';
@@ -70,6 +71,7 @@ class AccountScreen extends StatelessWidget {
             height: 10,
           ),
           TopBottons(),
+          Orders(),
         ],
       ),
     );

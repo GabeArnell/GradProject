@@ -35,7 +35,6 @@ class CartServices {
               userProvider.user.copyWith(cart: jsonDecode(res.body)['cart']);
           userProvider.setUserFromModel(user);
           showSnackBar(context, 'Added product to cart!');
-
         },
       );
     } catch (e) {
@@ -43,12 +42,12 @@ class CartServices {
     }
   }
 
- Future<List<Product>> fetchCartProducts(BuildContext context) async {
+  Future<List<Product>> fetchCartProducts(BuildContext context) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     List<Product> productList = [];
     try {
-      http.Response res =
-          await http.get(Uri.parse('$SERVER_URI/api/get-cart-products'), headers: {
+      http.Response res = await http
+          .get(Uri.parse('$SERVER_URI/api/get-cart-products'), headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         'x-auth-token': userProvider.user.token,
       });
@@ -74,9 +73,7 @@ class CartServices {
     return productList;
   }
 
-  void checkoutCart({
-    required BuildContext context
-  }) async {
+  void checkoutCart({required BuildContext context}) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     try {
@@ -85,7 +82,7 @@ class CartServices {
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': userProvider.user.token,
-        }
+        },
       );
 
       httpErrorHandle(
@@ -97,12 +94,10 @@ class CartServices {
           userProvider.setUserFromModel(user);
           showSnackBar(context, 'Order processed!');
           Navigator.pop(context);
-
         },
       );
     } catch (e) {
       showSnackBar(context, e.toString());
     }
   }
-
 }

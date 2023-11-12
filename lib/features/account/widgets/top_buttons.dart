@@ -87,7 +87,6 @@ class _TopBottonsState extends State<TopBottons> {
         SizedBox(
           height: 13,
         ),
-        Orders(),
       ],
     );
   }
