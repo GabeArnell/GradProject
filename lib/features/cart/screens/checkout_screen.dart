@@ -32,6 +32,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       'query': query,
     });
   }
+
   final CartServices cartServices = CartServices();
 
   TextEditingController cardNumberController = TextEditingController();
@@ -41,15 +42,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     num sum = 0;
-    for (int i = 0; i < widget.products.length; i++){
+    for (int i = 0; i < widget.products.length; i++) {
       sum += widget.products[i].quantity * widget.products[i].price;
     }
     num salestax = sum * 0.08;
     num total = sum + salestax;
 
-
     return Scaffold(
-      
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(67),
         child: AppBar(
@@ -127,45 +126,42 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
-
-        child: 
-          Column(
-            children: [              
-              const Text("Checkout",style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              const Text("Checkout",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
               const SizedBox(
                 height: 10,
               ),
-
               Align(
                 alignment: Alignment.centerLeft,
-                child: 
-                  Column(children: [
-                    Text("Subtotal: $sum",style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal)),
-                    const SizedBox(
-                      height: 5,
-                    ),
-
-                    Text("Sales Tax: $salestax",style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal)),
-                    const SizedBox(
-                      height: 5,
-                    ),
-
+                child: Column(children: [
+                  Text("Subtotal: $sum",
+                      style: TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.normal)),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text("Sales Tax: $salestax",
+                      style: TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.normal)),
+                  const SizedBox(
+                    height: 5,
+                  ),
                 ]),
               ),
-                            Align(
+              Align(
                 alignment: Alignment.centerLeft,
-                child: 
-                  Column(children: [
-                  Text("Total Price: $total",style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                child: Column(children: [
+                  Text("Total Price: $total",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 ]),
               ),
-
-
               const SizedBox(
                 height: 10,
               ),
-
               const SizedBox(
                 height: 10,
               ),
@@ -202,7 +198,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   // Limit the input
                                   LengthLimitingTextInputFormatter(4),
                                 ],
-                                decoration: const InputDecoration(hintText: "CVV"),
+                                decoration:
+                                    const InputDecoration(hintText: "CVV"),
                               ),
                             ),
                             const SizedBox(width: 16),
@@ -224,21 +221,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                 ),
               ),
-
               Padding(
-              padding: const EdgeInsets.all(17),
-              child: CustomButton(
-                text: 'Checkout',
-                onTap: () {
-                    cartServices.checkoutCart(context: context);
-                },
-                color: const Color.fromARGB(255, 255, 208, 0),
+                padding: const EdgeInsets.all(17),
+                child: CustomButton(
+                  text: 'Checkout',
+                  onTap: () {
+                    cartServices.checkoutCart(
+                        context: context, products: widget.products);
+                  },
+                  color: const Color.fromARGB(255, 255, 208, 0),
+                ),
               ),
-            ),
-
             ],
-          )
-      ),
+          )),
     );
   }
 }
