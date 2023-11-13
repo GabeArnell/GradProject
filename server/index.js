@@ -21,7 +21,7 @@ const chatbotRouter = require("./routes/chatbot")
 const cors = require("cors")
 
 // Initializations
-const {PORT, DATABASE_URI} = require('./config.json')
+const {PORT, SHARED_DATABASE_URI,DATABASE_URI} = require('./config.json')
 const app = express();
 
 // Allowing cross origin requests
@@ -42,7 +42,7 @@ app.use(messageRouter);
 app.use(chatbotRouter);
 
 // Database connections
-mongoose.connect(DATABASE_URI).then(()=>{
+mongoose.connect(SHARED_DATABASE_URI).then(()=>{
     console.log("Connected to MongoDB");
 })
 

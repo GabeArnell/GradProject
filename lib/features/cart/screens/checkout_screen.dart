@@ -227,7 +227,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   text: 'Checkout',
                   onTap: () {
                     cartServices.checkoutCart(
-                        context: context, products: widget.products);
+                        context: context);
                   },
                   color: const Color.fromARGB(255, 255, 208, 0),
                 ),

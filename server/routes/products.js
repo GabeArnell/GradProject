@@ -7,6 +7,7 @@ const {Listing} = require("../models/listing");
 const User = require("../models/user");
 const Rating = require("../models/rating");
 const mailer = require("../controllers/mailer")
+const Order = require("../models/orders")
 
 productsRouter.post('/admin/add-product', authModule, async (req, res)=>{
     console.log(req.user);
@@ -284,6 +285,19 @@ productsRouter.post('/api/checkout', authModule, async (req, res)=>{
        <h2> Your order </h2>
        <ul>
        `
+       let order = new Order({
+            userId: existingUser._id,
+
+            products: [],
+            quantity: [],
+
+            address: existingUser.address,
+            
+            orderedAt: new Date().getTime(),
+            status: 0,
+            totalPrice: 0,
+        })
+
     
         while(existingUser.cart.length > 0){
             let dupple = existingUser.cart.shift();
@@ -292,6 +306,8 @@ productsRouter.post('/api/checkout', authModule, async (req, res)=>{
             let basePrice = existingListing.price;
             totalPrice += dupple.quantity * basePrice;
             html+=`<li>x${dupple.quantity} ${existingListing.name} | $${basePrice * dupple.quantity}</li>`;
+            order.products.push(existingListing);
+            order.quantity.push(dupple.quantity);
         }
         let tax = 0.08;
         let salesTax = totalPrice * tax;
@@ -299,7 +315,11 @@ productsRouter.post('/api/checkout', authModule, async (req, res)=>{
         html += `</ul>`
         html+=`<br><hr>Price: $${totalPrice}<br>Sales Tax: $${salesTax}<br>Total Price: $${totalPrice + salesTax}`;
 
+        order.totalPrice = totalPrice + salesTax;
+        order = await order.save()
+
         existingUser = await existingUser.save();
+
         mailer.sendEmail(existingUser.email,"ThriftExchange Receipt", html);
 
         res.status(200).json(existingUser);
@@ -309,4 +329,35 @@ productsRouter.post('/api/checkout', authModule, async (req, res)=>{
         return res.status(500).json ({error: e.message});
     }
 })
+
+
+
+productsRouter.get("/api/orders/me", authModule,async (req,res)=>{
+    console.log(req.user);
+    
+    try {
+        let existingUser = await User.findById(req.user);
+        if (!existingUser){
+            return res.status(500).json ({error: "Could not find user"});
+        }
+
+        const myOrders = await Order.find({ userId: req.user });
+
+        if (!myOrders){
+            return res.status(500).json ({error: "Could not find orders"});
+        }
+
+        console.log(myOrders);
+
+        res.status(200).json(myOrders);
+
+
+    }
+    catch (e){
+        return res.status(500).json ({error: e.message});
+    }
+})
+
+productsRouter
+
 module.exports = productsRouter;

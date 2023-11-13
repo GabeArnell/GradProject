@@ -47,17 +47,6 @@ class _OrdersState extends State<Orders> {
                       ),
                     ),
                   ),
-                  Container(
-                    padding: const EdgeInsets.only(right: 15),
-                    child: Text(
-                      'See more',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: GlobalVariables.selectedNavBarColor,
-                      ),
-                    ),
-                  ),
                 ],
               ),
               Container(

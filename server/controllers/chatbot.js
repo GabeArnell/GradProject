@@ -19,8 +19,8 @@ async function communicate(message){
 
 module.exports.descriptionGen = async (name,info,price)=>{
     let prompt = `Write an amazon description for a product given a name and information. Make people want to buy it. Answer in less than 70 words.\n`
-    prompt+=`name: ${name.trim()}\n`
-    prompt+=`info: ${info.trim()}\n`
+    prompt+=`name: ${name.trim()}\n`;
+    prompt+=`info: ${info.trim()}\n`;
     let answer = await communicate(prompt);
     return answer;
 }

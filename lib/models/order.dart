@@ -5,12 +5,12 @@ import 'package:thrift_exchange/models/product.dart';
 class Order {
   final String id;
   final List<Product> products;
-  final List<int> quantity;
+  final List<dynamic> quantity;
   final String address;
   final String userId;
   final int orderedAt;
   final int status;
-  final int totalPrice;
+  final double totalPrice;
 
   Order({
     required this.id,
@@ -21,7 +21,9 @@ class Order {
     required this.orderedAt,
     required this.status,
     required this.totalPrice,
-  });
+  }){
+    print("Created map!");
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -37,15 +39,13 @@ class Order {
   }
 
   factory Order.fromMap(Map<String, dynamic> map) {
+    print("my map");
+    print(map);
     return Order(
       id: map['_id'] ?? '',
       products: List<Product>.from(
-          map['products']?.map((x) => Product.fromMap(x['product']))),
-      quantity: List<int>.from(
-        map['products']?.map(
-          (x) => x['quantity'],
-        ),
-      ),
+          map['products']?.map((x) => Product.fromMap(x))),
+      quantity: map['quantity'] ?? [],
       address: map['address'] ?? '',
       userId: map['userId'] ?? '',
       orderedAt: map['orderedAt']?.toInt() ?? 0,
