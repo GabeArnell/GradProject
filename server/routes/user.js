@@ -13,6 +13,9 @@ userRouter.post('/api/profile/update-details', authModule, async (req, res)=>{
     console.log(req.body);
 
    switch(req.body.type){
+    case("image"):
+        changeImage(req,res,req.body.detail.trim())
+        break;
     case('username'):
         changeName(req,res,req.body.detail.trim())
         break;
@@ -80,6 +83,34 @@ async function changeAddress(req,res,value){
         return res.status(500).json ({error: e.message});
     }
 }
+
+// Change Image
+async function changeImage(req,res,value){
+    console.log(req.user);
+    console.log(req.body);
+
+    try {
+        const newImage = value;
+        let existingUser = await User.findById(req.user);
+        if (!existingUser){
+            return res.status(500).json ({error: "Could not find user"});
+        }
+        if (!newImage){
+            return res.status(500).json ({error: "Could not find image in request"});
+        }
+
+        existingUser.image =  newImage;
+
+        await existingUser.save()
+        res.status(200).json(existingUser);
+
+    }
+    catch (e){
+        console.log('error with address saving', e.message);
+        return res.status(500).json ({error: e.message});
+    }
+}
+
 
 // Change Password
 async function changePassword(req,res,value){

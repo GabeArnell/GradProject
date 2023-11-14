@@ -49,4 +49,16 @@ listingRouter.get("/api/products/search/:input", async(req,res)=>{
     }
 });
 
+listingRouter.get("/api/products/category/:category", async(req,res)=>{
+    console.log(req.params)
+    try {
+        let array = await listingController.getByCategory(req.params.category);
+        res.status(200).json(array);
+    }
+    catch (e)
+    {
+        return res.status(500).json ({error: e.message});
+    }
+});
+
 module.exports = listingRouter;

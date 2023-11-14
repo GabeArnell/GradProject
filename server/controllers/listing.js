@@ -47,3 +47,10 @@ module.exports.searchByField = async(field,input) =>{
     //console.log(results)
     return results;
 }
+module.exports.getByCategory = async(input) =>{
+    
+    let results = await Listing.find({ 'category': input
+    });
+    //console.log(results)
+    return results;
+}
