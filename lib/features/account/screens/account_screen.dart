@@ -71,7 +71,7 @@ class AccountScreen extends StatelessWidget {
             height: 10,
           ),
           TopBottons(),
-          Orders(),
+          //Orders(),
         ],
       ),
     );

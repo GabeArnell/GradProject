@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thrift_exchange/constants/utils.dart';
+import 'package:thrift_exchange/features/account/screens/order_screen.dart';
 import 'package:thrift_exchange/features/account/screens/postings.dart';
 import 'package:thrift_exchange/features/account/screens/profile_screen.dart';
 import 'package:thrift_exchange/features/account/widgets/account_button.dart';
@@ -23,6 +24,10 @@ class _TopBottonsState extends State<TopBottons> {
     Navigator.pushNamed(context, PostingsPage.routeName);
   }
 
+  void navigateToOrdersScreen() {
+    Navigator.pushNamed(context, OrdersScreen.routeName);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -32,7 +37,11 @@ class _TopBottonsState extends State<TopBottons> {
         ),
         Row(
           children: [
-            AccountButton(text: 'Your Orders', onPressed: () {}),
+            AccountButton(
+                text: 'Your Orders',
+                onPressed: () {
+                  navigateToOrdersScreen();
+                }),
           ],
         ),
         SizedBox(

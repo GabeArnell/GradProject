@@ -4,9 +4,11 @@ import 'package:thrift_exchange/common/widgets/loader.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
 import 'package:thrift_exchange/features/account/widgets/product.dart';
 import 'package:thrift_exchange/features/home/screens/add_product_Screen.dart';
+import 'package:thrift_exchange/features/home/screens/category_screen.dart';
 import 'package:thrift_exchange/features/home/screens/products_screens.dart';
 import 'package:thrift_exchange/features/home/search/screens/search_screen.dart';
 import 'package:thrift_exchange/features/home/services/home_services.dart';
+import 'package:thrift_exchange/features/home/widgets/category.dart';
 import 'package:thrift_exchange/features/home/widgets/search_filter.dart';
 import 'package:thrift_exchange/models/product.dart';
 import 'package:thrift_exchange/providers/user_provider.dart';
@@ -22,6 +24,22 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String _selectedCategory = 'All';
   String _selectedZipcode = '0';
+  List<String> categories = [
+    'All',
+    'Electronics',
+    'Appliances',
+    'Apparel',
+    'Furniture',
+    'Other'
+  ];
+  List<String> categoryImage = [
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMidast3-DfnTuLTwez1EOGXrU63x6_q8X7w&usqp=CAU',
+    'https://static.vecteezy.com/system/resources/previews/003/769/924/non_2x/electronics-and-accessories-pink-flat-design-long-shadow-glyph-icon-smartphone-and-laptop-computers-and-devices-e-commerce-department-online-shopping-categories-silhouette-illustration-vector.jpg',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvz9dzpMsM_z0l2jfnXApB4sj7j9_Ic7dk1w&usqp=CAU',
+    'https://cdn0.iconfinder.com/data/icons/shopping-and-commerce-2-12/66/84-512.png',
+    'https://i.pinimg.com/564x/13/8d/74/138d740b0d523e8635ad851510f0a789.jpg',
+    'https://cdn1.iconfinder.com/data/icons/branding-filledoutline/64/BADGE-branding-pin-miscellaneous-badges-shapes-512.png'
+  ];
   void navigateToSearchScreen(String query) {
     Navigator.pushNamed(context, SearchScreen.routeName, arguments: {
       'query': query,
@@ -146,19 +164,68 @@ class _HomeScreenState extends State<HomeScreen> {
             //     //const AddressBox(),
             //   ],
             // ),
-            body: Column(
-              children: [
-                SearchFilter(
-                  onCategorySelected: (category) {
-                    _selectedCategory = category;
-                  },
-                  onZipcodeUpdated: (zipcode) {
-                    _selectedZipcode = zipcode;
-                  },
-                ),
-                Expanded(
-                  child: GridView.builder(
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SearchFilter(
+                    onCategorySelected: (category) {
+                      _selectedCategory = category;
+                    },
+                    onZipcodeUpdated: (zipcode) {
+                      _selectedZipcode = zipcode;
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(21),
+                    child: RichText(
+                      text: const TextSpan(
+                        text: 'Categories',
+                        style: TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                  GridView.builder(
+                    itemCount: categories.length,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2),
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, CategoryProducts.routeName,
+                              arguments: categories[index]);
+                        },
+                        child: CategoryWidget(
+                          image: categoryImage[index],
+                          category: categories[index],
+                        ),
+                      );
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(21),
+                    child: RichText(
+                      text: const TextSpan(
+                        text: 'Products',
+                        style: TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                  GridView.builder(
                     itemCount: products!.length,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2),
@@ -207,9 +274,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     },
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
+
             floatingActionButton: FloatingActionButton(
               backgroundColor: Colors.amber,
               onPressed: navigateToAddProduct,

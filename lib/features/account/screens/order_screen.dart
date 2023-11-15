@@ -7,6 +7,7 @@ import 'package:thrift_exchange/models/order.dart';
 import 'package:thrift_exchange/models/product.dart';
 
 class OrdersScreen extends StatefulWidget {
+  static const String routeName = '/order-screen';
   const OrdersScreen({super.key});
 
   @override
@@ -29,25 +30,33 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return orders == null
-        ? const Loader()
-        : GridView.builder(
-            itemCount: orders!.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2),
-            itemBuilder: (context, index) {
-              final orderData = orders![index];
-              return GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, OrderDetailScreen.routeName,
-                      arguments: orderData);
-                },
-                child: SizedBox(
-                  height: 130,
-                  child: ProductW(image: orderData.products[0].images[0]),
-                ),
-              );
-            },
-          );
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Orders',
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
+      body: orders == null
+          ? const Loader()
+          : GridView.builder(
+              itemCount: orders!.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2),
+              itemBuilder: (context, index) {
+                final orderData = orders![index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, OrderDetailScreen.routeName,
+                        arguments: orderData);
+                  },
+                  child: SizedBox(
+                    height: 130,
+                    child: ProductW(image: orderData.products[0].images[0]),
+                  ),
+                );
+              },
+            ),
+    );
   }
 }

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:thrift_exchange/common/widgets/bottom_bar.dart';
 import 'package:thrift_exchange/features/account/screens/order_details.dart';
+import 'package:thrift_exchange/features/account/screens/order_screen.dart';
 import 'package:thrift_exchange/features/account/screens/postings.dart';
 import 'package:thrift_exchange/features/account/screens/profile_screen.dart';
 import 'package:thrift_exchange/features/account/widgets/edit_product.dart';
 import 'package:thrift_exchange/features/chat/screens/chat_home_page.dart';
 import 'package:thrift_exchange/features/home/screens/add_product_Screen.dart';
+import 'package:thrift_exchange/features/home/screens/category_screen.dart';
 import 'package:thrift_exchange/features/home/screens/home_screens.dart';
 import 'package:thrift_exchange/features/home/screens/products_screens.dart';
 import 'package:thrift_exchange/features/home/search/screens/search_screen.dart';
@@ -25,6 +27,12 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
       return MaterialPageRoute(
         settings: routeSettings,
         builder: (_) => const HomeScreen(),
+      );
+    case CategoryProducts.routeName:
+      var category = routeSettings.arguments as String;
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => CategoryProducts(category: category),
       );
     case AddProductScreen.routeName:
       return MaterialPageRoute(
@@ -72,6 +80,11 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         builder: (_) => OrderDetailScreen(
           order: order,
         ),
+      );
+    case OrdersScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => OrdersScreen(),
       );
     case ProfilePage.routeName:
       return MaterialPageRoute(

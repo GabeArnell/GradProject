@@ -40,15 +40,14 @@ class HomeServices {
         ProfilePage();
       }
       Product product = Product(
-        name: name,
-        description: description,
-        quantity: quantity,
-        images: imageUrls,
-        category: category,
-        price: price,
-        zipcode: zipcode,
-        email: ''
-      );
+          name: name,
+          description: description,
+          quantity: quantity,
+          images: imageUrls,
+          category: category,
+          price: price,
+          zipcode: zipcode,
+          email: '');
       http.Response res = await http.post(
         Uri.parse('$SERVER_URI/admin/add-product'),
         headers: {
@@ -97,16 +96,15 @@ class HomeServices {
         imageUrls.add(res.secureUrl);
       }
       Product product = Product(
-        id: id,
-        name: name,
-        description: description,
-        quantity: quantity,
-        images: imageUrls,
-        category: category,
-        price: price,
-        zipcode: zipcode,
-        email: ''
-      );
+          id: id,
+          name: name,
+          description: description,
+          quantity: quantity,
+          images: imageUrls,
+          category: category,
+          price: price,
+          zipcode: zipcode,
+          email: '');
       http.Response res = await http.post(
         Uri.parse('$SERVER_URI/admin/edit-product'),
         headers: {
@@ -141,6 +139,42 @@ class HomeServices {
         'Content-Type': 'application/json; charset=UTF-8',
         'x-auth-token': userProvider.user.token,
       });
+
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          for (int i = 0; i < jsonDecode(res.body).length; i++) {
+            productList.add(
+              Product.fromJson(
+                jsonEncode(
+                  jsonDecode(res.body)[i],
+                ),
+              ),
+            );
+          }
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+    return productList;
+  }
+
+  Future<List<Product>> fetchCategoryProducts({
+    required BuildContext context,
+    required String category,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    List<Product> productList = [];
+    try {
+      http.Response res = await http.get(
+        Uri.parse('$SERVER_URI/api/products/category/$category'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+      );
 
       httpErrorHandle(
         response: res,
@@ -205,38 +239,32 @@ class HomeServices {
     try {
       showSnackBar(context, 'Generating description.');
 
-      http.Response res = await http.post(
-        Uri.parse('$SERVER_URI/api/chatbot/description-gen'),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': userProvider.user.token,
-        },
-        body: jsonEncode({
-          'name': name,
-          'description': description,
-          'price': price,
-        })
-      );
+      http.Response res =
+          await http.post(Uri.parse('$SERVER_URI/api/chatbot/description-gen'),
+              headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
+                'x-auth-token': userProvider.user.token,
+              },
+              body: jsonEncode({
+                'name': name,
+                'description': description,
+                'price': price,
+              }));
       httpErrorHandle(
         response: res,
         context: context,
         onSuccess: () {
           showSnackBar(context, 'Description generated.');
-
         },
       );
       print(jsonDecode(res.body));
       return jsonDecode(res.body);
-
     } catch (e) {
       showSnackBar(
         context,
         e.toString(),
       );
       return "Could not connect to Service";
-
     }
   }
-
-
 }

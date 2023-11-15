@@ -21,7 +21,7 @@ class Order {
     required this.orderedAt,
     required this.status,
     required this.totalPrice,
-  }){
+  }) {
     print("Created map!");
   }
 
@@ -43,8 +43,8 @@ class Order {
     print(map);
     return Order(
       id: map['_id'] ?? '',
-      products: List<Product>.from(
-          map['products']?.map((x) => Product.fromMap(x))),
+      products:
+          List<Product>.from(map['products']?.map((x) => Product.fromMap(x))),
       quantity: map['quantity'] ?? [],
       address: map['address'] ?? '',
       userId: map['userId'] ?? '',

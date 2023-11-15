@@ -28,3 +28,18 @@ Future<List<File>> pickImages() async {
   }
   return images;
 }
+
+Future<File?> pickProfileImages() async {
+  File? image;
+  try {
+    var file = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+    );
+    if (file != null && file.files.single.path != null) {
+      image = File(file.files.single.path!);
+    }
+  } catch (e) {
+    debugPrint(e.toString());
+  }
+  return image;
+}

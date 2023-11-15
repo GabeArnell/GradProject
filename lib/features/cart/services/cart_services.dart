@@ -73,7 +73,8 @@ class CartServices {
     return productList;
   }
 
-  void checkoutCart({required BuildContext context}) async {
+  void checkoutCart(
+      {required BuildContext context, required List<Product> products}) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     try {
@@ -83,6 +84,7 @@ class CartServices {
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': userProvider.user.token,
         },
+        body: jsonEncode(products.map((product) => product.toMap()).toList()),
       );
 
       httpErrorHandle(
