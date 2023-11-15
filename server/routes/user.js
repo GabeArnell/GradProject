@@ -93,20 +93,25 @@ async function changeImage(req,res,value){
         const newImage = value;
         let existingUser = await User.findById(req.user);
         if (!existingUser){
+            console.log('no user')
             return res.status(500).json ({error: "Could not find user"});
         }
         if (!newImage){
+            console.log('no image')
+
             return res.status(500).json ({error: "Could not find image in request"});
         }
 
         existingUser.image =  newImage;
 
         await existingUser.save()
-        res.status(200).json(existingUser);
+        console.log('saved')
+
+        res.status(200).json(newImage);
 
     }
     catch (e){
-        console.log('error with address saving', e.message);
+        console.log('error with image saving', e.message);
         return res.status(500).json ({error: e.message});
     }
 }

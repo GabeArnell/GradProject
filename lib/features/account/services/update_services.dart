@@ -54,25 +54,25 @@ class UpdateService {
     return orderList;
   }
 
-  void updateProfilePicture({
+  Future<String> updateProfilePicture({
     required BuildContext context,
-    required File? image,
-    required Function(String) onSuccess,
+    required String token,
+    required File image,
   }) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    print("UPDATING THE PROFILE PICTURE");
     String imageUrl = '';
     try {
       final cloudinary = CloudinaryPublic('dyczsvdgt', 'irpg0kb6');
 
       CloudinaryResponse result = await cloudinary.uploadFile(
-        CloudinaryFile.fromFile(image!.path, folder: 'profile'),
+        CloudinaryFile.fromFile(image.path, folder: 'profile'),
       );
       imageUrl = result.secureUrl;
       http.Response res = await http.post(
         Uri.parse('$SERVER_URI/api/profile/update-details'),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': userProvider.user.token,
+          'x-auth-token': token,
         },
         body: jsonEncode({
           "type": "image",
@@ -84,16 +84,21 @@ class UpdateService {
         response: res,
         context: context,
         onSuccess: () {
-          onSuccess(imageUrl);
-          showSnackBar(context, 'Profile Picture Updated Successfully!');
-          Navigator.pop(context);
+          //showSnackBar(context, 'Profile Picture Updated Successfully!');
+          //Navigator.pop(context);
         },
       );
+      return imageUrl;
     } catch (e) {
+      
+      print("Update error: ");
+      print(e);
       showSnackBar(
         context,
         e.toString(),
       );
+      return imageUrl;
+
     }
   }
 
@@ -158,4 +163,6 @@ class UpdateService {
       showSnackBar(context, e.toString());
     }
   }
+
+
 }

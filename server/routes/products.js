@@ -332,7 +332,7 @@ productsRouter.post('/api/checkout', authModule, async (req, res)=>{
 
 
 
-productsRouter.get("/api/orders/me", authModule,async (req,res)=>{
+productsRouter.get("/api/orders/listings", authModule,async (req,res)=>{
     console.log(req.user);
     
     try {

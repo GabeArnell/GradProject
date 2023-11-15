@@ -48,9 +48,15 @@ module.exports.searchByField = async(field,input) =>{
     return results;
 }
 module.exports.getByCategory = async(input) =>{
-    
-    let results = await Listing.find({ 'category': input
+    if (input != 'All'){
+        let results = await Listing.find({ 'category': input
     });
     //console.log(results)
     return results;
+    }
+    else{
+        let results = await Listing.find({});
+    //console.log(results)
+    return results;
+    }
 }

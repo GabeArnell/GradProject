@@ -11,7 +11,9 @@ import 'package:thrift_exchange/providers/user_provider.dart';
 
 class ProfilePage extends StatefulWidget {
   static const String routeName = '/show-profile';
-  const ProfilePage({super.key});
+  ProfilePage({super.key});
+
+  String currentURL = "";
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -27,19 +29,18 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  void selectImages() async {
+  Future<File?> selectImages() async {
     var res = await pickProfileImages();
     setState(() {
       image = res;
     });
+    return res;
   }
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
-    String imageUrl =
-        "https://images.unsplash.com/photo-1497551060073-4c5ab6435f12?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60";
-
+    widget.currentURL = user.image;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(67),
@@ -79,7 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
               children: <Widget>[
                 CircleAvatar(
                   backgroundImage: NetworkImage(
-                    imageUrl,
+                    widget.currentURL,
                   ),
                   radius: 39,
                 ),
@@ -120,22 +121,49 @@ class _ProfilePageState extends State<ProfilePage> {
                                           maxHeight: 480,
                                           maxWidth: 640,
                                         );
+                                        if (pickedFile != null){
+                                          final String pickedPath = pickedFile.path;
+                                          // ignore: use_build_context_synchronously
+                                        // ignore: use_build_context_synchronously
+                                        String finalResult = await updateService.updateProfilePicture(context: context,token:user.token, image: File(pickedPath));
+                                        if (finalResult != ''){
+                                          user.image = finalResult;
+                                          widget.currentURL = finalResult;
+                                        }
+
+                                        setState(() {
+                                          
+                                        });
+                                        }else{
+                                          print("No file chosen");
+                                        }
+
+
                                       },
                                     ),
                                     Padding(padding: EdgeInsets.all(8.0)),
                                     GestureDetector(
                                       child: Text('Choose from gallery'),
                                       onTap: () async {
-                                        selectImages();
-                                        updateService.updateProfilePicture(
-                                          context: context,
-                                          image: image,
-                                          onSuccess: (imageUrlp) {
-                                            setState(() {
-                                              imageUrl = imageUrlp;
-                                            });
-                                          },
-                                        );
+                                        await selectImages();
+                                        if (image != null){
+                                            String finalResult = await updateService.updateProfilePicture(
+                                            context: context,
+                                            token:user.token,
+                                            image: image!,
+                                          );
+                                          if (finalResult != ''){
+                                            user.image = finalResult;
+                                            widget.currentURL = finalResult;
+                                          }
+
+                                          setState(() {
+                                            
+                                          });
+                                        }else{
+                                          print("IMAGE IS NULL");
+                                        }
+
                                         Navigator.of(context).pop();
                                       },
                                     ),

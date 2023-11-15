@@ -7,7 +7,7 @@ class User {
   final String email;
   final String address;
   final String type;
-  final String image;
+  String image;
   final String token;
   final List<dynamic> cart;
 
