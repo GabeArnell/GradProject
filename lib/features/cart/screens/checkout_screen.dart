@@ -21,7 +21,10 @@ enum CardType {
 
 class CheckoutScreen extends StatefulWidget {
   List<Product> products;
-  CheckoutScreen({super.key, required this.products});
+  String promoCode;
+  num postPromoSum;
+  CheckoutScreen({super.key, required this.products, required this.promoCode, required this.postPromoSum});
+  
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
 }
@@ -39,11 +42,21 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   CardType cardType = CardType.Invalid;
 
+  String formatMoney(num m){
+    int expand = (m*100).round();
+    String result = "${expand/100}";
+    return result;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     num sum = 0;
     for (int i = 0; i < widget.products.length; i++) {
       sum += widget.products[i].quantity * widget.products[i].price;
+    }
+    if (widget.postPromoSum < sum){
+      sum = widget.postPromoSum;
     }
     num salestax = sum * 0.08;
     num total = sum + salestax;
@@ -137,13 +150,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Column(children: [
-                  Text("Subtotal: $sum",
+                  Text("Subtotal: \$${formatMoney(sum)}",
                       style: TextStyle(
                           fontSize: 15, fontWeight: FontWeight.normal)),
                   const SizedBox(
                     height: 5,
                   ),
-                  Text("Sales Tax: $salestax",
+                  Text("Sales Tax: \$${formatMoney(salestax)}",
                       style: TextStyle(
                           fontSize: 15, fontWeight: FontWeight.normal)),
                   const SizedBox(
@@ -154,7 +167,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Column(children: [
-                  Text("Total Price: $total",
+                  Text("Total Price: \$${formatMoney(total)}",
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 ]),
@@ -227,7 +240,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   text: 'Checkout',
                   onTap: () {
                     cartServices.checkoutCart(
-                        context: context, products: widget.products);
+                        context: context, promocode: widget.promoCode);
                   },
                   color: const Color.fromARGB(255, 255, 208, 0),
                 ),

@@ -17,6 +17,8 @@ const userRouter = require("./routes/user")
 const messageRouter = require("./routes/message")
 // API for chat GPT interfacing
 const chatbotRouter = require("./routes/chatbot")
+// API for PromoCode interfacing
+const promoRouter = require("./routes/promotion")
 
 const cors = require("cors")
 
@@ -40,6 +42,7 @@ app.use(productsRouter);
 app.use(userRouter);
 app.use(messageRouter);
 app.use(chatbotRouter);
+app.use(promoRouter)
 
 // Database connections
 mongoose.connect(SHARED_DATABASE_URI).then(()=>{

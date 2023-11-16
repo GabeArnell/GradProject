@@ -72,9 +72,43 @@ class CartServices {
     }
     return productList;
   }
+  
+  Future<String> checkPromotion(
+      {required BuildContext context, required String promoCode}) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    String responseBody = "";
+    try {
+      http.Response res = await http.get(
+        Uri.parse('$SERVER_URI/api/get-promotion/${promoCode.trim().toLowerCase()}'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+      );
+
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          dynamic information = jsonDecode(res.body);
+          if (information['valid'] == true){
+            showSnackBar(context, 'Promotion Applied');
+            responseBody = res.body;
+          }
+          else{
+            showSnackBar(context, information['reason'] ?? "Invalid code");
+          }
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+
+    return responseBody;
+  }
 
   void checkoutCart(
-      {required BuildContext context, required List<Product> products}) async {
+      {required BuildContext context, required String promocode}) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     try {
@@ -84,7 +118,9 @@ class CartServices {
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': userProvider.user.token,
         },
-        body: jsonEncode(products.map((product) => product.toMap()).toList()),
+        body: jsonEncode({
+          "code": promocode
+        }),
       );
 
       httpErrorHandle(

@@ -10,6 +10,7 @@ class User {
   String image;
   final String token;
   final List<dynamic> cart;
+  List<dynamic> usedPromotions;
 
   User({
     required this.id,
@@ -21,6 +22,7 @@ class User {
     required this.image,
     required this.token,
     required this.cart,
+    required this.usedPromotions,
   });
 
   Map<String, dynamic> toMap() {
@@ -34,6 +36,7 @@ class User {
       'image': image,
       'token': token,
       'cart': cart,
+      'usedPromotions': usedPromotions,
     };
   }
 
@@ -48,6 +51,7 @@ class User {
       image: map['image'] ??
           'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png',
       token: map['token'] ?? '',
+      usedPromotions: map['usedPromotions'] ?? [],
       cart: List<Map<String, dynamic>>.from(
         map['cart']?.map(
           (x) => Map<String, dynamic>.from(x),
@@ -68,6 +72,7 @@ class User {
     String? type,
     String? image,
     String? token,
+    List<dynamic>? usedPromotions,
     List<dynamic>? cart,
   }) {
     return User(
@@ -79,6 +84,7 @@ class User {
       type: type ?? this.type,
       token: token ?? this.token,
       cart: cart ?? this.cart,
+      usedPromotions: usedPromotions ?? this.usedPromotions,
       image: image ?? this.image,
     );
   }

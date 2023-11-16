@@ -32,6 +32,11 @@ class _CartScreenState extends State<CartScreen> {
     super.initState();
     loadCart();
   }
+  String formatMoney(num m){
+    int expand = (m*100).round();
+    String result = "${expand/100}";
+    return result;
+  }
 
   void loadCart() async {
     products = (await cartServices.fetchCartProducts(context)).cast<Product>();
@@ -45,12 +50,13 @@ class _CartScreenState extends State<CartScreen> {
     for (int i = 0; i < context.watch<UserProvider>().user.cart.length; i++) {
       userCartLength += context.watch<UserProvider>().user.cart[i]['quantity'];
     }
+    CartSubtotal subtotalScreen = CartSubtotal(products: products);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(67),
         child: AppBar(
           flexibleSpace: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: GlobalVariables.appBarGradient,
             ),
           ),
@@ -125,7 +131,7 @@ class _CartScreenState extends State<CartScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            CartSubtotal(products: products),
+            subtotalScreen,
             Padding(
               padding: const EdgeInsets.all(17),
               child: CustomButton(
@@ -134,7 +140,7 @@ class _CartScreenState extends State<CartScreen> {
                   if (userCartLength > 0) {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return CheckoutScreen(products: products);
+                      return CheckoutScreen(products: products, promoCode: subtotalScreen.promoCode,postPromoSum: subtotalScreen.postPromoSum,);
                     }));
                   }
                 },

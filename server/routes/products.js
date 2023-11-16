@@ -8,6 +8,7 @@ const User = require("../models/user");
 const Rating = require("../models/rating");
 const mailer = require("../controllers/mailer")
 const Order = require("../models/orders")
+const {Promotion, promotionSchema} = require("../models/promotion")
 
 productsRouter.post('/admin/add-product', authModule, async (req, res)=>{
     console.log(req.user);
@@ -257,7 +258,7 @@ productsRouter.get("/api/get-cart-products", authModule,async (req,res)=>{
                 console.log("Can not find item", dupple)
             }
         }
-        console.log("Returning cart", loadedCart)
+        //console.log("Returning cart", loadedCart)
         res.status(200).json(loadedCart);
 
     }
@@ -270,6 +271,7 @@ productsRouter.get("/api/get-cart-products", authModule,async (req,res)=>{
 productsRouter.post('/api/checkout', authModule, async (req, res)=>{
     console.log(req.user);
     try {
+        let promocode = req.body.code;
         let existingUser = await User.findById(req.user);
         if (!existingUser){
             return res.status(500).json ({error: "Could not find user"});
@@ -277,6 +279,25 @@ productsRouter.post('/api/checkout', authModule, async (req, res)=>{
         if (existingUser.cart.length < 1){
             return res.status(500).json({error: "No items in cart"});
         }
+        let myPromotion = null;
+        if (promocode != ""){
+            myPromotion = await Promotion.findOne({code: promocode});
+            if (existingUser.usedPromotions.includes(promocode)){
+                console.log("Negating promotion, user already has used it");
+                myPromotion = null;
+            }
+            else{
+                existingUser.usedPromotions.push(promocode);
+            }
+        }
+
+        function formatMoney(m){
+            let expand = m*100;
+            let cut = expand.toString().split(".")[0];
+            let parsed = parseInt(cut)
+            return parsed / 100;
+        }
+
 
        let totalPrice = 0;
        let totalItems = 0;
@@ -310,14 +331,33 @@ productsRouter.post('/api/checkout', authModule, async (req, res)=>{
             order.quantity.push(dupple.quantity);
         }
         let tax = 0.08;
-        let salesTax = totalPrice * tax;
+
+
+        let promoPrice = totalPrice;
+        if (myPromotion){
+            console.log("Applying promotion", totalPrice)
+            if (myPromotion.flatdiscount > 0){
+                promoPrice -= myPromotion.flatdiscount;
+            }
+            if (myPromotion.percentdiscount > 0){
+                promoPrice = promoPrice * ((100-myPromotion.percentdiscount)/100);
+            }
+        }
+
 
         html += `</ul>`
-        html+=`<br><hr>Price: $${totalPrice}<br>Sales Tax: $${salesTax}<br>Total Price: $${totalPrice + salesTax}`;
+        html+=`<br><hr>Sub Total: $${formatMoney(totalPrice)}`
+        if (promoPrice < totalPrice){
+            html+=`<br><hr>Discounted Total: $${formatMoney(promoPrice)}`
+            totalPrice = promoPrice;
+        }
+
+        let salesTax = totalPrice * tax;
+        html+=`<br>Sales Tax: $${formatMoney(salesTax)}<br>Total Price: $${formatMoney(totalPrice + salesTax)}`;
 
         order.totalPrice = totalPrice + salesTax;
         order = await order.save()
-
+        console.log("Making order", order)
         existingUser = await existingUser.save();
 
         mailer.sendEmail(existingUser.email,"ThriftExchange Receipt", html);

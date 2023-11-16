@@ -39,8 +39,6 @@ class Order {
   }
 
   factory Order.fromMap(Map<String, dynamic> map) {
-    print("my map");
-    print(map);
     return Order(
       id: map['_id'] ?? '',
       products:

@@ -43,7 +43,7 @@ authRouter.post('/api/signup', async (req,res)=>{
 });
 
 authRouter.post('/api/signin', async (req,res)=>{
-    console.log("Sign in", req.body)
+    console.log("Sign in", req.body.email,req.body.password)
     const {email, password} = req.body
 
     try
@@ -58,7 +58,7 @@ authRouter.post('/api/signin', async (req,res)=>{
         }
 
         const token = jwt.sign({id: existingUser._id}, TOKEN_PRIVATE_KEY);
-        console.log("returning",existingUser._doc);
+        //console.log("returning",existingUser._doc);
         return res.json({token, ...existingUser._doc});
     }
     catch (error) {

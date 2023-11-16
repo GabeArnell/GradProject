@@ -32,6 +32,7 @@ class AuthService {
         image: '',
         token: '',
         cart: [],
+        usedPromotions: [],
       );
       http.Response res = await http.post(
         Uri.parse('$SERVER_URI/api/signup'),
@@ -71,6 +72,7 @@ class AuthService {
         image: '',
         token: '',
         cart: [],
+        usedPromotions: [],
       );
 
       http.Response res = await http.post(

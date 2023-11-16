@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 const { use } = require("../routes/auth")
 const {Listing, listingSchema} = require("./listing")
+
 const userSchema = mongoose.Schema({
     name: {
         required: true,
@@ -57,6 +58,10 @@ const userSchema = mongoose.Schema({
                 required: true
             }
         }
+    ],
+
+    usedPromotions: [
+        String
     ]
 
 });
