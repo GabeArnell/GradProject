@@ -9,6 +9,7 @@ const Rating = require("../models/rating");
 const mailer = require("../controllers/mailer")
 const Order = require("../models/orders")
 const {Promotion, promotionSchema} = require("../models/promotion")
+const taxModule = require("../controllers/tax")
 
 productsRouter.post('/admin/add-product', authModule, async (req, res)=>{
     console.log(req.user);
@@ -294,13 +295,15 @@ productsRouter.post('/api/checkout', authModule, async (req, res)=>{
         function formatMoney(m){
             let expand = m*100;
             let cut = expand.toString().split(".")[0];
-            let parsed = parseInt(cut)
-            return parsed / 100;
+            let parsed = parseInt(cut);
+            let s = (parsed/100).toFixed(2);
+            return s
         }
 
 
        let totalPrice = 0;
        let totalItems = 0;
+       
        let html = `
        <h1>Your ThriftExchange order is in the works!</h1>
        <h2> Your order </h2>
@@ -319,18 +322,20 @@ productsRouter.post('/api/checkout', authModule, async (req, res)=>{
             totalPrice: 0,
         })
 
-    
+        let tax = 0;
         while(existingUser.cart.length > 0){
             let dupple = existingUser.cart.shift();
             totalItems += dupple.quantity;
             let existingListing = await Listing.findById(dupple._id.toString());
             let basePrice = existingListing.price;
             totalPrice += dupple.quantity * basePrice;
-            html+=`<li>x${dupple.quantity} ${existingListing.name} | $${basePrice * dupple.quantity}</li>`;
+            let taxPercent = await taxModule.getSalesTax(existingListing.zipcode);
+            tax = dupple.quantity * basePrice * parseFloat(taxPercent);
+            let textTax = (parseFloat(taxPercent)*100).toFixed(1);
+            html+=`<li>x${dupple.quantity} ${existingListing.name} | $${basePrice * dupple.quantity} | Tax ${textTax}%</li>`;
             order.products.push(existingListing);
             order.quantity.push(dupple.quantity);
         }
-        let tax = 0.08;
 
 
         let promoPrice = totalPrice;
@@ -352,10 +357,9 @@ productsRouter.post('/api/checkout', authModule, async (req, res)=>{
             totalPrice = promoPrice;
         }
 
-        let salesTax = totalPrice * tax;
-        html+=`<br>Sales Tax: $${formatMoney(salesTax)}<br>Total Price: $${formatMoney(totalPrice + salesTax)}`;
+        html+=`<br>Sales Tax: $${formatMoney(tax)}<br>Total Price: $${formatMoney(totalPrice + tax)}`;
 
-        order.totalPrice = totalPrice + salesTax;
+        order.totalPrice = totalPrice + tax;
         order = await order.save()
         console.log("Making order", order)
         existingUser = await existingUser.save();

@@ -40,12 +40,50 @@ module.exports.get = async() =>{
     return results;
 }
 module.exports.searchByField = async(field,input) =>{
-    
     let results = await Listing.find({ 'name': 
-        {$regex: input, $options: 'i'}
+        {$regex: input, $options: 'i'},
     });
     //console.log(results)
     return results;
+}
+module.exports.searchByFields = async(body) =>{
+    let zipcode = null
+    let category = null;
+    if (body.zipcode && body.zipcode.length > 0 ){
+        zipcode = parseInt(body.zipcode)
+    }
+    if (body.category && body.category.length > 0 ){
+        category = body.category
+    }
+    
+    if (!zipcode && !category){
+        let results = await Listing.find({ 'name': 
+            {$regex: input, $options: 'i'}
+        });
+        //console.log(results)
+        return results;
+    }
+    else if (category && zipcode){
+        let results = await Listing.find({ 'name': 
+            {$regex: input, $options: 'i'},
+            zipcode: zipcode,
+            category: category
+        },);
+        return results;
+    }else if (!zipcode){
+        let results = await Listing.find({ 'name': 
+            {$regex: input, $options: 'i'},
+            category: category
+        },);
+        return results;
+    }
+    else {
+        let results = await Listing.find({ 'name': 
+            {$regex: input, $options: 'i'},
+            zipcode: zipcode,
+        },);
+        return results;
+    }
 }
 module.exports.getByCategory = async(input) =>{
     if (input != 'All'){

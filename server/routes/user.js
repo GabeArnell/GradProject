@@ -6,6 +6,7 @@ const authModule = require("../middleware/auth");
 const User = require("../models/user");
 const bcryptjs = require("bcryptjs");
 
+const taxModule = require("../controllers/tax");
 
 // Change Details
 userRouter.post('/api/profile/update-details', authModule, async (req, res)=>{
@@ -26,6 +27,18 @@ userRouter.post('/api/profile/update-details', authModule, async (req, res)=>{
         changePassword(req,res,req.body.detail.trim())
         break;
    }
+});
+
+// Get Tax Ammount
+userRouter.post('/api/tax-list', async (req, res)=>{
+    let zipcodes = req.body
+    let taxes = [];
+    for (let zipcode of zipcodes){
+        let string = await taxModule.getSalesTax(zipcode);
+        let f = parseFloat(string);
+        taxes.push(f);
+    }
+    res.status(200).json(taxes);
 });
 
 

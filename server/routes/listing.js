@@ -37,10 +37,10 @@ listingRouter.get("/api/my-listings",  authModule, async (req,res) => {
 });
 
 
-listingRouter.get("/api/products/search/:input", async(req,res)=>{
+listingRouter.get("/api/products/search/:name/:category/:zipcode", async(req,res)=>{
     console.log(req.params)
     try {
-        let array = await listingController.searchByField('name',req.params.input);
+        let array = await listingController.searchByFields(req.params);
         res.status(200).json(array);
     }
     catch (e)

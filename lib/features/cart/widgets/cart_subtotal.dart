@@ -29,10 +29,11 @@ class _CartSubtotalState extends State<CartSubtotal> {
   String formatMoney(num m){
     int expand = (m*100).round();
     String result = "${expand/100}";
+    
     return result;
   }
 
-
+  
   @override
   Widget build(BuildContext context) {
     num sum = 0;

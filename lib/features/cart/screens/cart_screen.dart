@@ -40,8 +40,15 @@ class _CartScreenState extends State<CartScreen> {
 
   void loadCart() async {
     products = (await cartServices.fetchCartProducts(context)).cast<Product>();
+
     setState(() {});
   }
+
+  Future<List<dynamic>> calculateTaxes()async{
+    List<dynamic> taxList = await cartServices.getTaxList(context: context, products: products);
+    return taxList;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -136,11 +143,16 @@ class _CartScreenState extends State<CartScreen> {
               padding: const EdgeInsets.all(17),
               child: CustomButton(
                 text: 'Proceed to Buy (${userCartLength} items)',
-                onTap: () {
+                onTap: () async {
                   if (userCartLength > 0) {
+                    
+                    List<dynamic> taxes = await calculateTaxes();
+
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return CheckoutScreen(products: products, promoCode: subtotalScreen.promoCode,postPromoSum: subtotalScreen.postPromoSum,);
+                      return CheckoutScreen(products: products, promoCode: subtotalScreen.promoCode,postPromoSum: subtotalScreen.postPromoSum,
+                        taxList: taxes,
+                      );
                     }));
                   }
                 },

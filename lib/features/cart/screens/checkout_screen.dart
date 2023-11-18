@@ -7,23 +7,14 @@ import '../../../models/product.dart';
 import '../services/cart_services.dart';
 import 'package:flutter/services.dart';
 
-enum CardType {
-  Master,
-  Visa,
-  Verve,
-  Discover,
-  AmericanExpress,
-  DinersClub,
-  Jcb,
-  Others,
-  Invalid
-}
 
 class CheckoutScreen extends StatefulWidget {
   List<Product> products;
   String promoCode;
   num postPromoSum;
-  CheckoutScreen({super.key, required this.products, required this.promoCode, required this.postPromoSum});
+  List<dynamic> taxList;
+
+  CheckoutScreen({super.key, required this.products, required this.promoCode, required this.postPromoSum, required this.taxList});
   
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
@@ -40,25 +31,35 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   TextEditingController cardNumberController = TextEditingController();
 
-  CardType cardType = CardType.Invalid;
-
   String formatMoney(num m){
     int expand = (m*100).round();
     String result = "${expand/100}";
     return result;
   }
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
+
     num sum = 0;
+    num salestax = 0;
+
     for (int i = 0; i < widget.products.length; i++) {
       sum += widget.products[i].quantity * widget.products[i].price;
+      if (widget.taxList[i] != null){
+        salestax += widget.taxList[i]*(widget.products[i].quantity * widget.products[i].price);
+      }
     }
     if (widget.postPromoSum < sum){
       sum = widget.postPromoSum;
     }
-    num salestax = sum * 0.08;
     num total = sum + salestax;
 
     return Scaffold(

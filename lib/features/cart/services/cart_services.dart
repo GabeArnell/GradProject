@@ -107,6 +107,39 @@ class CartServices {
     return responseBody;
   }
 
+  Future<List<dynamic>> getTaxList(
+      {required BuildContext context, required List<Product> products}) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    List<dynamic> taxList = [];
+    List<num> zipcodes = [];
+    for (int i = 0; i < products.length; i++){
+      zipcodes.add(products[i].zipcode);
+    }
+    try {
+      http.Response res = await http.post(
+        Uri.parse('$SERVER_URI/api/tax-list'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+        body: jsonEncode(zipcodes)
+      );
+
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          taxList = jsonDecode(res.body);
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+
+    return taxList;
+  }
+
+
   void checkoutCart(
       {required BuildContext context, required String promocode}) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);

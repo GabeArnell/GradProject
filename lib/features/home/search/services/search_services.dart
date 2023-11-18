@@ -20,12 +20,7 @@ class SearchServices {
     List<Product> productList = [];
     try {
       http.Response res = await http.get(
-        Uri.parse('$SERVER_URI/api/products/search/$searchQuery').replace(
-          queryParameters: {
-            'category': category,
-            'zipcode': zipcode,
-          },
-        ),
+        Uri.parse('$SERVER_URI/api/products/search/$searchQuery/$category/$zipcode'),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': userProvider.user.token,
