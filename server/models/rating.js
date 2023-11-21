@@ -18,11 +18,11 @@ const ratingSchema = mongoose.Schema({
     },
     productid: {
         type: String,
-        default: 'Furniture'
+        default: ''
     },
     rating: {
         type: Number,
-        default: -1
+        default: -100
     },
 });
 

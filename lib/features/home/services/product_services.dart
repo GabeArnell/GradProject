@@ -44,4 +44,69 @@ class ProductServices {
       showSnackBar(context, e.toString());
     }
   }
+
+  void rateProduct({
+    required BuildContext context,
+    required Product product,
+    required num rating
+  }) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    try {
+      http.Response res = await http.post(
+        Uri.parse('$SERVER_URI/api/rate-product'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+        body: jsonEncode({
+          'itemID': product.id,
+          'rating': rating,
+        }),
+      );
+
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+            showSnackBar(context, 'Gave the product ${rating.round()} stars!');
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
+  Future<double> getRating({
+    required BuildContext context,
+    required Product product,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    double result = -10;
+    try {
+      http.Response res = await http.post(
+        Uri.parse('$SERVER_URI/api/calculate-product-rating'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+        body: jsonEncode({
+          'itemID': product.id
+        }),
+      );
+
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+            result = jsonDecode(res.body);
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+    return result;
+  }
+
+
 }

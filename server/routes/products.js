@@ -374,8 +374,6 @@ productsRouter.post('/api/checkout', authModule, async (req, res)=>{
     }
 })
 
-
-
 productsRouter.get("/api/orders/listings", authModule,async (req,res)=>{
     console.log(req.user);
     
@@ -398,6 +396,94 @@ productsRouter.get("/api/orders/listings", authModule,async (req,res)=>{
 
     }
     catch (e){
+        return res.status(500).json ({error: e.message});
+    }
+})
+
+
+productsRouter.post('/api/calculate-product-rating', async (req, res)=>{
+    console.log("Calcing Rating")
+    console.log(req.body);
+    let {itemID} = req.body;
+    try {
+        let existingListing = await Listing.findById(itemID);
+        if (!existingListing){
+            return res.status(500).json ({error: "Could not find product"});
+        }
+
+        let ratings = await Rating.find({productid: itemID});
+        let total = 0;
+        let sum = 0;
+        for (let r of ratings ){
+            total++;
+            sum = sum + r.rating;
+        }
+
+        if (total == 0){
+            return res.status(200).json(0);
+        }
+        
+        // forcing it to be a double so that the ratings are accepted by frontend (which will round it anyway)
+        res.status(200).json(sum/total + 0.001);
+    }
+    catch (e){
+        console.log('prod error', e.message);
+        return res.status(500).json ({error: e.message});
+    }
+})
+
+productsRouter.post('/api/rate-product', authModule, async (req, res)=>{
+    console.log("Rating PRODUCT")
+    console.log(req.user);
+    console.log(req.body);
+    let {itemID, rating} = req.body;
+    try {
+        const existingUser = await User.findById(req.user);
+        if (!existingUser){
+            return res.status(500).json ({error: "Could not find user"});
+        }
+        let existingListing = await Listing.findById(itemID);
+        if (!existingListing){
+            return res.status(500).json ({error: "Could not find product"});
+        }
+
+        let purchasedProduct = false;
+        let orders = await Order.find({userId: req.user});
+
+        for (let i = 0; i < orders.length && purchasedProduct == false; i++){
+            let order = orders[i];
+            for (let product of order.products){
+                if (product._id == itemID){
+                    console.log("Owns product");
+                    purchasedProduct = true;
+                }
+            }
+        }
+
+        if (!purchasedProduct){
+            return res.status(500).json ({error: "Must purchase the item to rate it."});
+        }
+
+        let myRating = await Rating.findOne({user: existingUser.email, productid: itemID});
+        console.log(myRating)
+        if (!myRating){
+            console.log("New rating");
+            myRating = new Rating({
+                user: existingUser.email,
+                productid: itemID,
+                rating: rating
+            })
+        }else{
+            console.log("edited rating");
+            myRating.rating = rating;
+        }
+
+        myRating = await myRating.save();
+        
+        res.json(true);
+    }
+    catch (e){
+        console.log('prod error', e.message);
         return res.status(500).json ({error: e.message});
     }
 })

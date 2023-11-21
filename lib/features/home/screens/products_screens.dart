@@ -37,10 +37,28 @@ class _ProductsScreenState extends State<ProductsScreen> {
     );
   }
 
+  double stars = 0;
+
+  void calcStars()async{
+    stars = await prodServices.getRating(context: context,product: widget.product);
+    setState(() {
+      
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    calcStars();
+  }
+
+
   final ChatServices chatService = ChatServices();
 
   @override
   Widget build(BuildContext context) {
+
+    
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(67),
@@ -133,7 +151,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                       ),
                     ),
                   ),
-                  Stars(rating: 3),
+                  Stars(rating: stars),
                 ],
               ),
             ),
@@ -275,7 +293,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'Rate The Item: ',
+                'Rate The Item',
                 style: const TextStyle(
                   fontSize: 26,
                   color: Colors.black,
@@ -288,7 +306,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 Icons.star,
                 color: GlobalVariables.secondaryColor,
               ),
-              onRatingUpdate: (rating) {},
+              onRatingUpdate: (rating) {
+                prodServices.rateProduct(context: context,product: widget.product, rating: rating);
+                calcStars();
+              },
             ),
             const SizedBox(
               height: 13,
