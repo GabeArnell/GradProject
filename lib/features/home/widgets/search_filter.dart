@@ -212,12 +212,10 @@ class _SearchFilterState extends State<SearchFilter> {
                           child: CustomButton(
                               text: 'Submit',
                               onTap: () {
-                                if (RegExp(r'^\d+$')
-                                    .hasMatch(addressController.text)) {
-                                  widget.onCategorySelected(
-                                      _category.toString().split('.').last);
-                                  widget
-                                      .onZipcodeUpdated(addressController.text);
+                                if (RegExp(r'^\d+$').hasMatch(addressController.text) || addressController.text.isEmpty) {
+                                  print("Matched the regex");
+                                  widget.onCategorySelected(_category.toString().split('.').last);
+                                  widget.onZipcodeUpdated(addressController.text.trim());
                                   Navigator.pop(context);
                                 } else {
                                   setStateModal(() {

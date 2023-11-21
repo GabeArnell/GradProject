@@ -19,6 +19,15 @@ class SearchServices {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     List<Product> productList = [];
     try {
+      if (searchQuery.isEmpty){
+        searchQuery = "null";
+      }
+      if (category.isEmpty){
+        category = "null";
+      }
+      if (zipcode.isEmpty){
+        zipcode = "null";
+      }
       http.Response res = await http.get(
         Uri.parse('$SERVER_URI/api/products/search/$searchQuery/$category/$zipcode'),
         headers: {

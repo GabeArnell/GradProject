@@ -49,37 +49,42 @@ module.exports.searchByField = async(field,input) =>{
 module.exports.searchByFields = async(body) =>{
     let zipcode = null
     let category = null;
-    if (body.zipcode && body.zipcode.length > 0 ){
+    let name = "";
+
+    if (body.zipcode && body.zipcode.length > 0 && body.zipcode != "null"){
         zipcode = parseInt(body.zipcode)
     }
-    if (body.category && body.category.length > 0 ){
+    if (body.category && body.category.length > 0  && body.category != "null" && body.category != "All"){
         category = body.category
+    }
+    if (body.name && body.name.length > 0  && body.name != "null"){
+        name = body.name
     }
     
     if (!zipcode && !category){
         let results = await Listing.find({ 'name': 
-            {$regex: input, $options: 'i'}
+            {$regex: name, $options: 'i'}
         });
         //console.log(results)
         return results;
     }
     else if (category && zipcode){
         let results = await Listing.find({ 'name': 
-            {$regex: input, $options: 'i'},
+            {$regex: name, $options: 'i'},
             zipcode: zipcode,
             category: category
         },);
         return results;
     }else if (!zipcode){
         let results = await Listing.find({ 'name': 
-            {$regex: input, $options: 'i'},
+            {$regex: name, $options: 'i'},
             category: category
         },);
         return results;
     }
     else {
         let results = await Listing.find({ 'name': 
-            {$regex: input, $options: 'i'},
+            {$regex: name, $options: 'i'},
             zipcode: zipcode,
         },);
         return results;
