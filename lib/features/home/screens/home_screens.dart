@@ -153,6 +153,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
+                        if (user.type == "Admin")
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10.0),
+                            child: const Text(
+                              "Admin",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                            ),
+                          )
                       ],
                     ),
                   ],
@@ -167,53 +177,56 @@ class _HomeScreenState extends State<HomeScreen> {
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  SearchFilter(
-                    onCategorySelected: (category) {
-                      _selectedCategory = category;
-                    },
-                    onZipcodeUpdated: (zipcode) {
-                      _selectedZipcode = zipcode;
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(21),
-                    child: RichText(
-                      text: const TextSpan(
-                        text: 'Categories',
-                        style: TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                  if (user.type != "Admin")
+                    SearchFilter(
+                      onCategorySelected: (category) {
+                        _selectedCategory = category;
+                      },
+                      onZipcodeUpdated: (zipcode) {
+                        _selectedZipcode = zipcode;
+                      },
+                    ),
+                  if (user.type != "Admin")
+                    Padding(
+                      padding: const EdgeInsets.all(21),
+                      child: RichText(
+                        text: const TextSpan(
+                          text: 'Categories',
+                          style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  GridView.builder(
-                    itemCount: categories.length,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2),
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(
-                              context, CategoryProducts.routeName,
-                              arguments: categories[index]);
-                        },
-                        child: CategoryWidget(
-                          image: categoryImage[index],
-                          category: categories[index],
-                        ),
-                      );
-                    },
-                  ),
+                  if (user.type != "Admin")
+                    GridView.builder(
+                      itemCount: categories.length,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2),
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context, CategoryProducts.routeName,
+                                arguments: categories[index]);
+                          },
+                          child: CategoryWidget(
+                            image: categoryImage[index],
+                            category: categories[index],
+                          ),
+                        );
+                      },
+                    ),
                   Padding(
                     padding: const EdgeInsets.all(21),
                     child: RichText(
-                      text: const TextSpan(
-                        text: 'Products',
+                      text: TextSpan(
+                        text: (user.type == "Admin") ? 'All Posts' : 'Products',
                         style: TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.bold,
@@ -261,7 +274,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                 ),
-                                if (productData.email == user.email)
+                                if (productData.email == user.email ||
+                                    user.type == "Admin")
                                   IconButton(
                                     onPressed: () =>
                                         deleteProduct(productData, index),

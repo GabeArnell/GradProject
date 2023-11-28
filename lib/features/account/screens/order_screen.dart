@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:thrift_exchange/common/widgets/loader.dart';
 import 'package:thrift_exchange/features/account/screens/order_details.dart';
 import 'package:thrift_exchange/features/account/services/update_services.dart';
 import 'package:thrift_exchange/features/account/widgets/product.dart';
 import 'package:thrift_exchange/models/order.dart';
 import 'package:thrift_exchange/models/product.dart';
+import 'package:thrift_exchange/providers/user_provider.dart';
 
 class OrdersScreen extends StatefulWidget {
   static const String routeName = '/order-screen';
@@ -30,13 +32,16 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Orders',
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
+      appBar: (user.type != 'Admin')
+          ? AppBar(
+              title: Text(
+                'Orders',
+                style: TextStyle(color: Colors.black),
+              ),
+            )
+          : null,
       body: orders == null
           ? const Loader()
           : GridView.builder(

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:thrift_exchange/common/widgets/bottom_bar.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
+import 'package:thrift_exchange/features/admin/screens/admin_screen.dart';
 import 'package:thrift_exchange/features/auth/screens/auth_screen.dart';
 import 'package:thrift_exchange/features/auth/services/auth_service.dart';
 import 'package:thrift_exchange/providers/user_provider.dart';
@@ -53,7 +54,9 @@ class _MyAppState extends State<MyApp> {
 
       // Below checks if we have a user token saved in which case, we skip auth screen
       home: Provider.of<UserProvider>(context).user.token.isNotEmpty
-          ? const BottomBar()
+          // ? Provider.of<UserProvider>(context).user.type == 'user'
+          //     ? const BottomBar()
+          ? const AdminScreen()
           : const AuthScreen(),
     );
   }
