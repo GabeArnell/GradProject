@@ -6,8 +6,10 @@ import 'package:thrift_exchange/constants/global_variables.dart';
 import 'package:thrift_exchange/features/admin/screens/admin_screen.dart';
 import 'package:thrift_exchange/features/auth/screens/auth_screen.dart';
 import 'package:thrift_exchange/features/auth/services/auth_service.dart';
+import 'package:thrift_exchange/features/home/screens/home_screens.dart';
 import 'package:thrift_exchange/providers/user_provider.dart';
 import 'package:thrift_exchange/router.dart';
+
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -38,6 +40,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    print("Getting user");
+    print(Provider.of<UserProvider>(context).user.type);
+    var myType = Provider.of<UserProvider>(context).user.type;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Thrift Exchange',
@@ -56,7 +61,10 @@ class _MyAppState extends State<MyApp> {
       home: Provider.of<UserProvider>(context).user.token.isNotEmpty
           // ? Provider.of<UserProvider>(context).user.type == 'user'
           //     ? const BottomBar()
-          ? const AdminScreen()
+          ? (
+            myType=="user"?BottomBar():AdminScreen()
+
+          )
           : const AuthScreen(),
     );
   }
