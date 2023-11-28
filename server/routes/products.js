@@ -383,7 +383,15 @@ productsRouter.get("/api/orders/listings", authModule,async (req,res)=>{
             return res.status(500).json ({error: "Could not find user"});
         }
 
-        const myOrders = await Order.find({ userId: req.user });
+        let myOrders = null;
+        
+        // Admins can see all orders
+        if (existingUser.type.toLowerCase() != "admin"){
+            myOrders= await Order.find({ userId: req.user });
+        }
+        else{
+            myOrders= await Order.find({ });
+        }
 
         if (!myOrders){
             return res.status(500).json ({error: "Could not find orders"});
