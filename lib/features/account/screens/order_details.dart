@@ -50,7 +50,6 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   void initState() {
     super.initState();
     currentStep = widget.order.status;
-    if ()
     loadBuyer();
   }
 
@@ -64,6 +63,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context).user;
 
     return Scaffold(
       appBar: PreferredSize(
