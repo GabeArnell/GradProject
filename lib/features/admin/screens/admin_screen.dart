@@ -4,8 +4,11 @@ import 'package:thrift_exchange/features/account/screens/order_screen.dart';
 import 'package:thrift_exchange/features/account/widgets/orders.dart';
 import 'package:thrift_exchange/features/admin/screens/analytics_screen.dart';
 import 'package:thrift_exchange/features/admin/screens/posts_screen.dart';
+import 'package:thrift_exchange/features/auth/screens/auth_screen.dart';
 import 'package:thrift_exchange/features/chat/screens/chat_home_page.dart';
 import 'package:thrift_exchange/features/home/screens/home_screens.dart';
+
+import '../../../common/widgets/custom_button.dart';
 
 class AdminScreen extends StatefulWidget {
   const AdminScreen({super.key});
@@ -23,6 +26,7 @@ class _AdminScreenState extends State<AdminScreen> {
     const HomeScreen(),
     const AnalyticsScreen(),
     const OrdersScreen(),
+    const AuthScreen(),
   ];
 
   void updatePage(int page) {
@@ -56,7 +60,7 @@ class _AdminScreenState extends State<AdminScreen> {
                             BlendMode.srcOver),
                         child: Image.asset(
                           'assets/images/thrift_exchange_logo.jpg',
-                          width: 55,
+                          width: 59,
                           height: 95,
                           //color: Colors.black,
                         ),
@@ -66,7 +70,7 @@ class _AdminScreenState extends State<AdminScreen> {
                       "Admin",
                       style: TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.black),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -131,6 +135,24 @@ class _AdminScreenState extends State<AdminScreen> {
               ),
               child: const Icon(
                 Icons.all_inbox_outlined,
+              ),
+            ),
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Container(
+              width: bottomBarWidth,
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                      color: _page == 2
+                          ? GlobalVariables.selectedNavBarColor
+                          : GlobalVariables.backgroundColor,
+                      width: bottomBarBorderWidth),
+                ),
+              ),
+              child: const Icon(
+                Icons.exit_to_app ,
               ),
             ),
             label: '',

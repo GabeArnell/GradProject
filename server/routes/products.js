@@ -127,7 +127,8 @@ productsRouter.post('/delete-product', authModule, async (req, res)=>{
         if (!existingListing){
             return res.status(400).json ({error: "Could not find product to delete."});
         }       
-        if (existingListing.email != existingUser.email && existingUser.type != 'admin'){
+        
+        if (existingListing.email != existingUser.email && existingUser.type.toLowerCase() != 'admin'){
             return res.status(401).json ({error: "User is not authorized to delete the product."});
         } 
 

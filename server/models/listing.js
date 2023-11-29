@@ -40,6 +40,11 @@ const listingSchema = mongoose.Schema({
         default: 'Furniture'
     },
 
+    views: {
+        type: Number,
+        default: 0,
+    },
+
     description: {
         type: String,
         default: 'Used wooden chair, some dents on side but structurally sound.'

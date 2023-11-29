@@ -10,6 +10,7 @@ class Product {
   final double zipcode;
   final String email;
   final String? id;
+  final int views;
 
   Product({
     required this.name,
@@ -20,6 +21,7 @@ class Product {
     required this.price,
     required this.zipcode,
     required this.email,
+    required this.views,
     this.id,
   });
 
@@ -33,6 +35,7 @@ class Product {
       'price': price,
       'zipcode': zipcode,
       'email': email,
+      'views': views,
       'id': id,
     };
   }
@@ -47,6 +50,7 @@ class Product {
       price: map['price']?.toDouble() ?? 0.0,
       zipcode: map['zipcode']?.toDouble() ?? 0.0,
       email: map['email'] ?? '',
+      views: map['views'] ?? 0,
       id: map['_id'],
     );
   }

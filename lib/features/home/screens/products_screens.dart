@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:provider/provider.dart';
 import 'package:thrift_exchange/common/widgets/custom_button.dart';
 import 'package:thrift_exchange/common/widgets/custom_textfield.dart';
 import 'package:thrift_exchange/common/widgets/stars.dart';
@@ -12,6 +13,7 @@ import 'package:thrift_exchange/features/home/services/home_services.dart';
 import 'package:thrift_exchange/features/home/services/product_services.dart';
 import 'package:thrift_exchange/models/product.dart';
 
+import '../../../providers/user_provider.dart';
 import '../../chat/services/chat_services.dart';
 
 //Not needed for thhis week
@@ -46,10 +48,15 @@ class _ProductsScreenState extends State<ProductsScreen> {
     });
   }
 
+  void incrementViews()async{
+    prodServices.incrementViews(context: context, product: widget.product);
+  }
+
   @override
   void initState() {
     super.initState();
     calcStars();
+    incrementViews();
   }
 
 
@@ -57,6 +64,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context).user;
 
     
     return Scaffold(
@@ -155,18 +163,19 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 ],
               ),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(
-            //     vertical: 20,
-            //     horizontal: 10,
-            //   ),
-            //   child: Text(
-            //     widget.product.name,
-            //     style: const TextStyle(
-            //       fontSize: 15,
-            //     ),
-            //   ),
-            // ),
+            if (widget.product.email == user.email || user.type == "Admin")
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 20,
+                  horizontal: 10,
+                ),
+                child: Text(
+                  "Seller Statistics: ${widget.product.views} Views",
+                  style: const TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+              ),
             Container(
               color: Colors.black26,
               height: 6,
@@ -281,15 +290,18 @@ class _ProductsScreenState extends State<ProductsScreen> {
             //       left: 10.0, right: 10, bottom: 10, top: 15),
             //   child: CustomButton(text: 'Buy Now', onTap: () {}),
             // ),
+            if (user.type != "Admin")
             Padding(
               padding: const EdgeInsets.only(
                   left: 10.0, right: 10, bottom: 5, top: 5),
               child: CustomButton(text: 'Add to Cart', onTap: addToCart),
             ),
+            if (user.type != "Admin")
             Container(
               color: Colors.black12,
               height: 6,
             ),
+            if (user.type != "Admin")
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
@@ -301,6 +313,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 ),
               ),
             ),
+            if (user.type != "Admin")
             RatingBar.builder(
               itemBuilder: (context, _) => const Icon(
                 Icons.star,
@@ -311,6 +324,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 calcStars();
               },
             ),
+            if (user.type != "Admin")
             const SizedBox(
               height: 13,
             ),

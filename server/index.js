@@ -19,6 +19,8 @@ const messageRouter = require("./routes/message")
 const chatbotRouter = require("./routes/chatbot")
 // API for PromoCode interfacing
 const promoRouter = require("./routes/promotion")
+// API for Sales Analytics
+const analyticsRouter = require("./routes/analytics")
 
 const cors = require("cors")
 
@@ -42,7 +44,8 @@ app.use(productsRouter);
 app.use(userRouter);
 app.use(messageRouter);
 app.use(chatbotRouter);
-app.use(promoRouter)
+app.use(promoRouter);
+app.use(analyticsRouter);
 
 // Database connections
 mongoose.connect(SHARED_DATABASE_URI).then(()=>{
