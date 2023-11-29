@@ -26,7 +26,7 @@ listingRouter.get("/api/my-listings",  authModule, async (req,res) => {
         console.log("Searching for listings from ", existingUser.email)
         let results = await Listing.find({ 'email': existingUser.email});
     
-        console.log(results)
+        //console.log(results)
 
         res.status(200).json(results);    
     }

@@ -9,6 +9,7 @@ import 'package:thrift_exchange/features/chat/screens/chat_home_page.dart';
 import 'package:thrift_exchange/features/home/screens/home_screens.dart';
 
 import '../../../common/widgets/custom_button.dart';
+import '../../account/screens/account_screen.dart';
 
 class AdminScreen extends StatefulWidget {
   const AdminScreen({super.key});
@@ -26,7 +27,7 @@ class _AdminScreenState extends State<AdminScreen> {
     const HomeScreen(),
     const AnalyticsScreen(),
     const OrdersScreen(),
-    const AuthScreen(),
+    const AccountScreen(),
   ];
 
   void updatePage(int page) {
@@ -152,7 +153,7 @@ class _AdminScreenState extends State<AdminScreen> {
                 ),
               ),
               child: const Icon(
-                Icons.exit_to_app ,
+                Icons.person ,
               ),
             ),
             label: '',

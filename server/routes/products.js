@@ -398,7 +398,7 @@ productsRouter.get("/api/orders/listings", authModule,async (req,res)=>{
             return res.status(500).json ({error: "Could not find orders"});
         }
 
-        console.log(myOrders);
+        //console.log(myOrders);
 
         res.status(200).json(myOrders);
 
