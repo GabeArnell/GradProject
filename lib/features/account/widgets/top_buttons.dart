@@ -49,7 +49,7 @@ class _TopBottonsState extends State<TopBottons> {
         ),
         Row(
           children: [
-            AccountButton(text: 'Your Wishlist', onPressed: () {}),
+            AccountButton(text: 'Wishlist', onPressed: () {}),
           ],
         ),
         SizedBox(
@@ -58,7 +58,7 @@ class _TopBottonsState extends State<TopBottons> {
         Row(
           children: [
             AccountButton(
-                text: 'Your Profile', onPressed: navigateToProfileScreen),
+                text: 'Edit Profile', onPressed: navigateToProfileScreen),
           ],
         ),
         SizedBox(

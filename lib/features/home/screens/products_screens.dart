@@ -6,6 +6,8 @@ import 'package:thrift_exchange/common/widgets/custom_button.dart';
 import 'package:thrift_exchange/common/widgets/custom_textfield.dart';
 import 'package:thrift_exchange/common/widgets/stars.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
+import 'package:thrift_exchange/features/account/screens/seller_screen.dart';
+import 'package:thrift_exchange/features/account/services/review_service.dart';
 import 'package:thrift_exchange/features/home/screens/add_product_Screen.dart';
 import 'package:thrift_exchange/features/home/screens/home_screens.dart';
 import 'package:thrift_exchange/features/home/search/screens/search_screen.dart';
@@ -28,6 +30,13 @@ class ProductsScreen extends StatefulWidget {
 
 class _ProductsScreenState extends State<ProductsScreen> {
   ProductServices prodServices = ProductServices();
+
+  Map<String, dynamic> sellerInfo = {
+    "name": "name",
+    "email": "email",
+    "image": ""
+  };
+
   void navigateToSearchScreen(String query) {
     Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
   }
@@ -52,11 +61,20 @@ class _ProductsScreenState extends State<ProductsScreen> {
     prodServices.incrementViews(context: context, product: widget.product);
   }
 
+  void loadSellerInfo()async{
+    sellerInfo = await prodServices.getSellerInfo(context: context, product: widget.product);
+    setState(() {
+      
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     calcStars();
     incrementViews();
+    loadSellerInfo();
+    
   }
 
 
@@ -65,7 +83,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
-
     
     return Scaffold(
       appBar: PreferredSize(
@@ -244,7 +261,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 10.0),
               child: Text(
-                'Contact the Seller :',
+                'Contact the Seller : ${sellerInfo["email"]}',
                 style: const TextStyle(
                   fontSize: 19,
                   color: Colors.black,
@@ -252,6 +269,46 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 ),
               ),
             ),
+            if (sellerInfo["name"] != "name")
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(children: [
+                GestureDetector(
+                  onTap: () {
+                    print("Go to seller page");
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return SellerScreen(email: sellerInfo['email'].toString(),
+                        name:sellerInfo['name'].toString(),
+                        image: sellerInfo['image'].toString()
+                      );
+                    }));
+
+                  }, // Image tapped
+                  child:                 CircleAvatar(
+                    backgroundImage: NetworkImage(sellerInfo["image"]),
+                    maxRadius: 30,
+                    
+                  ),
+
+                ),
+                SizedBox(
+                  width: 25,
+                ),
+                Text(
+                  '${sellerInfo["name"]}',
+                  style: const TextStyle(
+                    fontSize: 19,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+              ],)
+            ),
+
+
+            
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: TextFormField(

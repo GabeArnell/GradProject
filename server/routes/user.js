@@ -7,6 +7,119 @@ const User = require("../models/user");
 const bcryptjs = require("bcryptjs");
 
 const taxModule = require("../controllers/tax");
+const Review = require("../models/review");
+const Order = require("../models/orders")
+
+userRouter.post('/api/add-review', authModule, async (req, res)=>{
+    try {
+
+        const {email,content} = req.body;
+        console.log(req.body);
+        let myUser = await User.findById(req.user);
+
+        let existingUser = await User.findOne({email: email});
+        if (!existingUser ){
+            return res.status(500).json ({error: "Could not find subject user"});
+        }
+        if (!myUser){
+            return res.status(500).json ({error: "Could not find writer user"});
+        }
+
+        // Go through orders, they must have an order that contains product sold by user to review
+        let orders = await Order.find({userId:req.user });
+        let hasPurchasedFromSeller = false;
+
+        for (let order of orders){
+            for (let prod of order.products){
+                if (prod.email == email){
+                    hasPurchasedFromSeller = true;
+                }
+            }
+        }
+
+        if (!hasPurchasedFromSeller){
+            return res.status(500).json ({error: "You can not review a seller without buying from them."});
+        }
+
+
+        let existingReview = await Review.findOne({subject: email, writer: myUser.email});
+        if (existingReview){
+            existingReview.content = content;
+            existingReview.timestamp = new Date().getTime();
+            existingReview = await existingReview.save();
+            console.log("Updated review", existingReview);
+            res.status(200).json(existingReview);
+
+        }
+        else{
+            let review = new Review({
+                writer: myUser.email,
+                subject: existingUser.email,
+                content: content,
+                timestamp: new Date().getTime(),
+            })
+            review = await review.save();
+            console.log("saved review", review);
+            res.status(200).json(review);
+
+        }
+
+
+    }
+    catch (e){
+        console.log('error with username saving error', e.message);
+        return res.status(500).json ({error: e.message});
+    }
+});
+userRouter.post('/admin/delete-review', authModule, async (req, res)=>{
+    try {
+
+        const {writer,subject} = req.body;
+        console.log(req.body);
+        let myUser = await User.findById(req.user);
+        if (!myUser){
+            return res.status(500).json ({error: "Could not find user"});
+        }
+
+        if (myUser.type != "Admin"){
+            return res.status(500).json ({error: "Must be admin to delete reviews"});
+        }
+
+        let existingReview = await Review.findOne({subject: subject, writer: writer});
+        if (existingReview){
+            await Review.findOneAndRemove({subject: subject, writer: writer});
+            console.log("Removed review", existingReview);
+            res.status(200).json(existingReview);
+        }
+
+
+    }
+    catch (e){
+        console.log('error with username saving error', e.message);
+        return res.status(500).json ({error: e.message});
+    }
+});
+
+userRouter.post('/api/get-reviews', authModule, async (req, res)=>{
+    try {
+
+        const {email} = req.body;
+        let myUser = await User.findById(req.user);
+
+        let existingUser = await User.findOne({email: email});
+        if (!existingUser || !myUser){
+            return res.status(500).json ({error: "Could not find user(s)"});
+        }
+        
+        const reviews = await Review.find({subject: email});
+        console.log("retrieved review", reviews);
+        res.status(200).json(reviews);
+    }
+    catch (e){
+        console.log('error with username saving error', e.message);
+        return res.status(500).json ({error: e.message});
+    }
+});
 
 // Change Details
 userRouter.post('/api/profile/update-details', authModule, async (req, res)=>{
@@ -27,6 +140,31 @@ userRouter.post('/api/profile/update-details', authModule, async (req, res)=>{
         changePassword(req,res,req.body.detail.trim())
         break;
    }
+});
+
+userRouter.post('/api/view-profile', authModule, async (req, res)=>{
+    try {
+
+        const {email} = req.body;
+        let existingUser = await User.findOne({email: email});
+        if (!existingUser){
+            return res.status(500).json ({error: "Could not find user"});
+        }
+
+        // calculate average stars
+
+        let profile = {
+            name: existingUser.name,
+            email: existingUser.email,
+            image: existingUser.image
+        }
+        console.log("profile", profile);
+        res.status(200).json(profile);
+    }
+    catch (e){
+        console.log('error with username saving error', e.message);
+        return res.status(500).json ({error: e.message});
+    }
 });
 
 // Get Tax Ammount

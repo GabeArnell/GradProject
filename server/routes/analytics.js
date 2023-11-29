@@ -87,7 +87,6 @@ analyticsRouter.get("/api/analytics/views", authModule, async (req,res) => {
             }
             
         }
-        console.log(data);
         res.status(200).json(data);
     
     }
@@ -97,7 +96,6 @@ analyticsRouter.get("/api/analytics/views", authModule, async (req,res) => {
     }
 });
 analyticsRouter.post('/api/analytics/viewed-product', authModule, async (req, res)=>{
-    console.log("viewing PRODUCT")
     let {itemID} = req.body;
     try {
         const existingUser = await User.findById(req.user);
@@ -118,7 +116,6 @@ analyticsRouter.post('/api/analytics/viewed-product', authModule, async (req, re
             existingListing.views = existingListing.views + 1;
         }
 
-        console.log(existingListing);
         existingListing = await existingListing.save()
         res.json(existingListing);
 

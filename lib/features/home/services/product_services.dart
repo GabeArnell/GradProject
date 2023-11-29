@@ -138,4 +138,40 @@ class ProductServices {
     }
   }
 
+  Future<Map<String, dynamic>> getSellerInfo({
+    required BuildContext context,
+    required Product product,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    Map<String, dynamic> info = {
+      "name": "Loading",
+      "email": "email",
+      "image": ""
+    };
+
+    try {
+      http.Response res = await http.post(
+        Uri.parse('$SERVER_URI/api/view-profile'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+        body: jsonEncode({
+          'email': product.email,
+        }),
+      );
+
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          info = jsonDecode(res.body);
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+
+    return info;
+  }
 }

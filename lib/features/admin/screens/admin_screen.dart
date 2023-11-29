@@ -145,7 +145,7 @@ class _AdminScreenState extends State<AdminScreen> {
               decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(
-                      color: _page == 2
+                      color: _page == 3
                           ? GlobalVariables.selectedNavBarColor
                           : GlobalVariables.backgroundColor,
                       width: bottomBarBorderWidth),
