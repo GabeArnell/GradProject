@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thrift_exchange/common/widgets/loader.dart';
+import 'package:thrift_exchange/constants/global_variables.dart';
 import 'package:thrift_exchange/features/account/screens/order_details.dart';
 import 'package:thrift_exchange/features/account/services/update_services.dart';
 import 'package:thrift_exchange/features/account/widgets/product.dart';
@@ -34,14 +35,29 @@ class _OrdersScreenState extends State<OrdersScreen> {
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
-      appBar: (user.type != 'Admin')
+      appBar: (user.type == 'Admin')
           ? AppBar(
-              title: Text(
-                'Orders',
-                style: TextStyle(color: Colors.black),
+              backgroundColor: Colors.white,
+              elevation: 0,
+              title: Center(
+                child: Text(
+                  'All Orders',
+                  style: TextStyle(color: Colors.black),
+                ),
               ),
             )
-          : null,
+          : AppBar(
+              elevation: 0,
+              flexibleSpace: Container(
+                decoration: BoxDecoration(
+                  gradient: GlobalVariables.appBarGradient,
+                ),
+              ),
+              title: Text(
+                'All Orders',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
       body: orders == null
           ? const Loader()
           : GridView.builder(
@@ -57,7 +73,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
                   },
                   child: SizedBox(
                     height: 130,
-                    child: ProductW(image: orderData.products[0].images[0]),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ProductW(image: orderData.products[0].images[0]),
+                    ),
                   ),
                 );
               },

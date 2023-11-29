@@ -269,4 +269,41 @@ class HomeServices {
       return "Could not connect to Service";
     }
   }
+
+  void submitAlert({
+    required BuildContext context,
+    required String name,
+    required double zipcode,
+    required String category,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    try {
+      http.Response res = await http.post(
+        Uri.parse('$SERVER_URI/set-alert'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+        body: jsonEncode({
+          'name': name,
+          'zipcode': zipcode,
+          'category': category,
+        }),
+      );
+
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          showSnackBar(context, 'Alert has been set Successfully!');
+        },
+      );
+    } catch (e) {
+      showSnackBar(
+        context,
+        e.toString(),
+      );
+    }
+  }
 }

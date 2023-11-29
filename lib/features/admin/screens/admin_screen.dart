@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
+import 'package:thrift_exchange/constants/utils.dart';
 import 'package:thrift_exchange/features/account/screens/order_screen.dart';
 import 'package:thrift_exchange/features/account/widgets/orders.dart';
 import 'package:thrift_exchange/features/admin/screens/analytics_screen.dart';
@@ -9,7 +11,6 @@ import 'package:thrift_exchange/features/chat/screens/chat_home_page.dart';
 import 'package:thrift_exchange/features/home/screens/home_screens.dart';
 
 import '../../../common/widgets/custom_button.dart';
-import '../../account/screens/account_screen.dart';
 
 class AdminScreen extends StatefulWidget {
   const AdminScreen({super.key});
@@ -27,7 +28,6 @@ class _AdminScreenState extends State<AdminScreen> {
     const HomeScreen(),
     const AnalyticsScreen(),
     const OrdersScreen(),
-    const AccountScreen(),
   ];
 
   void updatePage(int page) {
@@ -142,20 +142,35 @@ class _AdminScreenState extends State<AdminScreen> {
           ),
           BottomNavigationBarItem(
             icon: Container(
-              width: bottomBarWidth,
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                      color: _page == 3
-                          ? GlobalVariables.selectedNavBarColor
-                          : GlobalVariables.backgroundColor,
-                      width: bottomBarBorderWidth),
+                width: bottomBarWidth,
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(
+                        color: _page == 3
+                            ? GlobalVariables.selectedNavBarColor
+                            : GlobalVariables.backgroundColor,
+                        width: bottomBarBorderWidth),
+                  ),
                 ),
-              ),
-              child: const Icon(
-                Icons.person ,
-              ),
-            ),
+                child: IconButton(
+                  onPressed: () async {
+                    try {
+                      SharedPreferences sharedPreferences =
+                          await SharedPreferences.getInstance();
+                      await sharedPreferences.setString('x-auth-token', '');
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        AuthScreen.routeName,
+                        (route) => false,
+                      );
+                    } catch (e) {
+                      showSnackBar(context, e.toString());
+                    }
+                  },
+                  icon: const Icon(
+                    Icons.exit_to_app,
+                  ),
+                )),
             label: '',
           ),
         ],

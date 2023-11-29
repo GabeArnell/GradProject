@@ -10,7 +10,6 @@ import 'package:thrift_exchange/features/home/screens/home_screens.dart';
 import 'package:thrift_exchange/providers/user_provider.dart';
 import 'package:thrift_exchange/router.dart';
 
-
 void main() {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.amber,
@@ -40,9 +39,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context).user;
     print("Getting user");
-    print(Provider.of<UserProvider>(context).user.type);
-    var myType = Provider.of<UserProvider>(context).user.type;
+    print(user.type);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Thrift Exchange',
@@ -58,12 +57,10 @@ class _MyAppState extends State<MyApp> {
       onGenerateRoute: (settings) => generateRoute(settings),
 
       // Below checks if we have a user token saved in which case, we skip auth screen
-      home: Provider.of<UserProvider>(context).user.token.isNotEmpty
-          // ? Provider.of<UserProvider>(context).user.type == 'user'
-          //     ? const BottomBar()
-          ? (
-            myType=="user"?const BottomBar():const AdminScreen()
-          )
+      home: user.token.isNotEmpty
+          ? user.type == 'user'
+              ? const BottomBar()
+              : const AdminScreen()
           : const AuthScreen(),
     );
   }
