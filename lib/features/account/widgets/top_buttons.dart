@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thrift_exchange/constants/utils.dart';
 import 'package:thrift_exchange/features/account/screens/order_screen.dart';
@@ -8,8 +7,6 @@ import 'package:thrift_exchange/features/account/screens/profile_screen.dart';
 import 'package:thrift_exchange/features/account/widgets/account_button.dart';
 import 'package:thrift_exchange/features/account/widgets/orders.dart';
 import 'package:thrift_exchange/features/auth/screens/auth_screen.dart';
-
-import '../../../providers/user_provider.dart';
 
 class TopBottons extends StatefulWidget {
   const TopBottons({super.key});
@@ -85,7 +82,6 @@ class _TopBottonsState extends State<TopBottons> {
                     SharedPreferences sharedPreferences =
                         await SharedPreferences.getInstance();
                     await sharedPreferences.setString('x-auth-token', '');
-                    
                     Navigator.pushNamedAndRemoveUntil(
                       context,
                       AuthScreen.routeName,

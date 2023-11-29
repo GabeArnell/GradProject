@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:thrift_exchange/constants/global_variables.dart';
 import 'package:thrift_exchange/features/account/widgets/product.dart';
 import 'package:thrift_exchange/features/home/screens/products_screens.dart';
 import 'package:thrift_exchange/features/home/services/home_services.dart';
@@ -50,6 +50,11 @@ class _CategoryProductsState extends State<CategoryProducts> {
     final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: GlobalVariables.appBarGradient,
+          ),
+        ),
         title: Text(
           '${widget.category} Products',
           style: TextStyle(color: Colors.black87),
@@ -66,7 +71,7 @@ class _CategoryProductsState extends State<CategoryProducts> {
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: kIsWeb==true?6:2),
+                  crossAxisCount: 2),
               itemBuilder: (context, index) {
                 final productData = products![index];
                 return GestureDetector(
@@ -80,7 +85,7 @@ class _CategoryProductsState extends State<CategoryProducts> {
                   child: Column(
                     children: [
                       SizedBox(
-                        height: 140,
+                        height: 123,
                         child: ProductW(image: productData.images[0]),
                       ),
                       Row(
@@ -92,7 +97,7 @@ class _CategoryProductsState extends State<CategoryProducts> {
                               child: Text(
                                 productData.name,
                                 overflow: TextOverflow.ellipsis,
-                                maxLines: kIsWeb==true?6:2,
+                                maxLines: 2,
                                 style: TextStyle(
                                   fontSize: 17,
                                 ),
@@ -101,7 +106,8 @@ class _CategoryProductsState extends State<CategoryProducts> {
                           ),
                           if (productData.email == user.email)
                             IconButton(
-                              onPressed: () => deleteProduct(productData, index),
+                              onPressed: () =>
+                                  deleteProduct(productData, index),
                               icon: const Icon(Icons.delete_sharp),
                             ),
                         ],

@@ -3,15 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
-import 'package:thrift_exchange/features/auth/services/auth_service.dart';
 import 'package:thrift_exchange/features/home/screens/home_screens.dart';
 import 'package:thrift_exchange/features/home/screens/products_screens.dart';
 import 'package:thrift_exchange/features/home/search/screens/search_screen.dart';
 import 'package:thrift_exchange/features/home/services/home_services.dart';
 import 'package:thrift_exchange/models/order.dart';
 import 'package:thrift_exchange/providers/user_provider.dart';
-
-import '../../../models/user.dart';
 
 class OrderDetailScreen extends StatefulWidget {
   static const String routeName = '/order-details';
@@ -28,38 +25,16 @@ class OrderDetailScreen extends StatefulWidget {
 class _OrderDetailScreenState extends State<OrderDetailScreen> {
   int currentStep = 0;
   final HomeServices adminServices = HomeServices();
-  final AuthService authService = AuthService();
+
   void navigateToSearchScreen(String query) {
     Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
   }
-
-  late User buyerData = User(id: "loading", 
-  name: "loading", 
-  password: "loading", 
-  email: "loading", 
-  address: "loading", 
-  type: "loading", 
-  image: "loading", 
-  token: "loading", 
-  cart: [], 
-  usedPromotions: []);
-
-  String orderStatus = "Loading";
 
   @override
   void initState() {
     super.initState();
     currentStep = widget.order.status;
-    loadBuyer();
   }
-
-  void loadBuyer()async{
-    buyerData = await authService.adminUserSearch(context: context, userID: widget.order.userId);
-    setState(() {
-      
-    });
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -117,26 +92,13 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (user.type == "Admin")
-                      Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        "Buyer: ${buyerData.email}",
-                        style: TextStyle(
-                          fontSize: 23,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-
-
-
                     Text("Order Date: ${DateFormat().format(
                       DateTime.fromMillisecondsSinceEpoch(
                           widget.order.orderedAt),
                     )}"),
                     Text('Order ID: ${widget.order.id}'),
-                    Text('Order Total: \$${widget.order.totalPrice}'),
+                    Text(
+                        'Order Total: \$${widget.order.totalPrice.toStringAsFixed(2)}'),
                   ],
                 ),
               ),
@@ -232,14 +194,14 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     Row(
                       children: [
                         Text(
-                          "Your Order is: ",
+                          "Your Order is being: ",
                           style: TextStyle(
                             fontSize: 21,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
-                          orderStatus,
+                          "Processed",
                           style: TextStyle(
                             fontSize: 21,
                             fontWeight: FontWeight.bold,
