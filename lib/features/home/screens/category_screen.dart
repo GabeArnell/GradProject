@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thrift_exchange/features/account/widgets/product.dart';
@@ -54,62 +55,64 @@ class _CategoryProductsState extends State<CategoryProducts> {
           style: TextStyle(color: Colors.black87),
         ),
       ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 17,
-          ),
-          GridView.builder(
-            itemCount: products!.length,
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2),
-            itemBuilder: (context, index) {
-              final productData = products![index];
-              return GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    ProductsScreen.routeName,
-                    arguments: productData,
-                  );
-                },
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 140,
-                      child: ProductW(image: productData.images[0]),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 13.0),
-                            child: Text(
-                              productData.name,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              style: TextStyle(
-                                fontSize: 17,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 17,
+            ),
+            GridView.builder(
+              itemCount: products!.length,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: kIsWeb==true?6:2),
+              itemBuilder: (context, index) {
+                final productData = products![index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      ProductsScreen.routeName,
+                      arguments: productData,
+                    );
+                  },
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 140,
+                        child: ProductW(image: productData.images[0]),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 13.0),
+                              child: Text(
+                                productData.name,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: kIsWeb==true?6:2,
+                                style: TextStyle(
+                                  fontSize: 17,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        if (productData.email == user.email)
-                          IconButton(
-                            onPressed: () => deleteProduct(productData, index),
-                            icon: const Icon(Icons.delete_sharp),
-                          ),
-                      ],
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ],
+                          if (productData.email == user.email)
+                            IconButton(
+                              onPressed: () => deleteProduct(productData, index),
+                              icon: const Icon(Icons.delete_sharp),
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
