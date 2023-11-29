@@ -4,6 +4,7 @@ import 'package:thrift_exchange/common/widgets/loader.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
 import 'package:thrift_exchange/features/account/widgets/product.dart';
 import 'package:thrift_exchange/features/home/screens/add_product_Screen.dart';
+import 'package:thrift_exchange/features/home/screens/add_reminder_screen.dart';
 import 'package:thrift_exchange/features/home/screens/category_screen.dart';
 import 'package:thrift_exchange/features/home/screens/products_screens.dart';
 import 'package:thrift_exchange/features/home/search/screens/search_screen.dart';
@@ -70,6 +71,10 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {});
       },
     );
+  }
+
+  void navigateToAddNotificationScreen() {
+    Navigator.pushNamed(context, AddAlertScreen.routeName);
   }
 
   void navigateToAddProduct() {
@@ -162,6 +167,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black),
                             ),
+                          ),
+                        if (user.type != "Admin")
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10.0),
+                            child: IconButton(
+                              onPressed: navigateToAddNotificationScreen,
+                              icon: const Icon(
+                                Icons.notifications_active,
+                              ),
+                            ),
                           )
                       ],
                     ),
@@ -185,6 +200,42 @@ class _HomeScreenState extends State<HomeScreen> {
                       onZipcodeUpdated: (zipcode) {
                         _selectedZipcode = zipcode;
                       },
+                    ),
+                  if (user.type != "Admin")
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.black12,
+                        ),
+                      ),
+                      alignment: Alignment.topLeft,
+                      padding: const EdgeInsets.only(
+                        left: 10,
+                        top: 15,
+                        bottom: 15,
+                      ),
+                      child: Center(
+                        child: const Text(
+                          "Today's Deal",
+                          style: TextStyle(
+                              fontSize: 23, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  if (user.type != "Admin")
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.black12,
+                        ),
+                      ),
+                      child: Image.network(
+                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7WnMwWXltBo_XSSTd0bNHBVhX1kwCS5zqgA&usqp=CAU',
+                        height: 235,
+                        fit: BoxFit.fitHeight,
+                      ),
                     ),
                   if (user.type != "Admin")
                     Padding(

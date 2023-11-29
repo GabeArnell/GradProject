@@ -152,51 +152,6 @@ class AuthService {
       //     });
       //   });
       // });
-    } catch (error) {
-      print("Token validation error");
-      print(error);
-    }
+    } catch (error) {}
   }
-  
-  // Get User data as Admin
-  Future<User> adminUserSearch({required BuildContext context,
-    required String userID,
-  }) async {
-    User result = User(id: "0", name: "requesting", 
-    password: "", 
-    email: "requesting", 
-    address: "", 
-    type: "", 
-    image: "", 
-    token: "", 
-    cart: [], 
-    usedPromotions: 
-    []);
-    try {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-
-      http.Response res = await http.post(
-        Uri.parse('$SERVER_URI/admin/get-user-data'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': userProvider.user.token,
-        },
-        body: jsonEncode({
-          "userID": userID
-        })
-      );
-
-      // ignore: use_build_context_synchronously
-      httpErrorHandle(response: res, context: context, onSuccess: (){
-          result = User.fromMap(jsonDecode(res.body));
-          print("My Result is " + result.email);
-          print(result);
-      });
-    } catch (error) {
-      print("Search eror");
-      print(error);
-    }
-    return result;
-  }
-
 }

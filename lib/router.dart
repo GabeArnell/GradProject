@@ -7,6 +7,7 @@ import 'package:thrift_exchange/features/account/screens/profile_screen.dart';
 import 'package:thrift_exchange/features/account/widgets/edit_product.dart';
 import 'package:thrift_exchange/features/chat/screens/chat_home_page.dart';
 import 'package:thrift_exchange/features/home/screens/add_product_Screen.dart';
+import 'package:thrift_exchange/features/home/screens/add_reminder_screen.dart';
 import 'package:thrift_exchange/features/home/screens/category_screen.dart';
 import 'package:thrift_exchange/features/home/screens/home_screens.dart';
 import 'package:thrift_exchange/features/home/screens/products_screens.dart';
@@ -80,6 +81,11 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         builder: (_) => OrderDetailScreen(
           order: order,
         ),
+      );
+    case AddAlertScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => AddAlertScreen(),
       );
     case OrdersScreen.routeName:
       return MaterialPageRoute(

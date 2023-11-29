@@ -296,32 +296,17 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 SizedBox(
                   width: 25,
                 ),
-                GestureDetector(
-                  child: Text(
-                        '${sellerInfo["name"]}',
-                        style: const TextStyle(
-                          fontSize: 19,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                Text(
+                  '${sellerInfo["name"]}',
+                  style: const TextStyle(
+                    fontSize: 19,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
 
-                  onTap: () {
-                    print("Go to seller page");
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return SellerScreen(email: sellerInfo['email'].toString(),
-                        name:sellerInfo['name'].toString(),
-                        image: sellerInfo['image'].toString(),
-                        averageStars: sellerInfo['averagestars'],
-                      );
-                    }));                  },
-          
-                )
-              ],
+              ],)
             ),
-            ),
-
 
 
             
@@ -354,7 +339,15 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 },
               ),
             ),
-
+            // Container(
+            //   color: Colors.black12,
+            //   height: 3,
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.only(
+            //       left: 10.0, right: 10, bottom: 10, top: 15),
+            //   child: CustomButton(text: 'Buy Now', onTap: () {}),
+            // ),
             if (user.type != "Admin")
             Padding(
               padding: const EdgeInsets.only(
