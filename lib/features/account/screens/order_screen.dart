@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thrift_exchange/common/widgets/loader.dart';
@@ -54,7 +55,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 ),
               ),
               title: Text(
-                'All Orders',
+                'Your Orders',
                 style: TextStyle(color: Colors.black),
               ),
             ),
@@ -63,7 +64,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
           : GridView.builder(
               itemCount: orders!.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2),
+                  crossAxisCount: kIsWeb==true?4:2),
               itemBuilder: (context, index) {
                 final orderData = orders![index];
                 return GestureDetector(

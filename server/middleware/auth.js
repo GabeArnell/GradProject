@@ -22,7 +22,12 @@ const auth = async (req, res, callback) => {
         callback();
 
     } catch (error){
-        res.status(500).json({error: error.message});
+        try{
+            res.status(500).json({error: error.message});
+        }
+        catch(e){
+            
+        }
     }
 }
 

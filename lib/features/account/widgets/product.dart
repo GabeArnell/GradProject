@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ProductW extends StatelessWidget {
@@ -20,12 +21,12 @@ class ProductW extends StatelessWidget {
           color: Colors.white,
         ),
         child: Container(
-          width: 180,
+          width: kIsWeb==true?200:180,
           padding: const EdgeInsets.all(10),
           child: Image.network(
             image,
             fit: BoxFit.fitHeight,
-            width: 180,
+            width: kIsWeb==true?200:180,
           ),
         ),
       ),

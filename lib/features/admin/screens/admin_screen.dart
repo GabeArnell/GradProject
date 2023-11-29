@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
 import 'package:thrift_exchange/constants/utils.dart';
+import 'package:thrift_exchange/features/account/screens/account_screen.dart';
 import 'package:thrift_exchange/features/account/screens/order_screen.dart';
 import 'package:thrift_exchange/features/account/widgets/orders.dart';
 import 'package:thrift_exchange/features/admin/screens/analytics_screen.dart';
@@ -14,6 +15,7 @@ import '../../../common/widgets/custom_button.dart';
 
 class AdminScreen extends StatefulWidget {
   const AdminScreen({super.key});
+  static const String routeName = '/admin-home';
 
   @override
   State<AdminScreen> createState() => _AdminScreenState();
@@ -28,6 +30,7 @@ class _AdminScreenState extends State<AdminScreen> {
     const HomeScreen(),
     const AnalyticsScreen(),
     const OrdersScreen(),
+    const AccountScreen()
   ];
 
   void updatePage(int page) {

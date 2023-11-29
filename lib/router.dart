@@ -5,6 +5,7 @@ import 'package:thrift_exchange/features/account/screens/order_screen.dart';
 import 'package:thrift_exchange/features/account/screens/postings.dart';
 import 'package:thrift_exchange/features/account/screens/profile_screen.dart';
 import 'package:thrift_exchange/features/account/widgets/edit_product.dart';
+import 'package:thrift_exchange/features/admin/screens/admin_screen.dart';
 import 'package:thrift_exchange/features/chat/screens/chat_home_page.dart';
 import 'package:thrift_exchange/features/home/screens/add_product_Screen.dart';
 import 'package:thrift_exchange/features/home/screens/add_reminder_screen.dart';
@@ -112,6 +113,12 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         settings: routeSettings,
         builder: (_) => const BottomBar(),
       );
+    case AdminScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => const AdminScreen(),
+      );
+
     default:
       return MaterialPageRoute(
         settings: routeSettings,

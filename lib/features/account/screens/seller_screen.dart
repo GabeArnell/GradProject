@@ -44,7 +44,8 @@ class _SellerScreenState extends State<SellerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
+
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
         child: AppBar(
@@ -149,38 +150,42 @@ class _SellerScreenState extends State<SellerScreen> {
                   fontWeight: FontWeight.bold,
                 ))
               ,
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                      hintText: 'They were a great communicator!.',
-                      border: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                        color: Colors.black38,
-                      )),
-                      enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                        color: Colors.black38,
-                      ))),
-                  validator: (val) {
-                    if (val == null || val.isEmpty) {
-                      return 'Enter your Message';
-                    }
-                    return null;
-                  },
-                  onFieldSubmitted: (value) async {
-                    if (value.isNotEmpty) {
-                       String response = await reviewService.addReview(
-                          context: context,
-                          email: widget.email,
-                          content: value);
-
-                      getReviews();
-                      setState(() {
-                        
-                      });
-                    }
-                  },
+              Container(
+                constraints: BoxConstraints(minWidth: 100,maxWidth: 500),
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                        hintText: 'They were a great communicator!.',
+                        border: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                          color: Colors.black38,
+                        )),
+                        enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                          color: Colors.black38,
+                        ))),
+                    validator: (val) {
+                      if (val == null || val.isEmpty) {
+                        return 'Enter your Message';
+                      }
+                      return null;
+                    },
+                    onFieldSubmitted: (value) async {
+                      if (value.isNotEmpty) {
+                         String response = await reviewService.addReview(
+                            context: context,
+                            email: widget.email,
+                            content: value);
+              
+                        getReviews();
+                        setState(() {
+                          
+                        });
+                      }
+                    },
+                  ),
                 ),
               ),
             ],

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thrift_exchange/common/widgets/loader.dart';
@@ -233,13 +234,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: Image.network(
                         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7WnMwWXltBo_XSSTd0bNHBVhX1kwCS5zqgA&usqp=CAU',
-                        height: 235,
+                        height: kIsWeb==true?200:235,
                         fit: BoxFit.fitHeight,
                       ),
                     ),
                   if (user.type != "Admin")
                     Padding(
-                      padding: const EdgeInsets.all(21),
+                      padding: const EdgeInsets.all(20),
                       child: RichText(
                         text: const TextSpan(
                           text: 'Categories',
@@ -258,7 +259,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       physics: NeverScrollableScrollPhysics(),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2),
+                              crossAxisCount: kIsWeb==true?6:2),
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
@@ -274,7 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                   Padding(
-                    padding: const EdgeInsets.all(21),
+                    padding: const EdgeInsets.all(kIsWeb==true?15:21),
                     child: RichText(
                       text: TextSpan(
                         text: (user.type == "Admin") ? 'All Posts' : 'Products',
@@ -292,7 +293,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     physics: NeverScrollableScrollPhysics(),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2),
+                            crossAxisCount: kIsWeb==true?6:2),
                     itemBuilder: (context, index) {
                       final productData = products![index];
                       return GestureDetector(
@@ -318,7 +319,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: Text(
                                       productData.name,
                                       overflow: TextOverflow.ellipsis,
-                                      maxLines: 2,
+                                      maxLines: kIsWeb==true?6:2,
                                       style: TextStyle(
                                         fontSize: 17,
                                       ),

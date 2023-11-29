@@ -181,6 +181,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               ),
               Form(
                 child: Container(
+                  constraints: BoxConstraints(minWidth: 100,maxWidth: 500),
+
                   color: GlobalVariables.greyBackgroundColor,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),

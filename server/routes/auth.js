@@ -103,12 +103,14 @@ authRouter.get("/api/getuserdata", authModule, async (req,res) => {
     res.status(200).json({...user._doc, token: req.token});
 });
 authRouter.post("/admin/get-user-data", authModule, async (req,res) => {
+    console.log("getting admin data req")
     const adminUser = await User.findById(req.user);
-    if (!adminUser || adminUser.type != 'Admin'){
+    let {userID} = req.body
+
+    if (!adminUser || (adminUser.type != 'Admin' && adminUser.id != userID)){
         console.log('admin search errored out', "Admin user does not exist");
         return res.status(500).json ({error: "Admin user does not exist"});
     }
-    let {userID} = req.body
     console.log(req.body)
     const user = await User.findById(userID);
     console.log("Admin searching for", user._doc)
