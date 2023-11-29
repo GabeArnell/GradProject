@@ -9,7 +9,8 @@ const bcryptjs = require("bcryptjs");
 const taxModule = require("../controllers/tax");
 const Review = require("../models/review");
 const Order = require("../models/orders")
-
+const {Listing} = require("../models/listing")
+const Rating = require("../models/rating");
 userRouter.post('/api/add-review', authModule, async (req, res)=>{
     try {
 
@@ -152,11 +153,27 @@ userRouter.post('/api/view-profile', authModule, async (req, res)=>{
         }
 
         // calculate average stars
+        let listings = await Listing.find({email: email});
+        let totalRatings = 0;
+        let totalStars = 0;
+        let avgStars = -1;
+        for (let prod of listings){
+            let ratings = await Rating.find({productid: prod._id});
+            for (let r of ratings){
+                totalRatings++;
+                totalStars+= r.rating
+            }
+        }
+        if (totalRatings > 0){
+            avgStars = totalStars / totalRatings
+        }
 
         let profile = {
             name: existingUser.name,
             email: existingUser.email,
-            image: existingUser.image
+            image: existingUser.image,
+            // forcing to double
+            averagestars: avgStars+0.0000001,
         }
         console.log("profile", profile);
         res.status(200).json(profile);

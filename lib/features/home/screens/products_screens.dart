@@ -280,7 +280,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         MaterialPageRoute(builder: (context) {
                       return SellerScreen(email: sellerInfo['email'].toString(),
                         name:sellerInfo['name'].toString(),
-                        image: sellerInfo['image'].toString()
+                        image: sellerInfo['image'].toString(),
+                        averageStars: sellerInfo['averagestars'],
                       );
                     }));
 

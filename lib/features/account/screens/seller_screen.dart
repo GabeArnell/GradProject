@@ -15,8 +15,9 @@ class SellerScreen extends StatefulWidget {
     final String email;
     final String name;
     final String image;
+    final double averageStars;
 
-  const SellerScreen({super.key, required this.email, required this.name, required this.image,});
+  const SellerScreen({super.key, required this.email, required this.name, required this.image, required this.averageStars,});
 
   @override
   State<SellerScreen> createState() => _SellerScreenState();
@@ -124,7 +125,7 @@ class _SellerScreenState extends State<SellerScreen> {
                     const SizedBox(height: 15),
       
                     Text(
-                      'Average Stars : 4.3',
+                      'Average Stars : ${widget.averageStars.roundToDouble()}',
                       style: const TextStyle(
                         fontSize: 19,
                         color: Color.fromARGB(255, 0, 0, 0),
