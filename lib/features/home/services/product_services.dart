@@ -100,12 +100,13 @@ class ProductServices {
         context: context,
         onSuccess: () {
             result = jsonDecode(res.body);
+            result = result.toDouble();
         },
       );
     } catch (e) {
-      showSnackBar(context, e.toString());
+      //showSnackBar(context, e.toString());
     }
-    return result;
+    return result.toDouble();
   }
 
   void incrementViews({

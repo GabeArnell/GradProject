@@ -136,7 +136,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                           widget.order.orderedAt),
                     )}"),
                     Text('Order ID: ${widget.order.id}'),
-                    Text('Order Total: \$${widget.order.totalPrice}'),
+                    Text('Order Total: \$${widget.order.totalPrice.roundToDouble()}'),
                   ],
                 ),
               ),
