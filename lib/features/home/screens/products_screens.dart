@@ -195,6 +195,16 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     ),
                   ),
                 ),
+              if (widget.product.quantity < 1)
+              Text(
+                  'OUT OF STOCK',
+                  style: const TextStyle(
+                    fontSize: 25,
+                    color: Color.fromARGB(255, 255, 0, 0),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              
               Container(
                 color: Colors.black26,
                 height: 6,
@@ -256,10 +266,18 @@ class _ProductsScreenState extends State<ProductsScreen> {
               const SizedBox(
                 height: 10,
               ),
-              // Container(
-              //   color: Colors.black12,
-              //   height: 5,
-              // ),
+              if (widget.product.quantity > 0)
+              Text(
+                  '${widget.product.quantity.ceil()} available',
+                  style: const TextStyle(
+                    fontSize: 25,
+                    color: Color.fromARGB(255, 255, 0, 0),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              SizedBox(
+                height: 5,
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 10.0),
                 child: Text(
@@ -369,7 +387,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
               //       left: 10.0, right: 10, bottom: 10, top: 15),
               //   child: CustomButton(text: 'Buy Now', onTap: () {}),
               // ),
-              if (user.type != "Admin" && (sellerInfo['email'] != user.email))
+              if (user.type != "Admin" && (sellerInfo['email'] != user.email) && (widget.product.quantity > 0))
               Padding(
                 padding: const EdgeInsets.only(
                     left: 10.0, right: 10, bottom: 5, top: 5),
