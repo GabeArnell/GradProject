@@ -171,8 +171,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     RichText(
                       text: TextSpan(
                         text: '${widget.product.name}',
-                        style: const TextStyle(
-                          fontSize: 21,
+                        
+                        style:  TextStyle(
+                          fontSize: widget.product.name.length > 20?15:21,
+                          
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),

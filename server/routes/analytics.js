@@ -10,12 +10,26 @@ const mailer = require("../controllers/mailer")
 const Order = require("../models/orders")
 const {Promotion, promotionSchema} = require("../models/promotion")
 
-analyticsRouter.get("/api/analytics/earnings", authModule, async (req,res) => {
+analyticsRouter.get("/api/analytics/earnings/:timespan", authModule, async (req,res) => {
     try{
         const user = await User.findById(req.user);
+        let timespan = req.params.timespan;
+        let minTime = 0;
+        //console.log(timespan)
+        if (timespan == "month"){
+            minTime = new Date().getTime() - (1000*60*60*24*30);
+        }
+        if (timespan == "week"){
+            minTime = new Date().getTime() - (1000*60*60*24*7);
+        }
+        if (timespan == "day"){
+            minTime = new Date().getTime() - (1000*60*60*24*1);
+        }
 
-        let allOrders = await Order.find();
+        //console.log("my start date",new Date(minTime));
 
+        let allOrders = await Order.find({orderedAt: {$gte: minTime}});
+        
         let data = {
             totalEarnings: 0,
             electronicsEarnings: 0,
@@ -55,9 +69,20 @@ analyticsRouter.get("/api/analytics/earnings", authModule, async (req,res) => {
         req.status(500).json({message: e})
     }
 });
-analyticsRouter.get("/api/analytics/views", authModule, async (req,res) => {
+analyticsRouter.get("/api/analytics/views/", authModule, async (req,res) => {
     try{
         const user = await User.findById(req.user);
+        let timespan = req.params.timespan || 0;
+        let minTime = 0;
+        if (timespan == "month"){
+            minTime = new Date().getTime() - (1000*60*60*24*30);
+        }
+        if (timespan == "week"){
+            minTime = new Date().getTime() - (1000*60*60*24*7);
+        }
+        if (timespan == "day"){
+            minTime = new Date().getTime() - (1000*60*60*24*1);
+        }
 
         let allProducts = await Listing.find();
 

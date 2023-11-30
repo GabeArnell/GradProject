@@ -6,6 +6,7 @@ import 'package:thrift_exchange/features/admin/widgets/category_charts.dart';
 import 'package:charts_flutter_maintained/charts_flutter_maintained.dart'
     as charts;
 
+import '../../../constants/global_variables.dart';
 import '../models/views_model.dart';
 import '../widgets/category_view_charts.dart';
 
@@ -23,21 +24,23 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   int? totalViews;
   List<Views>? views;
 
+  String timespan = "all";
+
   @override
   void initState() {
     super.initState();
-    getEarnings();
+    getEarnings(timespan);
     getViews();
   }
 
-  getEarnings() async {
-    var earningData = await adminServices.getEarnings(context);
+  getEarnings(String newTime) async {
+    var earningData = await adminServices.getEarnings(context,newTime);
     totalSales = earningData['totalEarnings'];
     earnings = earningData['sales'];
   }
 
   getViews() async {
-    var viewData = await adminServices.getViews(context);
+    var viewData = await adminServices.getViews(context,timespan);
     totalViews = viewData['totalViews'];
     views = viewData['views'];
     setState(() {});
@@ -50,6 +53,93 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         : SingleChildScrollView(
             child: Column(
               children: [
+                ListTile(
+                
+                  title: const Text("All Sales",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black
+                      )),
+                  tileColor: GlobalVariables.backgroundColor,
+                  leading: Radio(
+                    activeColor: GlobalVariables.secondaryColor,
+                    value: "all",
+                    groupValue: timespan,
+                    onChanged: (String? val) {
+                        timespan = val!;
+                        getEarnings("all");
+                      setState(() {
+                        timespan = val;
+                      });
+                    },
+                  ),
+                ),
+                ListTile(
+                  title: const Text("Last Month Sales (30 Days)",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black
+                      )),
+                  tileColor: GlobalVariables.backgroundColor,
+                  leading: Radio(
+                    activeColor: GlobalVariables.secondaryColor,
+                    value: "month",
+                    groupValue: timespan,
+                    onChanged: (String? val) {
+                        timespan = val!;
+                        getEarnings("month");
+                      setState(() {
+                        timespan = val;
+                      });
+                    },
+                  ),
+                ),
+                ListTile(
+                  title: const Text("Last Week Sales (7 Days)",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black
+                      )),
+                  tileColor: GlobalVariables.backgroundColor,
+                  leading: Radio(
+                    activeColor: GlobalVariables.secondaryColor,
+                    value: "week",
+                    groupValue: timespan,
+                    onChanged: (String? val) {
+                        timespan = val!;
+                        getEarnings("week");
+                      setState(() {
+                        timespan = val;
+                      });
+                    },
+                  ),
+                ),
+                ListTile(
+                  title: const Text("Last Day Sales(24 Hours)",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black
+                      )),
+                  tileColor: GlobalVariables.backgroundColor,
+                  leading: Radio(
+                    activeColor: GlobalVariables.secondaryColor,
+                    value: "day",
+                    groupValue: timespan,
+                    onChanged: (String? val) {
+                        timespan = val!;
+                        getEarnings("day");
+                      setState(() {
+                        timespan = val;
+                      });
+                    },
+                  ),
+                ),
+
+
+
+
+
+
                 Padding(
                   padding: const EdgeInsets.all(13),
                   child: RichText(

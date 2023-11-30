@@ -12,13 +12,13 @@ import 'package:thrift_exchange/providers/user_provider.dart';
 import '../models/views_model.dart';
 
 class AdminServices {
-  Future<Map<String, dynamic>> getEarnings(BuildContext context) async {
+  Future<Map<String, dynamic>> getEarnings(BuildContext context, String timespan) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     List<Sales> sales = [];
     int totalEarning = 0;
     try {
       http.Response res =
-          await http.get(Uri.parse('$SERVER_URI/api/analytics/earnings'), headers: {
+          await http.get(Uri.parse('$SERVER_URI/api/analytics/earnings/${timespan}'), headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         'x-auth-token': userProvider.user.token,
       });
@@ -47,7 +47,8 @@ class AdminServices {
     };
   }
 
-  Future<Map<String, dynamic>> getViews(BuildContext context) async {
+  Future<Map<String, dynamic>> getViews(BuildContext context,
+  String timespan) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     List<Views> views = [];
     int totalViews = 0;
