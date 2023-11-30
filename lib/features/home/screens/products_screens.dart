@@ -270,13 +270,13 @@ class _ProductsScreenState extends State<ProductsScreen> {
               Text(
                   '${widget.product.quantity.ceil()} available',
                   style: const TextStyle(
-                    fontSize: 25,
-                    color: Color.fromARGB(255, 255, 0, 0),
+                    fontSize: 20,
+                    color: Color.fromARGB(255, 0, 0, 0),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               SizedBox(
-                height: 5,
+                height: 15,
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 10.0),

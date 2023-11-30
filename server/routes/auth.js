@@ -50,11 +50,11 @@ authRouter.post('/api/signin', async (req,res)=>{
     {
         const existingUser = await User.findOne({email: email});
         if (!existingUser){
-            return res.status(400).json({error: "Invalid Credentials"})
+            return res.status(400).json({msg: "Invalid Credentials"})
         }
         const matchedPassword = await bcryptjs.compare(password, existingUser.password);
         if (!matchedPassword){
-            return res.status(400).json({error: "Invalid Credentials"})
+            return res.status(400).json({msg: "Invalid Credentials"})
         }
 
         const token = jwt.sign({id: existingUser._id}, TOKEN_PRIVATE_KEY);

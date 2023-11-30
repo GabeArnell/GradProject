@@ -23,11 +23,11 @@ productsRouter.post('/admin/add-product', authModule, async (req, res)=>{
         }
 
         if (parseInt(item.quantity) == null){
-            return res.status(400).json ({error: "Quantity must be a whole number"});
+            return res.status(400).json ({msg: "Quantity must be a whole number"});
         }
         item.quantity = parseInt(item.quantity);
         if (parseFloat(item.price) == null){
-            return res.status(400).json ({error: "Price must be a number"});
+            return res.status(400).json ({msg: "Price must be a number"});
         }
         item.price = parseFloat(item.price);
         
@@ -38,11 +38,11 @@ productsRouter.post('/admin/add-product', authModule, async (req, res)=>{
 
         // validation
         if (item.price < 0){
-            return res.status(400).json ({error: "Price can not be below 0."});
+            return res.status(400).json ({msg: "Price can not be below 0."});
         }
 
         if (parseInt(item.zipcode) == null){
-            return res.status(400).json ({error: "Zipcode must be a whole number"});
+            return res.status(400).json ({msg: "Zipcode must be a whole number"});
         }
 
         let listing = new Listing({
@@ -126,7 +126,7 @@ productsRouter.post('/delete-product', authModule, async (req, res)=>{
 
         const existingListing = await Listing.findById(item.id);
         if (!existingListing){
-            return res.status(400).json ({error: "Could not find product to delete."});
+            return res.status(400).json ({msg: "Could not find product to delete."});
         }       
         
         if (existingListing.email != existingUser.email && existingUser.type.toLowerCase() != 'admin'){
@@ -155,7 +155,7 @@ productsRouter.post('/edit-product-price/:newprice', authModule, async (req, res
 
         let existingListing = await Listing.findById(item.id);
         if (!existingListing){
-            return res.status(400).json ({error: "Could not find product to delete."});
+            return res.status(400).json ({msg: "Could not find product to delete."});
         }       
         if (existingListing.email != existingUser.email && existingUser.type != 'admin'){
             return res.status(401).json ({error: "User is not authorized to delete the product."});
@@ -182,8 +182,11 @@ productsRouter.post('/api/add-to-cart', authModule, async (req, res)=>{
 
         let existingListing = await Listing.findById(id);
         if (!existingListing){
-            return res.status(400).json ({error: "Could not find product to delete."});
+            return res.status(400).json ({msg: "Could not find product to delete."});
         }   
+        if (existingListing.quantity < 1){
+            return res.status(400).json ({msg: "Product is out of stock."});
+        }
         
         if (existingUser.cart.length == 0){
             existingUser.cart.push({id: existingListing._id, quantity: 1});
@@ -194,13 +197,20 @@ productsRouter.post('/api/add-to-cart', authModule, async (req, res)=>{
                 if (duple._id.equals(existingListing._id)){
                     foundProduct = true;
                     duple.quantity +=1
+                    if (duple.quantity > existingListing.quantity){
+                        return res.status(400).json ({msg: "Product does not have more stock."});
+                    }
+            
+                    
                 }
             }
             if (!foundProduct){
                 console.log("Adding to cart", existingListing)
                 existingUser.cart.push({_id: existingListing._id, quantity: 1});
             }     
+            
         }
+        
 
         existingUser = await existingUser.save();
         res.status(200).json(existingUser);
@@ -329,6 +339,8 @@ productsRouter.post('/api/checkout', authModule, async (req, res)=>{
             let dupple = existingUser.cart.shift();
             totalItems += dupple.quantity;
             let existingListing = await Listing.findById(dupple._id.toString());
+            existingListing.quantity -= dupple.quantity;
+            await existingListing.save();
             let basePrice = existingListing.price;
             totalPrice += dupple.quantity * basePrice;
             let taxPercent = await taxModule.getSalesTax(existingListing.zipcode);

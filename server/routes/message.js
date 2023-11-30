@@ -151,7 +151,7 @@ messageRouter.post("/api/send-message", authModule, async (req,res) => {
         let destinationUser = await User.find({email: recipient});
         
         if (!destinationUser){
-            return res.status(400).json ({error: 'The email you are trying to message does not have an account.'});
+            return res.status(400).json ({msg: 'The email you are trying to message does not have an account.'});
         }
         console.log("has user", destinationUser);
 
