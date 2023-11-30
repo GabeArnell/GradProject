@@ -326,7 +326,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
               ),
       
       
-              
+              if (sellerInfo['email'] != user.email)
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Container(
@@ -369,12 +369,12 @@ class _ProductsScreenState extends State<ProductsScreen> {
               //       left: 10.0, right: 10, bottom: 10, top: 15),
               //   child: CustomButton(text: 'Buy Now', onTap: () {}),
               // ),
-              if (user.type != "Admin")
+              if (user.type != "Admin" && (sellerInfo['email'] != user.email))
               Padding(
                 padding: const EdgeInsets.only(
                     left: 10.0, right: 10, bottom: 5, top: 5),
-                child: CustomButton(text: 'Add to Cart', onTap: addToCart),
-              ),
+                child: CustomButton(text: 'Add to Cart', onTap: addToCart)
+                  ),
               if (user.type != "Admin")
               Container(
                 color: Colors.black12,

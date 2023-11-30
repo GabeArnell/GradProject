@@ -44,7 +44,7 @@ class _SellerScreenState extends State<SellerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
 
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
