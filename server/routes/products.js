@@ -9,7 +9,8 @@ const Rating = require("../models/rating");
 const mailer = require("../controllers/mailer")
 const Order = require("../models/orders")
 const {Promotion, promotionSchema} = require("../models/promotion")
-const taxModule = require("../controllers/tax")
+const taxModule = require("../controllers/tax");
+const { stat } = require("fs");
 
 productsRouter.post('/admin/add-product', authModule, async (req, res)=>{
     console.log(req.user);
@@ -409,6 +410,39 @@ productsRouter.get("/api/orders/listings", authModule,async (req,res)=>{
     }
 })
 
+productsRouter.post("/admin/update-order-status", authModule,async (req,res)=>{
+    console.log(req.user);
+    
+    try {
+        const {orderID, status} = req.body;
+        let existingUser = await User.findById(req.user);
+        if (!existingUser){
+            return res.status(500).json ({error: "Could not find user"});
+        }
+
+        
+        // Admins can see all orders
+        if (existingUser.type.toLowerCase() != "admin"){
+            return res.status(500).json ({error: "Must be admin to edit order status"});
+        }
+        let myOrder= await Order.findById(orderID);
+        
+        if (!myOrder){
+            return res.status(500).json ({error: "Could not find orders"});
+        }
+
+        myOrder.status = status;
+
+        myOrder = await myOrder.save();
+
+        res.status(200).json(myOrder);
+
+
+    }
+    catch (e){
+        return res.status(500).json ({error: e.message});
+    }
+})
 
 productsRouter.post('/api/calculate-product-rating', async (req, res)=>{
     console.log("Calcing Rating")

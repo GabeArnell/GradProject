@@ -9,7 +9,7 @@ class Order {
   final String address;
   final String userId;
   final int orderedAt;
-  final int status;
+  int status;
   final double totalPrice;
 
   Order({

@@ -164,5 +164,35 @@ class UpdateService {
     }
   }
 
+  void updateOrderStatus({
+    required BuildContext context,
+    required Order order,
+    required int newStatus,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    try {
+      http.Response res = await http.post(
+        Uri.parse('$SERVER_URI/admin/update-order-status'),
+        body: jsonEncode({
+          'orderID': order.id,
+          'status': newStatus,
+        }),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+      );
+
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          showSnackBar(context, 'Updated status.');
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
 
 }

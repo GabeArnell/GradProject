@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
+import 'package:thrift_exchange/features/account/services/update_services.dart';
 import 'package:thrift_exchange/features/auth/services/auth_service.dart';
 import 'package:thrift_exchange/features/home/screens/home_screens.dart';
 import 'package:thrift_exchange/features/home/screens/products_screens.dart';
@@ -29,6 +30,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   int currentStep = 0;
   final HomeServices adminServices = HomeServices();
   final AuthService authService = AuthService();
+
+  UpdateService updateService = UpdateService();
+
   void navigateToSearchScreen(String query) {
     Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
   }
@@ -44,7 +48,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   cart: [], 
   usedPromotions: []);
 
+
   String orderStatus = "Loading";
+  
 
   @override
   void initState() {
@@ -60,11 +66,24 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     });
   }
 
+  void updateOrderStatus(int newStatus )async{
+    updateService.updateOrderStatus(context: context, order: widget.order, newStatus: newStatus);
+  }
+
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
-
+    print("Order status is ${widget.order.status}");
+    if (widget.order.status == 0){
+      orderStatus = "Processing";
+    }
+    if (widget.order.status == 1){
+      orderStatus = "Shipping";
+    }
+    if (widget.order.status == 2){
+      orderStatus = "Delivered";
+    }
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
@@ -77,7 +96,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           title: Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Text(
-              "Your Order",
+              user.type == "Admin"?"Active Order":"Your Order",
               style: TextStyle(
                 fontSize: 23,
                 fontWeight: FontWeight.bold,
@@ -232,7 +251,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     Row(
                       children: [
                         Text(
-                          "Your Order is: ",
+                          user.type =="Admin"?"The Order is: ":"Your Order is: ",
                           style: TextStyle(
                             fontSize: 21,
                             fontWeight: FontWeight.bold,
@@ -254,6 +273,91 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   ],
                 ),
               ),
+              if (user.type == "Admin")
+              Container(
+                child: Column(children: [
+                  SizedBox(
+                    height: 25,
+                  ),
+                    Text(
+                        "Admin: Set Order Status",
+                        style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      ListTile(
+                    
+                      title: const Text("Processing",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black
+                          )),
+                      tileColor: 1 == 1
+                          ? GlobalVariables.backgroundColor
+                          : GlobalVariables.greyBackgroundColor,
+                      leading: Radio(
+                        activeColor: GlobalVariables.secondaryColor,
+                        value: "Processing",
+                        groupValue: orderStatus,
+                        onChanged: (String? val) {
+                          setState(() {
+                            widget.order.status = 0;
+                            orderStatus = val!;
+                          });
+                          updateOrderStatus(0);
+                        },
+                      ),
+                    ),
+                    ListTile(
+                    
+                      title: const Text("Shipping",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black
+                          )),
+                      tileColor: 1 == 1
+                          ? GlobalVariables.backgroundColor
+                          : GlobalVariables.greyBackgroundColor,
+                      leading: Radio(
+                        activeColor: GlobalVariables.secondaryColor,
+                        value: "Shipping",
+                        groupValue: orderStatus,
+                        onChanged: (String? val) {
+                          setState(() {
+                            widget.order.status = 1;
+                            orderStatus = val!;
+                          });
+                          updateOrderStatus(1);
+                        },
+                      ),
+                    ),
+                    ListTile(
+                      title: const Text("Delivered",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black
+                          )),
+                      tileColor: 1 == 1
+                          ? GlobalVariables.backgroundColor
+                          : GlobalVariables.greyBackgroundColor,
+                      leading: Radio(
+                        activeColor: GlobalVariables.secondaryColor,
+                        value: "Delivered",
+                        groupValue: orderStatus,
+                        onChanged: (String? val) {
+                          setState(() {
+                            widget.order.status = 2;
+                            orderStatus = val!;
+                          });
+                          updateOrderStatus(2);
+
+                        },
+                      ),
+                    ),
+
+                ]),
+              )
             ],
           ),
         ),
