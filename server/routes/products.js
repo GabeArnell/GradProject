@@ -11,6 +11,8 @@ const Order = require("../models/orders")
 const {Promotion, promotionSchema} = require("../models/promotion")
 const taxModule = require("../controllers/tax");
 const { stat } = require("fs");
+const Alert = require("../models/alert");
+const listingController = require("../controllers/listing")
 
 productsRouter.post('/admin/add-product', authModule, async (req, res)=>{
     console.log(req.user);
@@ -57,7 +59,8 @@ productsRouter.post('/admin/add-product', authModule, async (req, res)=>{
         })
 
 
-        listing = await listing.save()
+        listing = await listing.save();
+        listingController.checkAlerts(listing);
         res.json(listing);
 
     }
@@ -66,6 +69,8 @@ productsRouter.post('/admin/add-product', authModule, async (req, res)=>{
         return res.status(500).json ({error: e.message});
     }
 })
+
+
 productsRouter.post('/admin/edit-product', authModule, async (req, res)=>{
     console.log("EDITING PRODUCT")
     console.log(req.user);
@@ -488,9 +493,6 @@ productsRouter.post('/api/calculate-product-rating', async (req, res)=>{
 })
 
 productsRouter.post('/api/rate-product', authModule, async (req, res)=>{
-    console.log("Rating PRODUCT")
-    console.log(req.user);
-    console.log(req.body);
     let {itemID, rating} = req.body;
     try {
         const existingUser = await User.findById(req.user);
@@ -543,6 +545,80 @@ productsRouter.post('/api/rate-product', authModule, async (req, res)=>{
     }
 })
 
-productsRouter
+productsRouter.post('/api/set-alert', authModule, async (req, res)=>{
+    console.log("Setting alert")
+    console.log(req.user);
+    console.log(req.body);
+    let {name,zipcode,category} = req.body;
+    try {
+        const existingUser = await User.findById(req.user);
+        if (!existingUser){
+            return res.status(500).json ({error: "Could not find user"});
+        }
+
+        let myAlert = new Alert({
+            name: name,
+            zipcode: zipcode,
+            category: category,
+            email: existingUser.email
+        })
+
+        myAlert = await myAlert.save();
+        
+        res.json(true);
+    }
+    catch (e){
+        console.log('prod error', e.message);
+        return res.status(500).json ({error: e.message});
+    }
+})
+
+productsRouter.get('/api/get-alerts', authModule, async (req, res)=>{
+    console.log("Getting alerts");
+    try {
+        const existingUser = await User.findById(req.user);
+        if (!existingUser){
+            return res.status(500).json ({error: "Could not find user"});
+        }
+
+        let myAlerts = await Alert.find({email: existingUser.email});
+        res.status(200).json(myAlerts);
+    }
+    catch (e){
+        console.log('prod error', e.message);
+        return res.status(500).json ({error: e.message});
+    }
+})
+
+
+productsRouter.post('/api/delete-alert', authModule, async (req, res)=>{
+    console.log("deleting alert")
+    console.log(req.user);
+    console.log(req.body);
+    let {alertID} = req.body;
+    try {
+        const existingUser = await User.findById(req.user);
+        if (!existingUser){
+            return res.status(500).json ({error: "Could not find user"});
+        }
+
+        let myAlert = await Alert.findById(alertID);
+        if (!myAlert){
+            return res.status(500).json ({error: "Could not find alert."});
+        }
+        if (myAlert.email != existingUser.email){
+            return res.status(400).json ({msg: "User does not own that alert."});
+        }
+
+        await Alert.deleteOne({ _id: myAlert._id });
+
+        res.status(200).json(true);
+    }
+    catch (e){
+        console.log('prod error', e.message);
+        return res.status(500).json ({error: e.message});
+    }
+})
+
 
 module.exports = productsRouter;

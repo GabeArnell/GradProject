@@ -13,6 +13,8 @@ import 'package:thrift_exchange/models/product.dart';
 import 'package:http/http.dart' as http;
 import 'package:thrift_exchange/providers/user_provider.dart';
 
+import '../../../models/alert.dart';
+
 class HomeServices {
   var logger = Logger();
   void submitProduct({
@@ -270,7 +272,7 @@ class HomeServices {
     }
   }
 
-  void submitAlert({
+  Future<bool> submitAlert({
     required BuildContext context,
     required String name,
     required double zipcode,
@@ -280,7 +282,7 @@ class HomeServices {
 
     try {
       http.Response res = await http.post(
-        Uri.parse('$SERVER_URI/set-alert'),
+        Uri.parse('$SERVER_URI/api/set-alert'),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': userProvider.user.token,
@@ -305,5 +307,77 @@ class HomeServices {
         e.toString(),
       );
     }
+          return true;
+
   }
+
+ Future<List<Alert>> getAlerts({
+    required BuildContext context
+  }) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    List<Alert> list = [];
+    try {
+      http.Response res = await http.get(
+        Uri.parse('$SERVER_URI/api/get-alerts'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+      );
+
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          var jsonList = jsonDecode(res.body);
+          for (int i = 0; i < jsonList.length; i++){
+            list.add(Alert.fromJson(jsonEncode(jsonList[i])));
+          }
+        },
+      );
+    } catch (e) {
+      showSnackBar(
+        context,
+        "alert get "+e.toString(),
+      );
+    }
+
+    return list;
+  }
+
+Future<bool> deleteAlert({
+    required BuildContext context,
+    required Alert alert,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    try {
+      http.Response res = await http.post(
+        Uri.parse('$SERVER_URI/api/delete-alert'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+        body: jsonEncode({
+          'alertID': alert.id,
+        }),
+      );
+
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          showSnackBar(context, 'Alert deleted successfully.');
+        },
+      );
+    } catch (e) {
+      showSnackBar(
+        context,
+        e.toString(),
+      );
+    }
+          return true;
+
+  }
+
 }

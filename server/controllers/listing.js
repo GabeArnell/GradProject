@@ -1,5 +1,8 @@
 const {Listing} = require("../models/listing");
 const User = require("../models/user");
+const Alert = require("../models/alert");
+const { default: test } = require("node:test");
+const mailController = require("./mailer");
 
 module.exports.getDemoListings = ()=>{
     return ([
@@ -103,3 +106,30 @@ module.exports.getByCategory = async(input) =>{
     return results;
     }
 }
+
+
+module.exports.checkAlerts = async (newProduct)=>{
+    let allAlerts = await Alert.find();
+    let prodName = newProduct.name.trim().toLowerCase();
+    for (let alert of allAlerts){
+        let testname = alert.name.trim().toLowerCase();
+        if (newProduct.zipcode != alert.zipcode) continue;
+        if (newProduct.category != alert.category) continue;
+        if (prodName.includes(testname)){
+
+            let html = `
+            <h1>A new product as added to ThriftExchange that matches your alert!</h1>
+            <h2> Product: ${newProduct.name}</h2>
+            <h2> Sold by ${newProduct.email}</h2>
+            <p>${newProduct.description}</p>
+            `
+            // mail out
+            mailController.sendEmail(
+                alert.email,
+                "ThriftExchange Alert: "+prodName,
+                html
+            )
+        }
+    }
+}
+
