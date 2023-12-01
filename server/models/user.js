@@ -50,6 +50,12 @@ const userSchema = mongoose.Schema({
         default: 'user'
     },
 
+    banStatus: {
+        type: String,
+        default: ''
+    },
+
+
     cart: [
         {
             product: listingSchema,

@@ -56,6 +56,9 @@ authRouter.post('/api/signin', async (req,res)=>{
         if (!matchedPassword){
             return res.status(400).json({msg: "Invalid Credentials"})
         }
+        if (existingUser.banStatus && existingUser.banStatus == "banned"){
+            return res.status(400).json({msg: "User is banned."})
+        }
 
         const token = jwt.sign({id: existingUser._id}, TOKEN_PRIVATE_KEY);
         //console.log("returning",existingUser._doc);
@@ -86,6 +89,10 @@ authRouter.post('/api/validateToken', async (req,res)=>{
         if (!existingUser){
             return res.json(false);
         }
+        if (existingUser.banStatus && existingUser.banStatus == "banned"){
+            return res.json(false);
+        }
+
         console.log("Found the user")
 
         return res.json(true);

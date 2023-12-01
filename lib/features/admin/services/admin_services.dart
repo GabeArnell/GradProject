@@ -82,4 +82,87 @@ class AdminServices {
       'totalViews': totalViews,
     };
   }
+
+  Future<bool> getBanStatus(BuildContext context,
+  String email) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    bool banned = false;
+    try {
+      http.Response res =
+          await http.post(Uri.parse('$SERVER_URI/admin/ban-status'), headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': userProvider.user.token,
+      },
+        body: jsonEncode({"email": email})
+      );
+
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          banned = jsonDecode(res.body);
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+    return banned;
+  }
+
+  Future<bool> banUser(BuildContext context,
+  String email) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    bool banned = false;
+    try {
+      http.Response res =
+          await http.post(Uri.parse('$SERVER_URI/admin/ban-user'), headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': userProvider.user.token,
+      },
+        body: jsonEncode({"email": email})
+      );
+
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          banned = jsonDecode(res.body);
+          showSnackBar(context, "Banned ${email}.");
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+    return banned;
+  }
+
+  Future<bool> unbanUser(BuildContext context,
+  String email) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    bool banned = false;
+    try {
+      http.Response res =
+          await http.post(Uri.parse('$SERVER_URI/admin/unban-user'), headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': userProvider.user.token,
+      },
+        body: jsonEncode({"email": email})
+      );
+
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          banned = jsonDecode(res.body);
+          showSnackBar(context, "Unbanned ${email}.");
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+    return banned;
+  }
+
+
+
 }

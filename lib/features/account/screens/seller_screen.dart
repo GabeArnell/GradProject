@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
 import 'package:thrift_exchange/features/account/widgets/below_app_bar.dart';
 import 'package:thrift_exchange/features/account/widgets/custom_sub_banner.dart';
 import 'package:thrift_exchange/features/account/widgets/orders.dart';
 import 'package:thrift_exchange/features/account/widgets/review_box.dart';
 import 'package:thrift_exchange/features/account/widgets/top_buttons.dart';
+import 'package:thrift_exchange/features/admin/services/admin_services.dart';
 import 'package:thrift_exchange/features/chat/screens/chat_home_page.dart';
 import 'package:thrift_exchange/features/home/screens/add_product_Screen.dart';
 
 import '../../../models/review.dart';
+import '../../../providers/user_provider.dart';
 import '../services/review_service.dart';
 
 class SellerScreen extends StatefulWidget {
@@ -25,12 +28,16 @@ class SellerScreen extends StatefulWidget {
 
 class _SellerScreenState extends State<SellerScreen> {
   ReviewService reviewService = ReviewService();
+  AdminServices adminServices = AdminServices();
 
   List<Review> reviews = [];
+
+  bool isBanned = false;
 
   @override
   void initState(){
     super.initState();
+    getBanStatus();
     getReviews();
   }
 
@@ -41,8 +48,17 @@ class _SellerScreenState extends State<SellerScreen> {
     });
   }
 
+  void getBanStatus()async{
+    isBanned = await adminServices.getBanStatus(context, widget.email);
+    setState(() {
+      
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context).user;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
 
@@ -117,9 +133,9 @@ class _SellerScreenState extends State<SellerScreen> {
                   children: [
                     Text(
                       'Name : ${widget.name}',
-                      style: const TextStyle(
+                      style:  TextStyle(
                         fontSize: 19,
-                        color: Colors.black,
+                        color: isBanned==true?Colors.red:Colors.black,
                         fontWeight: FontWeight.bold,
                       ),   
                     ),  
@@ -190,8 +206,48 @@ class _SellerScreenState extends State<SellerScreen> {
               ),
             ],
           ),
-      
-          
+
+          if (user.type == "Admin")
+              Column(
+                children: [
+                  SizedBox(
+                    height: 15,
+                  ),
+                  GestureDetector(
+                    child: Text(
+            '${isBanned==true?"Unban":"Ban"} ${widget.email}',
+            style: const TextStyle(
+                  fontSize: 25,
+                  color: Color.fromARGB(255, 255, 0, 0),
+                  fontWeight: FontWeight.bold,
+            ),
+          ),
+            onTap: ()async {
+              if (isBanned == false){
+                print("Banning user");
+                bool success = await adminServices.banUser(context, widget.email);
+                if (success){
+                  getBanStatus();
+                }
+              }
+              else{
+                print("Unbanning user");
+                bool success = await adminServices.unbanUser(context, widget.email);
+                if (success){
+                  getBanStatus();
+                }
+              }
+            }),
+
+                  SizedBox(
+                    height: 15,
+                  )
+
+                ],
+              ),
+
+
+
           SizedBox(
             child: Column(
               children: [
@@ -205,7 +261,7 @@ class _SellerScreenState extends State<SellerScreen> {
                 if (reviews.isNotEmpty)
                 SingleChildScrollView(
                   child: SizedBox(
-                    height: 390,
+                    height: user.type == "Admin"?300:350,
                     child: ListView.builder(
                       itemCount: reviews.length,
                       itemBuilder: (context, index) {
