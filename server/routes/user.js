@@ -18,7 +18,7 @@ userRouter.post('/api/add-review', authModule, async (req, res)=>{
     try {
 
         const {email,content} = req.body;
-        console.log(req.body);
+        //console.log(req.body);
         let myUser = await User.findById(req.user);
 
         let existingUser = await User.findOne({email: email});
@@ -79,7 +79,7 @@ userRouter.post('/admin/delete-review', authModule, async (req, res)=>{
     try {
 
         const {writer,subject} = req.body;
-        console.log(req.body);
+        //console.log(req.body);
         let myUser = await User.findById(req.user);
         if (!myUser){
             return res.status(500).json ({error: "Could not find user"});
@@ -116,7 +116,7 @@ userRouter.post('/admin/ban-user', authModule, async (req, res)=>{
         if (myUser.type != "Admin"){
             return res.status(500).json ({error: "Must be admin to ban a user."});
         }
-        console.log(req.body);
+        //console.log(req.body);
         let targetUser = await User.findOne({email: email});
         if (!targetUser){
             return res.status(500).json ({error: "Could not find target user"});
@@ -142,7 +142,7 @@ userRouter.post('/admin/unban-user', authModule, async (req, res)=>{
         if (myUser.type != "Admin"){
             return res.status(500).json ({error: "Must be admin to unban a user."});
         }
-        console.log(req.body);
+        //console.log(req.body);
         let targetUser = await User.findOne({email: email});
         if (!targetUser){
             return res.status(500).json ({error: "Could not find target user"});
@@ -197,7 +197,7 @@ userRouter.post('/api/get-reviews', authModule, async (req, res)=>{
         }
         
         const reviews = await Review.find({subject: email});
-        console.log("retrieved review", reviews);
+        //console.log("retrieved review", reviews);
         res.status(200).json(reviews);
     }
     catch (e){

@@ -63,7 +63,7 @@ class _AdminScreenState extends State<AdminScreen> {
                                 .withOpacity(0.4),
                             BlendMode.srcOver),
                         child: Image.asset(
-                          'assets/images/thrift_exchange_logo.jpg',
+                          'assets/images/logo_transparent.png',
                           width: 59,
                           height: 95,
                           //color: Colors.black,

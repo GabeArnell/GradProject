@@ -81,7 +81,7 @@ class _SellerScreenState extends State<SellerScreen> {
                       const Color.fromARGB(255, 251, 188, 0).withOpacity(0.4),
                       BlendMode.srcOver),
                   child: Image.asset(
-                    'assets/images/thrift_exchange_logo.jpg',
+                    'assets/images/logo_transparent.png',
                     width: 55,
                     height: 95,
                     //color: Colors.black,
