@@ -10,15 +10,28 @@ import 'package:thrift_exchange/features/account/widgets/orders.dart';
 import 'package:thrift_exchange/features/auth/screens/auth_screen.dart';
 
 import '../../../providers/user_provider.dart';
+import '../../home/services/product_services.dart';
+import '../screens/seller_screen.dart';
 
 class TopBottons extends StatefulWidget {
-  const TopBottons({super.key});
+  final String email;
+  const TopBottons({super.key, required this.email});
 
   @override
   State<TopBottons> createState() => _TopBottonsState();
 }
 
 class _TopBottonsState extends State<TopBottons> {
+  ProductServices prodServices = ProductServices();
+
+  Map<String, dynamic> sellerInfo = {
+    "name": "name",
+    "email": "email",
+    "image": "",
+    "averagestars": -1
+  };
+
+
   void navigateToProfileScreen() {
     Navigator.pushNamed(context, ProfilePage.routeName);
   }
@@ -29,6 +42,29 @@ class _TopBottonsState extends State<TopBottons> {
 
   void navigateToOrdersScreen() {
     Navigator.pushNamed(context, OrdersScreen.routeName);
+  }
+  void loadSellerInfo()async{
+    sellerInfo = await prodServices.getSellerInfo(context: context, email: widget.email);
+    setState(() {
+      
+    });
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    loadSellerInfo();
+  }
+
+  void navigateToSellerProfile(){
+    Navigator.push(context,
+    MaterialPageRoute(builder: (context) {
+      return SellerScreen(email: sellerInfo['email'].toString(),
+        name:sellerInfo['name'].toString(),
+        image: sellerInfo['image'].toString(),
+        averageStars: sellerInfo['averagestars'] ?? -1,
+      );
+    }));
   }
 
   @override
@@ -47,6 +83,16 @@ class _TopBottonsState extends State<TopBottons> {
                 }),
           ],
         ),
+        SizedBox(
+          height: 13,
+        ),
+        Row(
+          children: [
+            AccountButton(
+                text: 'Your Seller Profile', onPressed: navigateToSellerProfile),
+          ],
+        ),
+
         SizedBox(
           height: 13,
         ),

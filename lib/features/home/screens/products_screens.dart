@@ -62,7 +62,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
   }
 
   void loadSellerInfo()async{
-    sellerInfo = await prodServices.getSellerInfo(context: context, product: widget.product);
+    sellerInfo = await prodServices.getSellerInfo(context: context, email: widget.product.email);
     setState(() {
       
     });

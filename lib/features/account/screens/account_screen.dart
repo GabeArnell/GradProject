@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
 import 'package:thrift_exchange/features/account/widgets/below_app_bar.dart';
 import 'package:thrift_exchange/features/account/widgets/orders.dart';
 import 'package:thrift_exchange/features/account/widgets/top_buttons.dart';
 import 'package:thrift_exchange/features/chat/screens/chat_home_page.dart';
 import 'package:thrift_exchange/features/home/screens/add_product_Screen.dart';
+
+import '../../../providers/user_provider.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -16,6 +19,7 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen> {
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
@@ -70,13 +74,13 @@ class _AccountScreenState extends State<AccountScreen> {
           ),
         ),
       ),
-      body: const Column(
+      body: Column(
         children: [
           BelowAppBar(),
           SizedBox(
             height: 10,
           ),
-          TopBottons(),
+          TopBottons(email: userProvider.user.email),
           //Orders(),
         ],
       ),

@@ -141,7 +141,7 @@ class ProductServices {
 
   Future<Map<String, dynamic>> getSellerInfo({
     required BuildContext context,
-    required Product product,
+    required String email,
   }) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     Map<String, dynamic> info = {
@@ -158,7 +158,7 @@ class ProductServices {
           'x-auth-token': userProvider.user.token,
         },
         body: jsonEncode({
-          'email': product.email,
+          'email': email,
         }),
       );
 
@@ -175,4 +175,5 @@ class ProductServices {
 
     return info;
   }
+
 }
