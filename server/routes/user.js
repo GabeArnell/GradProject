@@ -165,10 +165,6 @@ userRouter.post('/admin/ban-status', authModule, async (req, res)=>{
             return res.status(500).json ({error: "Could not find user"});
         }
 
-        if (myUser.type != "Admin"){
-            return res.status(500).json ({error: "Must be admin to ban a user."});
-        }
-
         let targetUser = await User.findOne({email: email});
         if (!targetUser){
             return res.status(500).json ({error: "Could not find target user"});

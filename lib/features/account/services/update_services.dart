@@ -13,6 +13,7 @@ import 'package:thrift_exchange/models/order.dart';
 import 'package:thrift_exchange/models/product.dart';
 import 'package:thrift_exchange/providers/user_provider.dart';
 
+import '../../../common/temp_image.dart';
 import '../../../constants/server_path.dart';
 
 import '../../../models/user.dart';
@@ -54,7 +55,58 @@ class UpdateService {
     return orderList;
   }
 
-  Future<String> updateProfilePicture({
+
+  Future<String> updateProfilePictureFromGallery({
+    required BuildContext context,
+    required String token,
+    required TempImage image,
+  }) async {
+        final userProvider = Provider.of<UserProvider>(context, listen: false);
+    print("UPDATING THE PROFILE PICTURE");
+    String imageUrl = '';
+    try {
+      final cloudinary = CloudinaryPublic('dyczsvdgt', 'irpg0kb6');
+
+      CloudinaryFile newFile = CloudinaryFile.fromBytesData(image.bytes, identifier: "${userProvider.user.email}-profile");
+      CloudinaryResponse uploadResult = await cloudinary.uploadFile(
+        newFile
+      );
+      imageUrl = uploadResult.secureUrl;
+      http.Response res = await http.post(
+        Uri.parse('$SERVER_URI/api/profile/update-details'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+        body: jsonEncode({
+          "type": "image",
+          "detail": imageUrl,
+        }),
+      );
+
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          //showSnackBar(context, 'Profile Picture Updated Successfully!');
+          //Navigator.pop(context);
+        },
+      );
+      return imageUrl;
+    } catch (e) {
+      
+      print("Update error: ");
+      print(e);
+      showSnackBar(
+        context,
+        e.toString(),
+      );
+      return imageUrl;
+
+    }
+  }
+
+  Future<String> updateProfilePictureFromCamera({
     required BuildContext context,
     required String token,
     required File image,

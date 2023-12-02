@@ -142,7 +142,7 @@ class _SellerScreenState extends State<SellerScreen> {
                     const SizedBox(height: 15),
       
                     Text(
-                      'Average Stars : ${widget.averageStars.roundToDouble()}',
+                      'Average Stars : ${widget.averageStars.roundToDouble()<0?"No Star Ratings Yet":widget.averageStars.roundToDouble()}',
                       style: const TextStyle(
                         fontSize: 19,
                         color: Color.fromARGB(255, 0, 0, 0),

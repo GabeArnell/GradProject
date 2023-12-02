@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:thrift_exchange/common/temp_image.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
 import 'package:thrift_exchange/constants/utils.dart';
 import 'package:thrift_exchange/features/account/services/update_services.dart';
@@ -21,7 +23,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   String activeField = '';
-  File? image;
+  TempImage? image;
   UpdateService updateService = UpdateService();
   void _setActiveField(String field) {
     setState(() {
@@ -29,10 +31,14 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  Future<File?> selectImages() async {
-    var res = await pickProfileImages();
+  Future<TempImage?> selectImages() async {
+    TempImage? res = await pickProfileImages();
+    if (res == null){
+      return null;
+    }
+    image = res;
+
     setState(() {
-      image = res;
     });
     return res;
   }
@@ -107,10 +113,11 @@ class _ProfilePageState extends State<ProfilePage> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: Text('Choose a profile picture'),
+                              title: Text('Select Image Location'),
                               content: SingleChildScrollView(
                                 child: ListBody(
                                   children: <Widget>[
+                                    if (kIsWeb == false)
                                     GestureDetector(
                                       child: Text('Take a picture'),
                                       onTap: () async {
@@ -125,7 +132,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           final String pickedPath = pickedFile.path;
                                           // ignore: use_build_context_synchronously
                                         // ignore: use_build_context_synchronously
-                                        String finalResult = await updateService.updateProfilePicture(context: context,token:user.token, image: File(pickedPath));
+                                        String finalResult = await updateService.updateProfilePictureFromCamera(context: context,token:user.token, image: File(pickedPath));
                                         if (finalResult != ''){
                                           user.image = finalResult;
                                           widget.currentURL = finalResult;
@@ -147,7 +154,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       onTap: () async {
                                         await selectImages();
                                         if (image != null){
-                                            String finalResult = await updateService.updateProfilePicture(
+                                            String finalResult = await updateService.updateProfilePictureFromGallery(
                                             context: context,
                                             token:user.token,
                                             image: image!,

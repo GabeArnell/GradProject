@@ -5,6 +5,7 @@ import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+import 'package:thrift_exchange/common/temp_image.dart';
 import 'package:thrift_exchange/constants/error_handling.dart';
 import 'package:thrift_exchange/constants/server_path.dart';
 import 'package:thrift_exchange/constants/utils.dart';
@@ -25,16 +26,17 @@ class HomeServices {
     required double quantity,
     required double zipcode,
     required String category,
-    required List<File> images,
+    required List<TempImage> images,
   }) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-
     try {
       final cloudinary = CloudinaryPublic('dyczsvdgt', 'irpg0kb6');
       List<String> imageUrls = [];
       for (int i = 0; i < images.length; i++) {
+
+        CloudinaryFile newFile = CloudinaryFile.fromBytesData(images[i].bytes, identifier: "${userProvider.user.email}-${images[i].name}");
         CloudinaryResponse res = await cloudinary.uploadFile(
-          CloudinaryFile.fromFile(images[i].path, folder: name),
+          newFile
         );
         imageUrls.add(res.secureUrl);
       }
@@ -85,7 +87,7 @@ class HomeServices {
     required double quantity,
     required double zipcode,
     required String category,
-    required List<File> images,
+    required List<TempImage> images,
   }) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
@@ -93,8 +95,9 @@ class HomeServices {
       final cloudinary = CloudinaryPublic('dyczsvdgt', 'irpg0kb6');
       List<String> imageUrls = [];
       for (int i = 0; i < images.length; i++) {
+        CloudinaryFile newFile = CloudinaryFile.fromBytesData(images[i].bytes, identifier: "${userProvider.user.email}-${images[i].name}");
         CloudinaryResponse res = await cloudinary.uploadFile(
-          CloudinaryFile.fromFile(images[i].path, folder: name),
+          newFile
         );
         imageUrls.add(res.secureUrl);
       }

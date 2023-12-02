@@ -107,7 +107,7 @@ productsRouter.post('/admin/edit-product', authModule, async (req, res)=>{
         }
 
         if (item.images.length > 0){
-            existingListing.images.push(...item.images)
+            existingListing.images = item.images;
         }
         
 

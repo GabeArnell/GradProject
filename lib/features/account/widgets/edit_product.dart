@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+import 'package:thrift_exchange/common/temp_image.dart';
 import 'package:thrift_exchange/common/widgets/custom_button.dart';
 import 'package:thrift_exchange/common/widgets/custom_textfield.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
@@ -33,7 +34,7 @@ class _EditProductPageState extends State<EditProductPage> {
   final HomeServices homeServices = HomeServices();
 
   String category = 'Apparel';
-  List<File> images = [];
+  List<TempImage> images = [];
   final _addProductFormKey = GlobalKey<FormState>();
   @override
   void dispose() {
@@ -145,8 +146,8 @@ class _EditProductPageState extends State<EditProductPage> {
                       items: images.map(
                         (i) {
                           return Builder(
-                            builder: (BuildContext context) => Image.file(
-                              i,
+                            builder: (BuildContext context) => Image.memory(
+                              i.bytes,
                               fit: BoxFit.cover,
                               height: 200,
                             ),

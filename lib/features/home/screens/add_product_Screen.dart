@@ -11,6 +11,8 @@ import 'package:thrift_exchange/constants/utils.dart';
 import 'package:thrift_exchange/features/home/screens/home_screens.dart';
 import 'package:thrift_exchange/features/home/services/home_services.dart';
 
+import '../../../common/temp_image.dart';
+
 class AddProductScreen extends StatefulWidget {
   static const String routeName = '/add-product';
   const AddProductScreen({super.key});
@@ -28,7 +30,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final HomeServices homeServices = HomeServices();
 
   String category = 'Apparel';
-  List<File> images = [];
+  List<TempImage> images = [];
   final _addProductFormKey = GlobalKey<FormState>();
   @override
   void dispose() {
@@ -122,8 +124,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       items: images.map(
                         (i) {
                           return Builder(
-                            builder: (BuildContext context) => Image.file(
-                              i,
+                            builder: (BuildContext context) => Image.memory(
+                              i.bytes,
                               fit: BoxFit.cover,
                               height: 200,
                             ),

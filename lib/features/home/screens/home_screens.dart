@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
     'https://static.vecteezy.com/system/resources/previews/003/769/924/non_2x/electronics-and-accessories-pink-flat-design-long-shadow-glyph-icon-smartphone-and-laptop-computers-and-devices-e-commerce-department-online-shopping-categories-silhouette-illustration-vector.jpg',
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvz9dzpMsM_z0l2jfnXApB4sj7j9_Ic7dk1w&usqp=CAU',
     'https://cdn0.iconfinder.com/data/icons/shopping-and-commerce-2-12/66/84-512.png',
-    'https://i.pinimg.com/564x/13/8d/74/138d740b0d523e8635ad851510f0a789.jpg',
+    'https://static.thenounproject.com/png/1311796-200.png',
     'https://cdn1.iconfinder.com/data/icons/branding-filledoutline/64/BADGE-branding-pin-miscellaneous-badges-shapes-512.png'
   ];
   void navigateToSearchScreen(String query) {
