@@ -92,15 +92,6 @@ class _TopBottonsState extends State<TopBottons> {
                 text: 'Your Seller Profile', onPressed: navigateToSellerProfile),
           ],
         ),
-
-        SizedBox(
-          height: 13,
-        ),
-        Row(
-          children: [
-            AccountButton(text: 'Wishlist', onPressed: () {}),
-          ],
-        ),
         SizedBox(
           height: 13,
         ),

@@ -27,15 +27,18 @@ class _UpdateDetailsState extends State<UpdateDetails> {
         key: _updateFormKey,
         child: Column(
           children: [
+            
             CustomTextField(
               controller: _valueController,
               hintText: widget.type,
+              obscureText: widget.type == "password"? true: false,
             ),
             const SizedBox(
               height: 10,
             ),
             if (widget.type == 'password')
               CustomTextField(
+                obscureText: true,
                 controller: _confirmValueController,
                 hintText: "Re-type Password",
               ),
