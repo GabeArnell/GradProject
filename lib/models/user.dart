@@ -2,10 +2,10 @@ import 'dart:convert';
 
 class User {
   final String id;
-  final String name;
+  String name;
   final String password;
   final String email;
-  final String address;
+  String address;
   final String type;
   String image;
   final String token;

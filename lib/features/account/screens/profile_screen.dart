@@ -11,6 +11,8 @@ import 'package:thrift_exchange/features/account/services/update_services.dart';
 import 'package:thrift_exchange/features/account/widgets/update_details.dart';
 import 'package:thrift_exchange/providers/user_provider.dart';
 
+import '../../../models/user.dart';
+
 class ProfilePage extends StatefulWidget {
   static const String routeName = '/show-profile';
   ProfilePage({super.key});
@@ -28,6 +30,36 @@ class _ProfilePageState extends State<ProfilePage> {
   void _setActiveField(String field) {
     setState(() {
       activeField = field;
+    });
+  }
+
+  void refresh(bool result, String type, String detail){
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    if (result == false){
+      return;
+    }
+
+    if (type == "address"){
+      User user = userProvider.user.copyWith(address: detail);
+      userProvider.setUserFromModel(user);
+
+      showSnackBar(context, "Updated $type to $detail");
+    }
+    if (type == "username"){
+      User user = userProvider.user.copyWith(name: detail);
+      userProvider.setUserFromModel(user);
+      showSnackBar(context, "Updated $type to $detail");
+    }
+    if (type == "password"){
+      User user = userProvider.user.copyWith(password: detail);
+      userProvider.setUserFromModel(user);
+      showSnackBar(context, "Updated Password");
+    }
+
+    
+    setState(() {
+      
     });
   }
 
@@ -200,6 +232,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           if (activeField == 'username')
             UpdateDetails(
+                refreshFunction: refresh,
                 type: 'username',
                 onSubmitted: () {
                   _setActiveField('');
@@ -223,6 +256,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           if (activeField == 'password')
             UpdateDetails(
+                refreshFunction: refresh,
                 type: 'password',
                 onSubmitted: () {
                   _setActiveField('');
@@ -240,6 +274,8 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           if (activeField == 'address')
             UpdateDetails(
+                refreshFunction: refresh,
+
                 type: 'address',
                 onSubmitted: () {
                   _setActiveField('');

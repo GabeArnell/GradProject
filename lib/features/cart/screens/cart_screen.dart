@@ -8,6 +8,7 @@ import 'package:thrift_exchange/features/cart/widgets/cart_subtotal.dart';
 import 'package:thrift_exchange/features/home/search/screens/search_screen.dart';
 import 'package:thrift_exchange/providers/user_provider.dart';
 
+import '../../../constants/utils.dart';
 import '../../../models/product.dart';
 import '../services/cart_services.dart';
 
@@ -145,7 +146,10 @@ class _CartScreenState extends State<CartScreen> {
                 text: 'Proceed to Buy (${userCartLength} items)',
                 onTap: () async {
                   if (userCartLength > 0) {
-                    
+                    if (user.address.isEmpty){
+                      showSnackBar(context, 'Set an address in your profile before checking out!');
+                      return;
+                    }
                     List<dynamic> taxes = await calculateTaxes();
 
                     Navigator.push(context,

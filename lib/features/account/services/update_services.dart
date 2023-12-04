@@ -185,12 +185,13 @@ class UpdateService {
     return orderList;
   }
 
-  void updateDetails({
+  Future<bool> updateDetails({
     required BuildContext context,
     required String type,
     required String detail,
   }) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+    bool result = false;
     try {
       http.Response res = await http.post(
         Uri.parse('$SERVER_URI/api/profile/update-details'),
@@ -208,12 +209,14 @@ class UpdateService {
         response: res,
         context: context,
         onSuccess: () {
-          showSnackBar(context, 'Updated ${type} Successfully');
+          result = true;
+          //showSnackBar(context, 'Updated ${type} Successfully');
         },
       );
     } catch (e) {
       showSnackBar(context, e.toString());
     }
+    return result;
   }
 
   void updateOrderStatus({

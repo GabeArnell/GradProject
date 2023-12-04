@@ -323,6 +323,7 @@ async function changeAddress(req,res,value){
         existingUser.address =  newAddress;
 
         await existingUser.save()
+        console.log("Changed address to", existingUser.address);
         res.status(200).json(existingUser);
 
     }

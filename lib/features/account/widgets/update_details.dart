@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:thrift_exchange/common/widgets/custom_button.dart';
 import 'package:thrift_exchange/common/widgets/custom_textfield.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
+import 'package:thrift_exchange/constants/utils.dart';
 import 'package:thrift_exchange/features/account/services/update_services.dart';
 
 class UpdateDetails extends StatefulWidget {
   final String type;
+  final Function refreshFunction;
   final Function() onSubmitted;
-  const UpdateDetails({super.key, this.type = '', required this.onSubmitted});
+  const UpdateDetails({super.key, this.type = '', required this.onSubmitted, required this.refreshFunction});
 
   @override
   State<UpdateDetails> createState() => _UpdateDetailsState();
@@ -47,7 +49,7 @@ class _UpdateDetailsState extends State<UpdateDetails> {
             ),
             CustomButton(
               text: "Update",
-              onTap: () {
+              onTap: ()async {
                 if (_updateFormKey.currentState!.validate()) {
                   if (widget.type == 'password' &&
                       _confirmValueController.text != _valueController.text) {
@@ -55,11 +57,14 @@ class _UpdateDetailsState extends State<UpdateDetails> {
                         SnackBar(content: Text("Password doesn't match")));
                   } else {
                     widget.onSubmitted();
-                    updateService.updateDetails(
+                    bool result = await updateService.updateDetails(
                       context: context,
                       type: widget.type,
                       detail: _valueController.text,
                     );
+
+                    widget.refreshFunction(result, widget.type, _valueController.text);
+
                   }
 
                   //signUpUser();}

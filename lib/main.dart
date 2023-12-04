@@ -40,8 +40,6 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
-    print("Getting user");
-    print(user.type);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Thrift Exchange',
