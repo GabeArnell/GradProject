@@ -13,7 +13,7 @@ module.exports.getDemoListings = ()=>{
             category: "Furniture",
             description: "Has a few scratches on the legs.",
             email: "gabe@gmail.com",
-            zipcode: 12601,
+            zipcode: "12601",
         },
         {
             name: "Used Tennis Racket",
@@ -22,7 +22,7 @@ module.exports.getDemoListings = ()=>{
             category: "Sports",
             description: "In good condition, used a couple times.",
             email: "gabe@gmail.com",
-            zipcode: 12601,
+            zipcode: "12601",
         },
         {
             name: "Computer Monitor",
@@ -31,7 +31,7 @@ module.exports.getDemoListings = ()=>{
             category: "Electronics",
             description: "Need to get rid of my second monitor when I leave the dormatory. Open to haggle.",
             email: "gabe@gmail.com",
-            zipcode: 12601,
+            zipcode: "12601",
         }
 
     ])
@@ -55,7 +55,7 @@ module.exports.searchByFields = async(body) =>{
     let name = "";
 
     if (body.zipcode && body.zipcode.length > 0 && body.zipcode != "null"){
-        zipcode = parseInt(body.zipcode)
+        zipcode = (body.zipcode).toString()
     }
     if (body.category && body.category.length > 0  && body.category != "null" && body.category != "All"){
         category = body.category

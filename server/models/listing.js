@@ -50,8 +50,8 @@ const listingSchema = mongoose.Schema({
         default: 'Used wooden chair, some dents on side but structurally sound.'
     },
     zipcode: {
-        type: Number,
-        default: 12601,
+        type: String,
+        default: '12601',
     },
     quantity: {
         type: Number,

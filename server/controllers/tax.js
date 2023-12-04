@@ -28,3 +28,7 @@ module.exports.getSalesTax = async (zipcode)=>{
     }
     return 0
 }
+
+module.exports.getSalesTax(2453).then(res =>{
+    console.log(res);
+})

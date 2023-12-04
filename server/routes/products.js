@@ -14,7 +14,7 @@ const { stat } = require("fs");
 const Alert = require("../models/alert");
 const listingController = require("../controllers/listing")
 
-productsRouter.post('/admin/add-product', authModule, async (req, res)=>{
+productsRouter.post('/api/add-product', authModule, async (req, res)=>{
     console.log(req.user);
     console.log(req.body);
     let item = req.body;
@@ -47,6 +47,13 @@ productsRouter.post('/admin/add-product', authModule, async (req, res)=>{
             return res.status(400).json ({msg: "Zipcode must be a whole number"});
         }
 
+        let myzipcode = item.zipcode;
+        let taxrate = await taxModule.getSalesTax(myzipcode);
+
+        if (taxrate == 0){
+            return res.status(400).json ({msg: "Enter a valid US zipcode."});
+        }
+
         let listing = new Listing({
             name: item.name,
             description: item.description,
@@ -71,7 +78,7 @@ productsRouter.post('/admin/add-product', authModule, async (req, res)=>{
 })
 
 
-productsRouter.post('/admin/edit-product', authModule, async (req, res)=>{
+productsRouter.post('/api/edit-product', authModule, async (req, res)=>{
     console.log("EDITING PRODUCT")
     console.log(req.user);
     console.log(req.body);
@@ -85,24 +92,37 @@ productsRouter.post('/admin/edit-product', authModule, async (req, res)=>{
         if (!existingListing){
             return res.status(500).json ({error: "Could not find product"});
         }
-        if (item.name != null && item.name.length > 0){
+        if (item.name != null && item.name != "null" && item.name.length > 0){
             existingListing.name = item.name;
         }
-        if (item.description != null && item.description.length > 0){
+        if (item.description != null && item.description != "null" && item.description.length > 0){
             existingListing.description = item.description;
         }
-        if (item.category != null && item.category.length > 0){
+        if (item.category != null && item.category != "null" && item.category.length > 0){
             existingListing.category = item.category;
         }
-        if (parseInt(item.quantity) != null && item.quantity >= 1){
+        if (parseInt(item.quantity) != null  && parseFloat(item.quantity) >= 0){
+            if (parseInt(item.quantity) < 1){
+                return res.status(400).json ({msg: "Quantity can not be less than 1."});
+            }
             existingListing.quantity = parseInt(item.quantity);
         }
 
-        if (parseFloat(item.price) != null && parseFloat(item.price) >= 0){
+        if (parseFloat(item.price) != null   && parseFloat(item.price) >= 0){
+            if (parseFloat(item.price) < 0){
+                return res.status(400).json ({msg: "Price can not be lower than 0."});
+            }
+
             existingListing.price = parseFloat(item.price);
         }
         
-        if (parseInt(item.zipcode) != null && item.zipcode >1 ){
+        if (parseInt(item.zipcode) != null  && item.zipcode != "null"){
+            let myzipcode = item.zipcode;
+            let taxrate = await taxModule.getSalesTax(myzipcode);
+            if (taxrate == 0){
+                return res.status(400).json ({msg: "Enter a valid US zipcode."});
+            }
+    
             existingListing.zipcode = item.zipcode;
         }
 

@@ -34,7 +34,7 @@ class _AddAlertScreenState extends State<AddAlertScreen> {
       await homeServices.submitAlert(
         context: context,
         name: productNameController.text,
-        zipcode: double.parse(zipcodeController.text),
+        zipcode: (zipcodeController.text).trim(),
         category: category,
       );
     }

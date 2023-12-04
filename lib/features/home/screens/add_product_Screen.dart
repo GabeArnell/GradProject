@@ -58,12 +58,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
         description: descriptionController.text,
         price: double.parse(priceController.text),
         quantity: double.parse(quantityController.text),
-        zipcode: double.parse(zipcodeController.text),
+        zipcode: (zipcodeController.text).trim(),
         category: category,
         images: images,
       );
     }
-    Navigator.pop(context);
+    //Navigator.pop(context);
   }
 
   void generateDescription() async {

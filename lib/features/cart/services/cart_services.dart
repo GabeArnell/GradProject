@@ -111,7 +111,7 @@ class CartServices {
       {required BuildContext context, required List<Product> products}) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     List<dynamic> taxList = [];
-    List<num> zipcodes = [];
+    List<String> zipcodes = [];
     for (int i = 0; i < products.length; i++){
       zipcodes.add(products[i].zipcode);
     }

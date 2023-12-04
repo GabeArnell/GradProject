@@ -25,8 +25,8 @@ const alertSchema = mongoose.Schema({
         default: ''
     },
     zipcode: {
-        type: Number,
-        default: -100
+        type: String,
+        default: '-100'
     },
 });
 

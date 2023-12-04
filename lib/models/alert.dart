@@ -3,7 +3,7 @@ import 'dart:convert';
 class Alert {
   final String id;
   final String email;
-  final int zipcode;
+  final String zipcode;
   final String name;
   final String category;
 
@@ -26,7 +26,7 @@ class Alert {
       id: map['_id'] ?? '',
       email: map['email'] ?? '',
       category: map['category'] ?? '',
-      zipcode: map['zipcode'] ?? 0,
+      zipcode: map['zipcode'] ?? "0",
       name: map['name'] ?? '',
     );
   }

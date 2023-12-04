@@ -24,11 +24,12 @@ class HomeServices {
     required String description,
     required double price,
     required double quantity,
-    required double zipcode,
+    required String zipcode,
     required String category,
     required List<TempImage> images,
   }) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+    bool result = true;
     try {
       final cloudinary = CloudinaryPublic('dyczsvdgt', 'irpg0kb6');
       List<String> imageUrls = [];
@@ -54,7 +55,7 @@ class HomeServices {
           views: 0,
           email: '');
       http.Response res = await http.post(
-        Uri.parse('$SERVER_URI/admin/add-product'),
+        Uri.parse('$SERVER_URI/api/add-product'),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': userProvider.user.token,
@@ -78,19 +79,19 @@ class HomeServices {
     }
   }
 
-  void editProduct({
+  Future<bool> editProduct({
     required BuildContext context,
     required String id,
     required String name,
     required String description,
     required double price,
     required double quantity,
-    required double zipcode,
+    required String zipcode,
     required String category,
     required List<TempImage> images,
   }) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-
+    bool success = false;
     try {
       final cloudinary = CloudinaryPublic('dyczsvdgt', 'irpg0kb6');
       List<String> imageUrls = [];
@@ -113,7 +114,7 @@ class HomeServices {
           views: -1,
           email: '');
       http.Response res = await http.post(
-        Uri.parse('$SERVER_URI/admin/edit-product'),
+        Uri.parse('$SERVER_URI/api/edit-product'),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': userProvider.user.token,
@@ -125,7 +126,9 @@ class HomeServices {
         response: res,
         context: context,
         onSuccess: () {
+          success = true;
           showSnackBar(context, 'Product Edited Successfully!');
+          Navigator.pop(context);
           Navigator.pop(context);
         },
       );
@@ -135,6 +138,7 @@ class HomeServices {
         e.toString(),
       );
     }
+    return success;
   }
 
   Future<List<Product>> fetchAllProducts(BuildContext context) async {
@@ -278,7 +282,7 @@ class HomeServices {
   Future<bool> submitAlert({
     required BuildContext context,
     required String name,
-    required double zipcode,
+    required String zipcode,
     required String category,
   }) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);

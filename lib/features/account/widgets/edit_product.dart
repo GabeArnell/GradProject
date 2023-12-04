@@ -60,7 +60,7 @@ class _EditProductPageState extends State<EditProductPage> {
     'Other'
   ];
 
-  void submitProduct(String id) {
+  void submitProduct(String id) async {
       if (priceController.text.isEmpty){
         priceController.text = "-1";
       }
@@ -68,24 +68,35 @@ class _EditProductPageState extends State<EditProductPage> {
         quantityController.text = "-1";
       }
       if (zipcodeController.text.isEmpty){
-        zipcodeController.text = "0";
+        zipcodeController.text = "null";
       }
-      homeServices.editProduct(
+      bool success = await homeServices.editProduct(
         id: id,
         context: context,
         name: productNameController.text,
         description: descriptionController.text,
         price: double.parse(priceController.text),
         quantity: double.parse(quantityController.text),
-        zipcode: double.parse(zipcodeController.text),
+        zipcode: zipcodeController.text.trim(),
         category: category,
         images: images,
       );
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Editted product")));
+      if (priceController.text=="-1"){
+        priceController.text = "";
+      }
+      if (quantityController.text == "-1"){
+        quantityController.text = "";
+      }
+      if (zipcodeController.text == "null"){
+        zipcodeController.text = "";
+      }
 
-    Navigator.pop(context);
-    Navigator.pop(context);
+
+
+    if (success == true){
+      //Navigator.pop(context);
+      //Navigator.pop(context);
+    }
   }
 
   void generateDescription() async {

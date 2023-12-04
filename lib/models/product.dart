@@ -7,7 +7,7 @@ class Product {
   final List<String> images;
   final String category;
   final double price;
-  final double zipcode;
+  final String zipcode;
   final String email;
   final String? id;
   final int views;
@@ -48,7 +48,7 @@ class Product {
       images: List<String>.from(map['images']),
       category: map['category'] ?? '',
       price: map['price']?.toDouble() ?? 0.0,
-      zipcode: map['zipcode']?.toDouble() ?? 0.0,
+      zipcode: map['zipcode'] ?? '',
       email: map['email'] ?? '',
       views: map['views'] ?? 0,
       id: map['_id'],
