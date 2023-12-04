@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:thrift_exchange/common/widgets/custom_button.dart';
 import 'package:thrift_exchange/common/widgets/custom_textfield.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
+import 'package:thrift_exchange/constants/utils.dart';
 import 'package:thrift_exchange/features/auth/services/auth_service.dart';
 
 enum Auth {
@@ -131,6 +132,10 @@ class _AuthScreenState extends State<AuthScreen> {
                                 CustomButton(
                                     text: "Sign Up",
                                     onTap: () {
+                                      if (_passwordController.text.trim().length < 8){
+                                        showSnackBar(context, 'Pass word must be at least 8 characters');
+                                        return;
+                                      }
                                       if (_signUpFormKey.currentState!.validate()) {
                                         signUpUser();
                                       }

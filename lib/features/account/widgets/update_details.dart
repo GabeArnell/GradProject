@@ -51,11 +51,16 @@ class _UpdateDetailsState extends State<UpdateDetails> {
               text: "Update",
               onTap: ()async {
                 if (_updateFormKey.currentState!.validate()) {
-                  if (widget.type == 'password' &&
-                      _confirmValueController.text != _valueController.text) {
+                  if (widget.type == 'password' && _confirmValueController.text != _valueController.text) {
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text("Password doesn't match")));
+                      
                   } else {
+                    if (_valueController.text.trim().length < 8){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Password must be at least 8 characters.")));
+                      return;
+                    }
                     widget.onSubmitted();
                     bool result = await updateService.updateDetails(
                       context: context,
