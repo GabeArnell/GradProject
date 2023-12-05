@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:thrift_exchange/common/temp_image.dart';
 
@@ -23,7 +24,16 @@ Future<List<TempImage>> pickImages() async {
 
     if (files != null && files.files.isNotEmpty) {
       for (int i = 0; i < files.files.length; i++) {
-        Uint8List fileBytes = files.files[i].bytes!;
+        Uint8List fileBytes;
+        if (kIsWeb){
+         fileBytes = files.files[i].bytes!;
+        }
+        else{
+          Uri myUri = Uri.parse(files.files[i].path!);
+          File myFile = File.fromUri(myUri);
+          var value = await myFile.readAsBytes();
+          fileBytes = Uint8List.fromList(value); 
+        }
         String fileName = files.files[i].name;        
         images.add(TempImage(fileName, fileBytes));
       }
