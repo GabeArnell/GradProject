@@ -51,6 +51,16 @@ class _PostingItemState extends State<PostingItem> {
                       maxLines: 2,
                     ),
                   ),
+                  // SizedBox(
+                  //   height: 6,
+                  // ),
+                  // Container(
+                  //   width: 176,
+                  //   child: Text(
+                  //     "${widget.product.sold.toInt()} Sold",
+                  //     style: TextStyle(fontWeight: FontWeight.bold),
+                  //   ),
+                  // )
                 ],
               ),
             ],

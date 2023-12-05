@@ -58,51 +58,58 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: GlobalVariables.greyBackgroundColor,
-        
         body: SafeArea(
-          child: Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
+            child: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
                 fit: BoxFit.cover,
-
-                image: AssetImage("assets/images/testbackground.jpg")
-                ),
-            ),
-
-            child: Center(
-              child: Container(
-                constraints: BoxConstraints(minWidth: 100,maxWidth: 500),
-                  child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    
-                    const Text("Welcome!",
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold,color: Colors.amber)),
-                    ListTile(
-                    
-                      title: const Text("Create Account",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white
-                          )),
-                      tileColor: _auth == Auth.signup
-                          ? GlobalVariables.backgroundColor
-                          : GlobalVariables.greyBackgroundColor,
-                      leading: Radio(
-                        activeColor: GlobalVariables.secondaryColor,
-                        value: Auth.signup,
-                        groupValue: _auth,
-                        onChanged: (Auth? val) {
-                          setState(() {
-                            _auth = val!;
-                          });
-                        },
-                      ),
+                image: AssetImage("assets/images/testbackground.jpg")),
+          ),
+          child: Center(
+            child: Container(
+              constraints: BoxConstraints(minWidth: 100, maxWidth: 500),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 21,
+                  ),
+                  const Text(
+                    "Welcome!",
+                    style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.amber),
+                  ),
+                  ListTile(
+                    title: const Text("Create Account",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.white)),
+                    tileColor: _auth == Auth.signup
+                        ? GlobalVariables.backgroundColor
+                        : GlobalVariables.greyBackgroundColor,
+                    leading: Radio(
+                      activeColor: GlobalVariables.secondaryColor,
+                      value: Auth.signup,
+                      groupValue: _auth,
+                      onChanged: (Auth? val) {
+                        setState(() {
+                          _auth = val!;
+                        });
+                      },
                     ),
-                    if (_auth == Auth.signup)
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: GlobalVariables.backgroundColor,
+                  ),
+                  if (_auth == Auth.signup)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: GlobalVariables
+                              .backgroundColor, // Container color
+                          borderRadius: BorderRadius.circular(
+                              13), // Rounded corner radius
+                        ),
+                        padding: const EdgeInsets.all(13),
                         child: Form(
                             key: _signUpFormKey,
                             child: Column(
@@ -132,41 +139,54 @@ class _AuthScreenState extends State<AuthScreen> {
                                 CustomButton(
                                     text: "Sign Up",
                                     onTap: () {
-                                      if (_passwordController.text.trim().length < 8){
-                                        showSnackBar(context, 'Pass word must be at least 8 characters');
+                                      if (_passwordController.text
+                                              .trim()
+                                              .length <
+                                          8) {
+                                        showSnackBar(context,
+                                            'Pass word must be at least 8 characters');
                                         return;
                                       }
-                                      if (_signUpFormKey.currentState!.validate()) {
+                                      if (_signUpFormKey.currentState!
+                                          .validate()) {
                                         signUpUser();
                                       }
                                     })
                               ],
                             )),
                       ),
-                    ListTile(
-                      title: const Text("Sign In",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      tileColor: _auth == Auth.signin
-                          ? GlobalVariables.backgroundColor
-                          : GlobalVariables.greyBackgroundColor,
-                      leading: Radio(
-                        activeColor: GlobalVariables.secondaryColor,
-                        value: Auth.signin,
-                        groupValue: _auth,
-                        onChanged: (Auth? val) {
-                          setState(() {
-                            _auth = val!;
-                          });
-                        },
-                      ),
                     ),
-                    if (_auth == Auth.signin)
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        color: GlobalVariables.backgroundColor,
+                  ListTile(
+                    title: const Text("Sign In",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    tileColor: _auth == Auth.signin
+                        ? GlobalVariables.backgroundColor
+                        : GlobalVariables.greyBackgroundColor,
+                    leading: Radio(
+                      activeColor: GlobalVariables.secondaryColor,
+                      value: Auth.signin,
+                      groupValue: _auth,
+                      onChanged: (Auth? val) {
+                        setState(() {
+                          _auth = val!;
+                        });
+                      },
+                    ),
+                  ),
+                  if (_auth == Auth.signin)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        padding: const EdgeInsets.all(13),
+                        decoration: BoxDecoration(
+                          color: GlobalVariables
+                              .backgroundColor, // Container color
+                          borderRadius: BorderRadius.circular(
+                              13), // Rounded corner radius
+                        ),
                         child: Form(
                             key: _signInFormKey,
                             child: Column(
@@ -189,17 +209,19 @@ class _AuthScreenState extends State<AuthScreen> {
                                 CustomButton(
                                     text: "Sign In",
                                     onTap: () {
-                                      if (_signInFormKey.currentState!.validate()) {
+                                      if (_signInFormKey.currentState!
+                                          .validate()) {
                                         signInUser();
                                       }
                                     })
                               ],
                             )),
                       ),
-                  ],
-                ),
+                    ),
+                ],
               ),
             ),
-          )));
+          ),
+        )));
   }
 }

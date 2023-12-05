@@ -26,26 +26,26 @@ class _CartSubtotalState extends State<CartSubtotal> {
   final TextEditingController _promoController = TextEditingController();
   final CartServices cartServices = CartServices();
 
-  String formatMoney(num m){
-    int expand = (m*100).round();
-    String result = "${expand/100}";
-    
+  String formatMoney(num m) {
+    int expand = (m * 100).round();
+    String result = "${expand / 100}";
+
     return result;
   }
 
-  
   @override
   Widget build(BuildContext context) {
     num sum = 0;
-    for (int i = 0; i < widget.products.length; i++){
+    for (int i = 0; i < widget.products.length; i++) {
       sum += widget.products[i].quantity * widget.products[i].price;
     }
     widget.postPromoSum = sum;
-    if (flatDiscount > 0 && sum > promoMinPrice){
+    if (flatDiscount > 0 && sum > promoMinPrice) {
       widget.postPromoSum = widget.postPromoSum - flatDiscount;
     }
-    if (percentDiscount > 0 && sum > promoMinPrice){
-      widget.postPromoSum = widget.postPromoSum * ((100-percentDiscount)/100);
+    if (percentDiscount > 0 && sum > promoMinPrice) {
+      widget.postPromoSum =
+          widget.postPromoSum * ((100 - percentDiscount) / 100);
     }
     // user.cart
     //     .map((e) => sum += e['quantity'] * e['product']['price'] as int)
@@ -75,48 +75,54 @@ class _CartSubtotalState extends State<CartSubtotal> {
             height: 10,
           ),
           TextFormField(
-                maxLines: 1,
-                controller: _promoController,
-                onFieldSubmitted: (value) async {
-                  if (value.isNotEmpty) {
-                    String responseBody = await cartServices.checkPromotion(
-                        context: context,
-                        promoCode: value);
+            maxLines: 1,
+            controller: _promoController,
+            onFieldSubmitted: (value) async {
+              if (value.isNotEmpty) {
+                String responseBody = await cartServices.checkPromotion(
+                    context: context, promoCode: value);
 
-                    if (responseBody == ""){
-                      print("Bad promo code");
-                      return;
-                    };
+                if (responseBody == "") {
+                  print("Bad promo code");
+                  return;
+                }
+                ;
 
-                    flatDiscount = jsonDecode(responseBody)['flatdiscount'] ?? 0;
-                    percentDiscount = jsonDecode(responseBody)['percentdiscount'] ?? 0;
-                    promoMinPrice = jsonDecode(responseBody)['minprice'] ?? 0;
-                    widget.promoCode = jsonDecode(responseBody)['code'] ?? '';
-                    print("Flat Discount: "+flatDiscount.toString());
-                    print("response body" + responseBody);
-                    setState(() {
-                      
-                    });
-                  }
-                },
-                decoration: const InputDecoration(
-                    hintText: 'Promo Code',
-                    border:  OutlineInputBorder(
-                        borderSide: BorderSide(
-                      color: Colors.black38,
-                    )),
-                    enabledBorder:  OutlineInputBorder(
-                        borderSide: BorderSide(
-                      color: Colors.black38,
-                    ))),
-                validator: (val) {
-                  if (val == null || val.isEmpty) {
-                    return 'Enter a promo code';
-                  }
+                flatDiscount = jsonDecode(responseBody)['flatdiscount'] ?? 0;
+                percentDiscount =
+                    jsonDecode(responseBody)['percentdiscount'] ?? 0;
+                promoMinPrice = jsonDecode(responseBody)['minprice'] ?? 0;
+                widget.promoCode = jsonDecode(responseBody)['code'] ?? '';
+                print("Flat Discount: " + flatDiscount.toString());
+                print("response body" + responseBody);
+                setState(() {});
+              }
+            },
+            decoration: const InputDecoration(
+                hintText: 'Promo Code',
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                  color: Colors.black38,
+                )),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                  color: Colors.black38,
+                ))),
+            validator: (val) {
+              if (val == null || val.isEmpty) {
+                return 'Enter a promo code';
+              }
 
-                  return null;
-                },
+              return null;
+            },
+          ),
+          if (widget.products.length == 0)
+            Container(
+              height: 397,
+              child: Center(
+                child: Text("Cart is Empty"),
               ),
+            ),
           if (flatDiscount > 0 && sum >= promoMinPrice)
             Row(
               children: [
@@ -132,7 +138,6 @@ class _CartSubtotalState extends State<CartSubtotal> {
                     fontSize: 21,
                     fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 0, 186, 6),
-
                   ),
                 ),
               ],
@@ -152,7 +157,6 @@ class _CartSubtotalState extends State<CartSubtotal> {
                     fontSize: 21,
                     fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 0, 186, 6),
-
                   ),
                 ),
               ],
@@ -172,13 +176,10 @@ class _CartSubtotalState extends State<CartSubtotal> {
                     fontSize: 21,
                     fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 0, 186, 6),
-
                   ),
                 ),
               ],
             ),
-
-
         ],
       ),
     );

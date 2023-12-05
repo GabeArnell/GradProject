@@ -24,6 +24,7 @@ class HomeServices {
     required String description,
     required double price,
     required double quantity,
+    //required double sold,
     required String zipcode,
     required String category,
     required List<TempImage> images,
@@ -34,11 +35,9 @@ class HomeServices {
       final cloudinary = CloudinaryPublic('dyczsvdgt', 'irpg0kb6');
       List<String> imageUrls = [];
       for (int i = 0; i < images.length; i++) {
-
-        CloudinaryFile newFile = CloudinaryFile.fromBytesData(images[i].bytes, identifier: "${userProvider.user.email}-${images[i].name}");
-        CloudinaryResponse res = await cloudinary.uploadFile(
-          newFile
-        );
+        CloudinaryFile newFile = CloudinaryFile.fromBytesData(images[i].bytes,
+            identifier: "${userProvider.user.email}-${images[i].name}");
+        CloudinaryResponse res = await cloudinary.uploadFile(newFile);
         imageUrls.add(res.secureUrl);
       }
       if (imageUrls.length != 0) {
@@ -48,6 +47,7 @@ class HomeServices {
           name: name,
           description: description,
           quantity: quantity,
+          //sold: sold,
           images: imageUrls,
           category: category,
           price: price,
@@ -86,6 +86,7 @@ class HomeServices {
     required String description,
     required double price,
     required double quantity,
+    //required double sold,
     required String zipcode,
     required String category,
     required List<TempImage> images,
@@ -96,10 +97,9 @@ class HomeServices {
       final cloudinary = CloudinaryPublic('dyczsvdgt', 'irpg0kb6');
       List<String> imageUrls = [];
       for (int i = 0; i < images.length; i++) {
-        CloudinaryFile newFile = CloudinaryFile.fromBytesData(images[i].bytes, identifier: "${userProvider.user.email}-${images[i].name}");
-        CloudinaryResponse res = await cloudinary.uploadFile(
-          newFile
-        );
+        CloudinaryFile newFile = CloudinaryFile.fromBytesData(images[i].bytes,
+            identifier: "${userProvider.user.email}-${images[i].name}");
+        CloudinaryResponse res = await cloudinary.uploadFile(newFile);
         imageUrls.add(res.secureUrl);
       }
       Product product = Product(
@@ -107,6 +107,7 @@ class HomeServices {
           name: name,
           description: description,
           quantity: quantity,
+          //sold: sold,
           images: imageUrls,
           category: category,
           price: price,
@@ -314,13 +315,10 @@ class HomeServices {
         e.toString(),
       );
     }
-          return true;
-
+    return true;
   }
 
- Future<List<Alert>> getAlerts({
-    required BuildContext context
-  }) async {
+  Future<List<Alert>> getAlerts({required BuildContext context}) async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     List<Alert> list = [];
     try {
@@ -337,7 +335,7 @@ class HomeServices {
         context: context,
         onSuccess: () {
           var jsonList = jsonDecode(res.body);
-          for (int i = 0; i < jsonList.length; i++){
+          for (int i = 0; i < jsonList.length; i++) {
             list.add(Alert.fromJson(jsonEncode(jsonList[i])));
           }
         },
@@ -345,14 +343,14 @@ class HomeServices {
     } catch (e) {
       showSnackBar(
         context,
-        "alert get "+e.toString(),
+        "alert get " + e.toString(),
       );
     }
 
     return list;
   }
 
-Future<bool> deleteAlert({
+  Future<bool> deleteAlert({
     required BuildContext context,
     required Alert alert,
   }) async {
@@ -383,8 +381,6 @@ Future<bool> deleteAlert({
         e.toString(),
       );
     }
-          return true;
-
+    return true;
   }
-
 }

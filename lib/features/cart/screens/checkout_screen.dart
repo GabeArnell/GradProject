@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thrift_exchange/constants/global_variables.dart';
 import 'package:thrift_exchange/features/home/search/screens/search_screen.dart';
+import 'package:thrift_exchange/providers/user_provider.dart';
 import '../../../common/widgets/custom_button.dart';
 import '../../../models/product.dart';
 import '../services/cart_services.dart';
 import 'package:flutter/services.dart';
-
 
 class CheckoutScreen extends StatefulWidget {
   List<Product> products;
@@ -14,8 +14,13 @@ class CheckoutScreen extends StatefulWidget {
   num postPromoSum;
   List<dynamic> taxList;
 
-  CheckoutScreen({super.key, required this.products, required this.promoCode, required this.postPromoSum, required this.taxList});
-  
+  CheckoutScreen(
+      {super.key,
+      required this.products,
+      required this.promoCode,
+      required this.postPromoSum,
+      required this.taxList});
+
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
 }
@@ -31,9 +36,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   TextEditingController cardNumberController = TextEditingController();
 
-  String formatMoney(num m){
-    int expand = (m*100).round();
-    String result = "${expand/100}";
+  String formatMoney(num m) {
+    int expand = (m * 100).round();
+    String result = "${expand / 100}";
     return result;
   }
 
@@ -42,22 +47,26 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     super.initState();
   }
 
-
-
+  // void updateSold() {
+  //   for (int i = 0; i < widget.products.length; i++) {
+  //     widget.products[i].sold =
+  //         context.watch<UserProvider>().user.cart[i]['quantity'];
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
-
     num sum = 0;
     num salestax = 0;
 
     for (int i = 0; i < widget.products.length; i++) {
       sum += widget.products[i].quantity * widget.products[i].price;
-      if (widget.taxList[i] != null){
-        salestax += widget.taxList[i]*(widget.products[i].quantity * widget.products[i].price);
+      if (widget.taxList[i] != null) {
+        salestax += widget.taxList[i] *
+            (widget.products[i].quantity * widget.products[i].price);
       }
     }
-    if (widget.postPromoSum < sum){
+    if (widget.postPromoSum < sum) {
       sum = widget.postPromoSum;
     }
     num total = sum + salestax;
@@ -151,15 +160,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Column(children: [
-                  Text("Subtotal: \$${formatMoney(sum)}",
-                      style: TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.normal)),
+                  Text(
+                    "Subtotal: \$${formatMoney(sum)}",
+                    style:
+                        TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
+                  ),
                   const SizedBox(
                     height: 5,
                   ),
-                  Text("Sales Tax: \$${formatMoney(salestax)}",
-                      style: TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.normal)),
+                  Text(
+                    "Sales Tax: \$${formatMoney(salestax)}",
+                    style:
+                        TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
+                  ),
                   const SizedBox(
                     height: 5,
                   ),
@@ -181,8 +194,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               ),
               Form(
                 child: Container(
-                  constraints: BoxConstraints(minWidth: 100,maxWidth: 500),
-
+                  constraints: BoxConstraints(minWidth: 100, maxWidth: 500),
                   color: GlobalVariables.greyBackgroundColor,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -244,6 +256,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   onTap: () {
                     cartServices.checkoutCart(
                         context: context, promocode: widget.promoCode);
+                    //updateSold;
                   },
                   color: const Color.fromARGB(255, 255, 208, 0),
                 ),

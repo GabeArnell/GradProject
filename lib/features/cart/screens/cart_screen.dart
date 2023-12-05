@@ -33,9 +33,10 @@ class _CartScreenState extends State<CartScreen> {
     super.initState();
     loadCart();
   }
-  String formatMoney(num m){
-    int expand = (m*100).round();
-    String result = "${expand/100}";
+
+  String formatMoney(num m) {
+    int expand = (m * 100).round();
+    String result = "${expand / 100}";
     return result;
   }
 
@@ -45,11 +46,11 @@ class _CartScreenState extends State<CartScreen> {
     setState(() {});
   }
 
-  Future<List<dynamic>> calculateTaxes()async{
-    List<dynamic> taxList = await cartServices.getTaxList(context: context, products: products);
+  Future<List<dynamic>> calculateTaxes() async {
+    List<dynamic> taxList =
+        await cartServices.getTaxList(context: context, products: products);
     return taxList;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -146,15 +147,19 @@ class _CartScreenState extends State<CartScreen> {
                 text: 'Proceed to Buy (${userCartLength} items)',
                 onTap: () async {
                   if (userCartLength > 0) {
-                    if (user.address.isEmpty){
-                      showSnackBar(context, 'Set an address in your profile before checking out!');
+                    if (user.address.isEmpty) {
+                      showSnackBar(context,
+                          'Set an address in your profile before checking out!');
                       return;
                     }
                     List<dynamic> taxes = await calculateTaxes();
 
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return CheckoutScreen(products: products, promoCode: subtotalScreen.promoCode,postPromoSum: subtotalScreen.postPromoSum,
+                      return CheckoutScreen(
+                        products: products,
+                        promoCode: subtotalScreen.promoCode,
+                        postPromoSum: subtotalScreen.postPromoSum,
                         taxList: taxes,
                       );
                     }));

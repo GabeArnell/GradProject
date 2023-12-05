@@ -61,39 +61,37 @@ class _EditProductPageState extends State<EditProductPage> {
   ];
 
   void submitProduct(String id) async {
-      if (priceController.text.isEmpty){
-        priceController.text = "-1";
-      }
-      if (quantityController.text.isEmpty){
-        quantityController.text = "-1";
-      }
-      if (zipcodeController.text.isEmpty){
-        zipcodeController.text = "null";
-      }
-      bool success = await homeServices.editProduct(
-        id: id,
-        context: context,
-        name: productNameController.text,
-        description: descriptionController.text,
-        price: double.parse(priceController.text),
-        quantity: double.parse(quantityController.text),
-        zipcode: zipcodeController.text.trim(),
-        category: category,
-        images: images,
-      );
-      if (priceController.text=="-1"){
-        priceController.text = "";
-      }
-      if (quantityController.text == "-1"){
-        quantityController.text = "";
-      }
-      if (zipcodeController.text == "null"){
-        zipcodeController.text = "";
-      }
+    if (priceController.text.isEmpty) {
+      priceController.text = "-1";
+    }
+    if (quantityController.text.isEmpty) {
+      quantityController.text = "-1";
+    }
+    if (zipcodeController.text.isEmpty) {
+      zipcodeController.text = "null";
+    }
+    bool success = await homeServices.editProduct(
+      id: id,
+      context: context,
+      name: productNameController.text,
+      description: descriptionController.text,
+      price: double.parse(priceController.text),
+      quantity: double.parse(quantityController.text),
+      zipcode: zipcodeController.text.trim(),
+      category: category,
+      images: images,
+    );
+    if (priceController.text == "-1") {
+      priceController.text = "";
+    }
+    if (quantityController.text == "-1") {
+      quantityController.text = "";
+    }
+    if (zipcodeController.text == "null") {
+      zipcodeController.text = "";
+    }
 
-
-
-    if (success == true){
+    if (success == true) {
       //Navigator.pop(context);
       //Navigator.pop(context);
     }
@@ -263,7 +261,7 @@ class _EditProductPageState extends State<EditProductPage> {
               ),
               CustomButton(
                 text: 'Submit',
-                onTap: (){
+                onTap: () {
                   submitProduct(widget.product.id!);
                 },
               ),

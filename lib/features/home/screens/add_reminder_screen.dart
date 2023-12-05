@@ -29,7 +29,7 @@ class _AddAlertScreenState extends State<AddAlertScreen> {
     'Furniture',
     'Other'
   ];
-  Future<bool> submitAlert() async{
+  Future<bool> submitAlert() async {
     if (_addAlertFormKey.currentState!.validate()) {
       await homeServices.submitAlert(
         context: context,
@@ -45,32 +45,28 @@ class _AddAlertScreenState extends State<AddAlertScreen> {
   List<Alert> alertList = [];
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     loadAlerts();
   }
 
-  void loadAlerts()async{
+  void loadAlerts() async {
     alertList = await homeServices.getAlerts(context: context);
-    setState(() {
-      
-    });
+    setState(() {});
   }
 
-  void deleteAlert(Alert alert)async{
-    print("Deleting alert: "+alert.name);
-    bool result = await homeServices.deleteAlert(context: context, alert: alert);
+  void deleteAlert(Alert alert) async {
+    print("Deleting alert: " + alert.name);
+    bool result =
+        await homeServices.deleteAlert(context: context, alert: alert);
     loadAlerts();
-    setState(() {
-      
-    });
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -159,21 +155,34 @@ class _AddAlertScreenState extends State<AddAlertScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  CustomButton(text: 'Submit', onTap:()async{
-                    var result = await submitAlert();
-                    setState(() {
-                    });
-
-                  } ),
+                  CustomButton(
+                      text: 'Submit',
+                      onTap: () async {
+                        var result = await submitAlert();
+                        setState(() {});
+                      }),
                   const SizedBox(
                     height: 15,
                   ),
-
                 ],
               ),
             ),
           ),
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            height: 0,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.black12,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 13,
+          ),
           Text(
             "Currently Set Alerts",
             style: TextStyle(
@@ -184,16 +193,18 @@ class _AddAlertScreenState extends State<AddAlertScreen> {
           ),
           SingleChildScrollView(
             child: SizedBox(
-              height: 180,
+              height: 155,
               child: ListView.builder(
-                        itemCount: alertList.length,
-                        itemBuilder: (context, index) {
-                          return SavedAlert(alert: alertList[index], deleteFunction: deleteAlert,);
-                        },
-                      ),
+                itemCount: alertList.length,
+                itemBuilder: (context, index) {
+                  return SavedAlert(
+                    alert: alertList[index],
+                    deleteFunction: deleteAlert,
+                  );
+                },
+              ),
             ),
           ),
-        
         ],
       ),
     );
