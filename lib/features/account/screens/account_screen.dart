@@ -55,7 +55,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 child: Row(
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(right: 15),
+                      padding: EdgeInsets.only(left:13),
                       child: IconButton(
                         onPressed: () {
                           Navigator.pushNamed(context, ChatHomePage.routeName);
@@ -66,7 +66,6 @@ class _AccountScreenState extends State<AccountScreen> {
                         ),
                       ),
                     ),
-                    Icon(Icons.search),
                   ],
                 ),
               )
