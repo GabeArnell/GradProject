@@ -117,6 +117,13 @@ class _CartSubtotalState extends State<CartSubtotal> {
                   return null;
                 },
               ),
+          if (widget.products.length == 0)
+            Container(
+              height: 397,
+              child: Center(
+                child: Text("Cart is Empty"),
+              ),
+            ),
           if (flatDiscount > 0 && sum >= promoMinPrice)
             Row(
               children: [

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:thrift_exchange/constants/global_variables.dart';
 import 'package:thrift_exchange/features/account/widgets/product.dart';
 import 'package:thrift_exchange/features/home/screens/products_screens.dart';
 import 'package:thrift_exchange/features/home/services/home_services.dart';
@@ -50,6 +51,12 @@ class _CategoryProductsState extends State<CategoryProducts> {
     final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: GlobalVariables.appBarGradient
+
+          ),
+        ),
         title: Text(
           '${widget.category} Products',
           style: TextStyle(color: Colors.black87),
