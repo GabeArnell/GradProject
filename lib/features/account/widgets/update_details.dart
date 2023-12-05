@@ -56,7 +56,7 @@ class _UpdateDetailsState extends State<UpdateDetails> {
                         SnackBar(content: Text("Password doesn't match")));
                       
                   } else {
-                    if (_valueController.text.trim().length < 8){
+                    if (_valueController.text.trim().length < 8 && widget.type == 'password'){
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text("Password must be at least 8 characters.")));
                       return;

@@ -39,6 +39,20 @@ Responses
  - Status 400: "Invalid Credentials". This means that the email does not exist as an account or that the password is wrong.
  - Status 500. There is an internal server error. Contact the backend developer and give them this message.
 
+### Reset Password
+HTTP Method: POST
+> /api/reset-password
+
+Required Body Values
+ - "email" String - The email of the user.
+
+Responses
+ - Status 200: Successful reset. The email has been sent to the user.
+ - Status 400: "Invalid Credentials". This means that the email does not exist as an account or that the password is wrong.
+ - Status 400: The account may not be able to reset password due to password reset being used recently.
+ - Status 500. There is an internal server error. Contact the backend developer and give them this message.
+
+
 ### Validate Token 
 HTTP Method: POST
 > /api/validateToken
@@ -71,38 +85,40 @@ Requirements: None
 Responses
  - Status 200. Returns JSON data of **count** and **listings**
  count is how many total listings the server wants to send. 
- Current **PLACEHOLDER** response data: 
- `{
-    count: 3
-    listings: [
-        {
-            name: "Wooden Chair",
-            image: "https://images.restaurantfurniture.net/image/upload/c_lpad,dpr_1.0,f_auto,q_auto/rfnet/media/catalog/product/5/1/5100-ch-ws__1.jpg",
-            price: 5.50,
-            category: "Furniture",
-            description: "Has a few scratches on the legs.",
-            email: "gabe@gmail.com"
-        },
-        {
-            name: "Used Tennis Racket",
-            image: "https://www.perfect-tennis.com/wp-content/uploads/2022/06/functional-tennis-saber-review-1024x628.jpg",
-            price: 7.00,
-            category: "Sports",
-            description: "In good condition, used a couple times.",
-            email: "gabe@gmail.com"
-        },
-        {
-            name: "Computer Monitor",
-            image: "https://i.pcmag.com/imagery/roundups/05ersXu1oMXozYJa66i9GEo-40..v1657319390.jpg",
-            price: 30.00,
-            category: "Technology",
-            description: "Need to get rid of my second monitor when I leave the dormatory. Open to haggle.",
-            email: "gabe@gmail.com"
-        }
-
-    ]
- }`
  - Status 500. There is an internal server error. Contact the backend developer and give them this message.
+
+### Seller Listings
+HTTP Method: GET
+> /api/my-listings
+
+Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
+
+Responses
+ - Status 200. Returns JSON data of listings posted by the user.
++ - Status 500. There is an internal server error. Contact the backend developer and give them this message.
+
+### Filter Listings
+HTTP Method: GET
+> /api/products/search/:name/:category/:zipcode
+
+Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
+
+Responses
+ - Status 200. Filters listings by the category, searched name, and zipcode
++ - Status 500. There is an internal server error. Contact the backend developer and give them this message.
+
+
+### Filter Listings By Category
+HTTP Method: GET
+> /api/products/category/:category
+
+Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
+
+Responses
+ - Status 200. Returns all listings from specified category
++ - Status 500. There is an internal server error. Contact the backend developer and give them this message.
+
+
 
 
 
@@ -143,3 +159,234 @@ Request Body should be the new password in a JSON format.
 Responses
  - Status 200: Successfull request. Response body is JSON data of the updated user.
  - Status 500. There is an internal server error. Contact the backend developer and give them this message.
+
+### Get Profile Information
+HTTP Method: POST
+> /api/view-profile
+
+Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
+
+Required Body Values
+ - "email" String - The email of the user.
+
+Responses
+ - Status 200: Successfull request. Response body is JSON data of the user for normal users to view.
+ - Status 500. There is an internal server error. Contact the backend developer and give them this message.
+
+
+
+
+### Tax List Calculation
+HTTP Method: POST
+> /api/tax-list
+
+Body is a JSON list of zipcodes
+
+Responses
+ - Status 200: Returns list of sales tax rates parallel to the zipcode list.
+ - Status 500. There is an internal server error. Contact the backend developer and give them this message.
+
+
+
+### Get Seller Reviews
+HTTP Method: POST
+> /api/get-reviews
+
+Required Body Values
+ - "email" String - The email of the user.
+
+Responses
+ - Status 200: Returns all of the reviews of a requested seller email.
+ - Status 500. There is an internal server error. Contact the backend developer and give them this message.
+
+### Ban Status
+HTTP Method: POST
+> /admin/ban-status
+
+Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
+
+Required Body Values
+ - "email" String - The email of the user.
+
+Responses
+ - Status 200: Checks if the user is banned from the app.
+ - Status 500. There is an internal server error. Contact the backend developer and give them this message.
+
+### Ban User
+HTTP Method: POST
+> /admin/ban-user
+
+Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
+
+Required Body Values
+ - "email" String - The email of the user.
+
+Responses
+ - Status 200: Bans a user from the platform. Must be an admin.
+ - Status 500. There is an internal server error. Contact the backend developer and give them this message.
+
+### Unban User
+HTTP Method: POST
+> /admin/unban-user
+
+Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
+
+Required Body Values
+ - "email" String - The email of the user.
+
+Responses
+ - Status 200: Unbans a user from the platform. Must be an admin.
+ - Status 500. There is an internal server error. Contact the backend developer and give them this message.
+
+### add review
+HTTP Method: POST
+> /api/add-review
+
+Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
+
+Required Body Values
+ - "email" String - The email of the seller.
+ - "content" String - The review content.
+
+Responses
+ - Status 200: Adds the review to the designated seller if the user has purchased from them.
+
+### Delete review
+HTTP Method: POST
+> /admin/delete-review
+
+Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
+
+Required Body Values
+ - "writer" String - The email of the reviewer.
+ - "subject" String - The email of the seller.
+
+Responses
+ - Status 200: Deletes the review. Requires admin permission.
+
+
+## Analytics API
+
+### Earnings Analytics
+HTTP Method: GET
+> /api/analytics/earnings/:timespan
+
+Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
+
+"timespan" parameter is "month"/"week"/"day"/"all"
+
+Responses
+ - Status 200: Returns JSON object for earnings by category.
+
+### View Analytics
+HTTP Method: GET
+> /api/analytics/views
+
+Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
+
+Responses
+ - Status 200: Returns JSON object for views by category.
+
+### Increase View on Product
+HTTP Method: POST
+> /api/analytics/viewed-product
+
+Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
+
+Required Body Values
+ - "itemID" String - The ID of the product.
+
+Responses
+ - Status 200: Returns the product's update information.
+
+
+
+## Product API
+
+### Add Product
+HTTP Method: POST
+> /api/add-product
+
+Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
+
+Required Body Values
+ - "item" Product Object - The new product.
+
+Responses
+ - Status 200: Successfull addition
+ - Status 500. There is an internal server error. Contact the backend developer and give them this message.
+
+### Edit Product
+HTTP Method: POST
+> /api/edit-product
+
+Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
+
+Required Body Values
+ - "item" Product Object - The product with the edited fields.
+
+Responses
+ - Status 200: Edit
+ - Status 500. There is an internal server error. Contact the backend developer and give them this message.
+
+
+### Delete product
+HTTP Method: POST
+> /delete-product
+
+Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
+
+Required Body Values
+ - "item" Product Object - The product to be deleted.
+
+Responses
+ - Status 200: Successfull deletion
+ - Status 500. There is an internal server error. Contact the backend developer and give them this message.
+
+## Cart API
+### Add Product to Cart
+HTTP Method: POST
+> /api/add-to-cart
+
+Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
+
+Required Body Values
+ - "id" string - The ID of the product to be added to cart.
+
+Responses
+ - Status 200: Successfull addition
+ - Status 500. There is an internal server error. Contact the backend developer and give them this message.
+
+### Remove Product From Cart
+HTTP Method: DELETE
+> /api/remove-from-cart/:id
+
+Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
+
+Required Body Values
+ - "id" string - The ID of the product to be removed from cart.
+
+Responses
+ - Status 200: Successfull removal
+ - Status 500. There is an internal server error. Contact the backend developer and give them this message.
+
+### Get Products In Cart
+HTTP Method: GET
+> /api/get-cart-products
+
+Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
+
+Responses
+ - Status 200: JSON list of products in user's cart
+ - Status 500. There is an internal server error. Contact the backend developer and give them this message.
+
+### Checkout Cart
+HTTP Method: post
+> /api/checkout
+
+Requires an authentication token from SignIn to be put as a header value named `x-auth-token`
+
+Responses
+ - Status 200: Successfully processed order of the cart.
+ - Status 500. There is an internal server error. Contact the backend developer and give them this message.
+
