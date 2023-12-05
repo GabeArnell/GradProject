@@ -8,6 +8,7 @@ import 'package:thrift_exchange/features/auth/services/auth_service.dart';
 enum Auth {
   signin,
   signup,
+  reset,
 }
 
 class AuthScreen extends StatefulWidget {
@@ -23,6 +24,7 @@ class _AuthScreenState extends State<AuthScreen> {
   Auth _auth = Auth.signup;
   final _signUpFormKey = GlobalKey<FormState>();
   final _signInFormKey = GlobalKey<FormState>();
+  final _resetFormKey = GlobalKey<FormState>();
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -52,6 +54,10 @@ class _AuthScreenState extends State<AuthScreen> {
         context: context,
         email: _emailController.text,
         password: _passwordController.text);
+  }
+
+  void resetUser(){
+    authService.resetUser(context: context, email: _emailController.text);
   }
 
   @override
@@ -191,6 +197,51 @@ class _AuthScreenState extends State<AuthScreen> {
                                     onTap: () {
                                       if (_signInFormKey.currentState!.validate()) {
                                         signInUser();
+                                      }
+                                    })
+                              ],
+                            )),
+                      ),
+                    ListTile(
+                      title: const Text("Reset Password",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      tileColor: _auth == Auth.signin
+                          ? GlobalVariables.backgroundColor
+                          : GlobalVariables.greyBackgroundColor,
+                      leading: Radio(
+                        activeColor: GlobalVariables.secondaryColor,
+                        value: Auth.reset,
+                        groupValue: _auth,
+                        onChanged: (Auth? val) {
+                          setState(() {
+                            _auth = val!;
+                          });
+                        },
+                      ),
+                    ),
+                    if (_auth == Auth.reset)
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: GlobalVariables.backgroundColor,
+                        child: Form(
+                            key: _resetFormKey,
+                            child: Column(
+                              children: [
+                                CustomTextField(
+                                  controller: _emailController,
+                                  hintText: "Email",
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                CustomButton(
+                                    text: "Reset",
+                                    onTap: () {
+                                      if (_resetFormKey.currentState!.validate()) {
+                                        resetUser();
                                       }
                                     })
                               ],

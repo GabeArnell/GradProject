@@ -7,9 +7,17 @@ const User = require("../models/user");
 const authRouter = express.Router();
 const {TOKEN_PRIVATE_KEY} = require("../config.json")
 
-const authModule = require("../middleware/auth")
+const authModule = require("../middleware/auth");
+const mailModule = require("../controllers/mailer");
 
-// TODO: FORCE ALL EMAIL INPUTS TO LOWERCASE
+function randomPasswordGenerator(length) {
+    const list = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = ''
+    while (result.length < length) {
+      result += list.charAt(Math.floor(Math.random() * list.length));
+    }
+    return result;
+}
 
 authRouter.post('/api/signup', async (req,res)=>{
     console.log(req.body)
@@ -63,6 +71,46 @@ authRouter.post('/api/signin', async (req,res)=>{
         const token = jwt.sign({id: existingUser._id}, TOKEN_PRIVATE_KEY);
         //console.log("returning",existingUser._doc);
         return res.json({token, ...existingUser._doc});
+    }
+    catch (error) {
+        console.log("Auth error", error.message)
+        return res.status(500).json ({error: error.message});
+    }
+});
+
+authRouter.post('/api/reset-password', async (req,res)=>{
+    console.log("Yooo");
+    console.log("resetting", req.body)
+    const {email} = req.body
+
+    try
+    {
+        let existingUser = await User.findOne({email: email});
+        if (!existingUser){
+            return res.status(400).json({msg: "Invalid Credentials"})
+        }
+        let date = new Date().getTime();
+        let monthLong = 1000*60*60*24;
+        if (existingUser.lastPasswordReset && existingUser.lastPasswordReset+monthLong > date){
+            console.log("Last reset:",new Date(existingUser.lastPasswordReset))
+            return res.status(400).json({msg: "Password reset already used this month, contact administrator for assistance."})
+        }
+        if (existingUser.banStatus && existingUser.banStatus == "banned"){
+            return res.status(400).json({msg: "User is banned."})
+        }
+        let newPassword = randomPasswordGenerator(15);
+
+        const hashedPassword = bcryptjs.hashSync(newPassword, 10);
+        existingUser.password = hashedPassword;
+        existingUser.lastPasswordReset = date;
+        existingUser = await existingUser.save();
+        
+        mailModule.sendEmail(existingUser.email,"Password Reset - ThriftExchange",
+        `A password reset has been requested on your account. Your new temporary password is:\n
+        <b>${newPassword}</b>\nUse this one-time use password to log into your account then change your password in Edit Profile.`)
+        
+
+        return res.status(200).json(true);
     }
     catch (error) {
         console.log("Auth error", error.message)

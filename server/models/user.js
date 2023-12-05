@@ -68,7 +68,12 @@ const userSchema = mongoose.Schema({
 
     usedPromotions: [
         String
-    ]
+    ],
+    
+    lastPasswordReset: {
+        type: Number,
+        default: 0,
+    }
 
 });
 

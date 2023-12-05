@@ -115,6 +115,38 @@ class AuthService {
     }
   }
 
+// Sign In The User
+  void resetUser({
+    required BuildContext context,
+    required String email,
+  }) async {
+    try {
+
+      http.Response res = await http.post(
+        Uri.parse('$SERVER_URI/api/reset-password'),
+        body: jsonEncode({
+          "email": email
+        }),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+      );
+
+      // ignore: use_build_context_synchronously
+      httpErrorHandle(
+          response: res,
+          context: context,
+          onSuccess: () async {
+            showSnackBar(
+                context, 'Password has been reset, check email.');
+          });
+    } catch (error) {
+      print("Reset Error");
+      print(error);
+
+    }
+  }
+
   // Get User data
   void getUserData({required BuildContext context}) async {
     try {
